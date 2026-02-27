@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -16,18 +20,12 @@
     "plugins": [
       {
         "name": "next"
-      },
-
-      {
-        "compilerOptions": {
-          "jsx": "react-jsx", // or "react" for older versions
-          "moduleResolution": "node",
-          "lib": ["dom", "dom.iterable", "esnext"]
-        }
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
   "include": [
@@ -35,8 +33,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "app/page.tsx", "app/component/login/page.js", "app/layout.tsx"  ],
-  "exclude": ["node_modules"]
+    ".next/dev/types/**/*.ts"
+, "app/component/admin/student/page.js", "app/component/admin/student/page.js", "app/component/admin/classes/page.js", "app/component/admin/results/page.js", "app/component/admin/salary/page.js"  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

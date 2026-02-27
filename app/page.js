@@ -1,6 +1,6 @@
 "use client"
+import Sidebar from "./component/admin/sidevar";
 import Hero from "./component/hero";
-import Sidebar from "./component/sidevar";
 const home = () => {
     return (
         <div>
