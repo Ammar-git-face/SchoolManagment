@@ -9,12 +9,27 @@ const fee = () => {
         { Total: "Pending Payment", amount: '$1000', icon: <DollarSign size={40} className="shadow-md p-2 rounded-md text-blue-400 bg-blue-100" />, id: 2 },
         { Total: "Overdue Payment", amount: '$1000', icon: <DollarSign size={40} className="shadow-md p-2 rounded-md text-red-400 bg-red-100" />, id: 3 }
     ]
+    const [teacher, setTeacher] = useState({fullname:0, salart:0, })
     const student = [
-        { name: 'alex', money: "$100", term: "first", due: "20/02/26", status: "paid", action: "print", id: 1 },
+        { name: teacher.fullname, money: "$100", term: "first", due: "20/02/26", status: "paid", action: "print", id: 1 },
         { name: 'alex', money: "$100", term: "first", due: "24/02/10", status: "Due.", action: "print", id: 2 },
         { name: 'alex', money: "$100", term: "first", due: "24/02/10", status: "Due", action: "print", id: 3 },
         { name: 'alex', money: "$100", term: "first", due: "24/02/10", status: "paid", action: "print", id: 4 }
     ]
+   
+
+    const getData = async () => {
+        try {
+            const res = await fetch('http://localhost:5000/teacher/getTeachers')
+            const result = await res.json()
+            setTeacher(result)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    useEffect(() => {
+        getData()
+    }, [])
 
     return (
         <div className="overflow-x-hidden">
@@ -35,11 +50,11 @@ const fee = () => {
 
                 {/* Search */}
                 <div className="relative px-4 md:ml-80 max-w-sm mb-4">
-                    <Search size={15} className="absolute left-6 md:left-2 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <Search size={15} className="absolute left-5 md:left-6 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                         type="text"
                         placeholder="Search students..."
-                        className="w-full pl-8 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-1 h-8 text-sm focus:ring-blue-500"
+                        className="w-full pl-6 py-2 border rounded-lg focus:outline-none focus:ring-1 h-8 text-sm focus:ring-blue-500"
                     />
                 </div>
 

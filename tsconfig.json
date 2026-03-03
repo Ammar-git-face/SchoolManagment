@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-, "app/component/admin/student/page.js", "app/component/admin/student/page.js", "app/component/admin/classes/page.js", "app/component/admin/results/page.js", "app/component/admin/salary/page.js"  ],
+, "app/component/admin/student/page.js", "app/component/admin/student/page.js", "app/component/admin/classes/page.js", "app/component/admin/results/page.js", "app/component/admin/salary/page.js", "app/component/teacher/pta/page.js", "app/component/teacher/salary/page.js"  ],
   "exclude": [
     "node_modules"
   ]

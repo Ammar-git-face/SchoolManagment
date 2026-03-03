@@ -43,7 +43,7 @@ const message = () => {
                     {teacher.map((t) => (
                         <div key={t._id} className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 rounded-lg mx-2">
                             <h2 className="text-sm">{t.fullname}</h2>
-                            <button className="bg-blue-200 text-xs h-4 w-7">teacher</button>
+                            <button className="bg-blue-200 text-xs h-5 w-17 rounded-xl">teacher</button>
                         </div>
                     ))}
 

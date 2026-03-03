@@ -83,10 +83,10 @@ const hero = () => {
         },
         {
             title: "Fee collected",
-            heading:"₦500,000",
-            content:"This Term",
-           // heading: `₦${stats.feesCollected.toLocaleString()}`,
-           // content: `₦${stats.feesPending.toLocaleString()} pending`,
+            heading: "₦500,000",
+            content: "This Term",
+            // heading: `₦${stats.feesCollected.toLocaleString()}`,
+            // content: `₦${stats.feesPending.toLocaleString()} pending`,
             icon: (
                 <DollarSignIcon
                     size={35}
@@ -109,7 +109,7 @@ const hero = () => {
     }
     useEffect(() => {
         getStats()
-    })
+    }, [])
 
 
 

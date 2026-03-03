@@ -13,31 +13,66 @@ const pta = () => {
     });
 
     const [call, setCall] = useState(false)
+    const [duration , setDuration] = useState([])
+    const [time , setTime]= useState([]);
+    const [agenda , setAgenda] = useState([])
+    const [date , setDate] = useState([])
     const [title, setTitle] = useState("")
     const [active, setActive] = useState(false);
     const [teacher, setTeachers] = useState([])
-    const [student, setStudent] = useState([])
+    const [student , setStudent] = useState([])
+    const [parent, setParent] = useState([])
     const [history, setHistory] = useState(false)
+    const [meetings, setMeetings] = useState([])
     const [Upcoming, setUpcoming] = useState(true)
     const [activeContent, setActiveContent] = useState('')
 
+    const send = async()=>{
+        try{
+
+        }catch(err){
+            
+        }
+    }
+
+    const getMeetings = async () => {
+        try {
+            const res = await fetch('http://localhost:5000/pta/get')
+            const result = await res.json()
+            setMeetings(result)
+        } catch (err) { console.log(err) }
+    }
+    
+    useEffect(() => { 
+        fetchData()
+        fetchData()
+        getMeetings()
+    }, [])
+
+    const scheduleMeeting = async () => {
+        try {
+            const res = await fetch('http://localhost:5000/pta', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, agenda, type: active, time, date, duration, teacher, parent })
+            })
+            if (res.ok) {
+                setCall(false)
+                getMeetings() // immediately updates the list
+            }
+        } catch (err) { console.log(err) }
+    }
+
     const fetchData = async () => {
         try {
-            const res = await fetch('http://localhost:5000/teacher/getTeachers')
+            const res = await fetch('http://localhost:5000/pta/stats')
             const result = await res.json();
-            setTeachers(result)
+            setTeachers(result.teachers)
+            setStudent(result.students)
         } catch (err) { console.log }
     }
     useEffect(() => { fetchData(); }, [])
 
-    const getStudent = async () => {
-        try {
-            const res = await fetch('http://localhost:5000/student/getStudent')
-            const result = await res.json();
-            setStudent(result)
-        } catch (err) { console.log }
-    }
-    useEffect(() => { getStudent(); }, [])
 
     const coming = [
         { icon: <Mic size={15} className="text-blue-500" />, title: "parent Awareness", task: "completed", agenda: "parent getting to know school", date: 'Feb 23, 2026', dicon: <Calendar1Icon />, time: "02:15 AM (50min)", ticon: <Clock size={10} />, id: 1 },
@@ -74,21 +109,26 @@ const pta = () => {
 
             {activeContent === Upcoming && (
                 <div className="mx-4 md:ml-80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {coming.map((list) => (
-                        <div key={list.id} className="shadow-xl hover:shadow-2xl rounded-xl p-3">
-                            <nav className="flex justify-between items-center mb-4">
-                                <span className="flex items-center text-sm font-bold gap-1">
-                                    <i>{list.icon}</i>{list.title}
-                                </span>
-                                <nav className="text-xs bg-gray-200 rounded-xl px-2 h-4 text-center">{list.task}</nav>
-                            </nav>
-                            <p className="text-xs text-gray-400 px-1 mb-4">{list.agenda}</p>
-                            <span className="flex flex-wrap gap-4">
-                                <p className="flex items-center gap-1 text-gray-500 text-xs"><Calendar1Icon size={12} />{list.date}</p>
-                                <p className="text-xs text-gray-500 flex items-center gap-1"><Clock size={12} />{list.time}</p>
-                            </span>
-                        </div>
-                    ))}
+                    {meetings.map((list) => (
+            <div key={list._id} className="shadow-xl hover:shadow-2xl rounded-xl p-3">
+                <nav className="flex justify-between items-center mb-4">
+                    <span className="flex items-center text-sm font-bold gap-1">
+                        {/* icon logic based on type */}
+                        {list.type === 'video' 
+                            ? <VideoIcon size={15} className="text-blue-500" /> 
+                            : <Mic size={15} className="text-blue-500" />
+                        }
+                        {list.title}
+                    </span>
+                    <nav className="text-xs bg-gray-200 rounded-xl px-2 h-4 text-center">upcoming</nav>
+                </nav>
+                <p className="text-xs text-gray-400 px-1 mb-4">{list.agenda}</p>
+                <span className="flex flex-wrap gap-4">
+                    <p className="flex items-center gap-1 text-gray-500 text-xs"><Calendar1Icon size={12} />{list.date}</p>
+                    <p className="text-xs text-gray-500 flex items-center gap-1"><Clock size={12} />{list.time}</p>
+                </span>
+            </div>
+        ))}
                 </div>
             )}
 
@@ -109,13 +149,14 @@ const pta = () => {
                         <textarea
                             className="w-full border border-gray-300 p-2 text-xs rounded-xl mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Meeting Topics And Discussion Points..."
+                            onChange={(e)=> setAgenda(e.target.value)}
                         />
 
                         <label className="block text-xs font-semibold mb-2">Meeting Type *</label>
                         <span className="flex items-center text-sm gap-2 mb-4">
                             <button
                                 onClick={() => setActive("video")}
-                                className={`hover:bg-gray-200 rounded-xl shadow-sm flex justify-center gap-2 p-2 w-1/2 ${active === "video" ? "bg-blue-500 text-white" : "bg-white"}`}
+                                className={`hover:bg-gray-200 rounded-xl shadow-sm flex justify-center gap-2 p-2 w-1/2 ${active === "video" ? "bg-blue-500 text-white" : "bg-white"}` }
                             >
                                 <VideoIcon size={20} />video call
                             </button>
@@ -130,16 +171,16 @@ const pta = () => {
                         <div className="flex flex-col sm:flex-row gap-2 mb-5">
                             <div className="w-full">
                                 <label className="block text-xs font-semibold mb-1">Time *</label>
-                                <input type="time" className="w-full border border-gray-300 p-2 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                <input type="time" className="w-full border border-gray-300 p-2 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"  onChange={(e)=> setTime(e.target.value)} />
                             </div>
                             <div className="w-full">
                                 <label className="block text-xs font-semibold mb-1">Date *</label>
-                                <input type="date" className="w-full border border-gray-300 p-2 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                <input type="date" className="w-full border border-gray-300 p-2 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"  onChange={(e)=> setDate(e.target.value)}/>
                             </div>
                         </div>
 
                         <label className="block text-xs font-semibold mb-2">Duration</label>
-                        <select className="focus:ring-1 shadow-xl p-2 bg-gray-200 text-xs focus:ring-blue-500 w-full mb-6 rounded-xl">
+                        <select className="focus:ring-1 shadow-xl p-2 bg-gray-200 text-xs focus:ring-blue-500 w-full mb-6 rounded-xl" onChange={(e) => setDuration(e.target.value)}>
                             <option>15 minutes</option>
                             <option>30 minutes</option>
                             <option>45 minutes</option>
@@ -148,8 +189,8 @@ const pta = () => {
                         </select>
 
                         <div className="p-2 text-sm mb-6 shadow-md hover:shadow-xl w-full rounded-xl">
-                            <input type="checkbox" className="p-2 text-xs mb-2" /> All Teachers
-                            {teacher.map((list) => (
+                            <input type="checkbox" className="p-2 text-xs mb-2"  onChange={(e) => setTeachers(e.target.checked)} /> All Teachers
+                            {student.map((list) => (
                                 <div key={list._id} className="px-6 text-xs text-gray-500">
                                     <input type="checkbox" className="p-2 text-xs" /> {list.fullname}
                                 </div>
@@ -157,7 +198,7 @@ const pta = () => {
                         </div>
 
                         <div className="p-2 text-sm mb-6 shadow-md hover:shadow-xl w-full rounded-xl">
-                            <input type="checkbox" className="p-2 text-xs rounded-xl" /> All Parents
+                            <input type="checkbox" className="p-2 text-xs rounded-xl" onChange={(e) => setParent(e.target.checked)} /> All Parents
                             {student.map((list) => (
                                 <div key={list._id} className="px-6 text-xs text-gray-500">
                                     <input type="checkbox" className="p-2 text-xs mb-2" /> {list.parent}
@@ -167,7 +208,7 @@ const pta = () => {
 
                         <span className="flex items-center justify-end gap-4">
                             <button onClick={() => setCall(false)}>cancel</button>
-                            <button className="bg-blue-500 p-2 h-8 rounded-xl text-white text-xs">Schedule Meeting</button>
+                            <button onClick={scheduleMeeting} className="bg-blue-500 p-2 h-8 rounded-xl text-white text-xs">Schedule Meeting</button>
                         </span>
                     </div>
                 </div>
