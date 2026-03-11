@@ -44,7 +44,7 @@ const NumCell = ({ value, max, onChange, locked, hint }) => {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function TeacherResults({ Sidebar }) {
+export default function TeacherResults() {
     const [teacher,    setTeacher]    = useState(null)
     const [classes,    setClasses]    = useState([])
     const [subjects,   setSubjects]   = useState([])
@@ -225,7 +225,7 @@ export default function TeacherResults({ Sidebar }) {
 
     return (
         <div className="flex min-h-screen bg-gray-50">
-            {Sidebar && <Sidebar />}
+            <Sidebar />
             <div className="flex-1 md:ml-64">
                 <div className="px-4 md:px-8 pt-8 pb-12 max-w-7xl">
 

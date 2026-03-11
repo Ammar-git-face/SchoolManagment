@@ -2,7 +2,7 @@
 import { Send, Search, Circle } from "lucide-react"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { io } from "socket.io-client"
-import { authFetch } from "../component/admin/utils/api"
+import { authFetch } from "./admin/utils/api"
 
 const SOCKET_URL = "http://localhost:5000"
 
@@ -65,7 +65,12 @@ const Chat = ({ Sidebar }) => {
 
         setUser(parsed)
 
-        const socket = io(SOCKET_URL, { withCredentials: true })
+        const socket = io(SOCKET_URL, {
+            withCredentials: true,
+            transports: ['websocket', 'polling'],   // websocket first — faster + more reliable
+            reconnectionAttempts: 5,
+            reconnectionDelay: 2000
+        })
         socketRef.current = socket
 
         socket.on("connect", () => {
@@ -74,6 +79,8 @@ const Chat = ({ Sidebar }) => {
 
         socket.on("connect_error", (err) => {
             console.error("Socket connection error:", err.message)
+            // "xhr poll error" = backend is down or not reachable on port 5000
+            // Check: is the server running? any startup crash in the terminal?
         })
 
         socket.on("online_users", (users) => {
