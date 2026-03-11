@@ -2,6 +2,8 @@
 import { Calendar } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidebar"
+import { teacherFetch } from "../utils/api"
+
 
 const TeacherAnnouncements = () => {
     const [announcements, setAnnouncements] = useState([])
@@ -9,7 +11,7 @@ const TeacherAnnouncements = () => {
 
     const getAnnouncements = async () => {
         try {
-            const res = await fetch('http://localhost:5000/alert/get')
+            const res = await teacherFetch('http://localhost:5000/alert/get')
             const data = await res.json()
             // only show announcements meant for teachers or all
             const filtered = data.filter(a => a.to === 'Teachers' || a.to === 'All')

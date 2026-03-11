@@ -2,6 +2,7 @@
 import { BookOpen, Users } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidebar"
+import { useTeacher, teacherFetch } from "../utils/api"
 
 const getInitials = (name = "") =>
     name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
@@ -19,38 +20,37 @@ const getAvgIcon = (avg) => {
 }
 
 const MyClasses = () => {
+    const { user } = useTeacher()
     const [classes, setClasses] = useState([])
     const [loading, setLoading] = useState(true)
 
-    const buildClasses = async () => {
+    const buildClasses = async (id) => {
         setLoading(true)
         try {
-            // TODO: replace TEACHER_ID with logged-in teacher's id once auth is done
-            const TEACHER_ID = "TEACHER_ID_HERE"
-
             const [teacherRes, studentRes, resultRes] = await Promise.all([
-                fetch(`http://localhost:5000/teacher/${TEACHER_ID}`),
-                fetch("http://localhost:5000/student/getStudent"),
-                fetch("http://localhost:5000/result")
+                teacherFetch(`http://localhost:5000/teacher/${id}`),
+                teacherFetch("http://localhost:5000/student/getStudent"),
+                teacherFetch("http://localhost:5000/teacherResult")
             ])
 
-            const teacher = await teacherRes.json()
-            const students = await studentRes.json()
-            const results = await resultRes.json()
+            const teacherData = await teacherRes.json()
+            const students    = await studentRes.json()
+            const results     = await resultRes.json()
 
-            // get this teacher's assigned class names
-            const assignedClasses = teacher.assignedClasses || []
+            const teacher        = teacherData.teacher || teacherData
+            const assignedClasses = Array.isArray(teacher.assignedClasses) ? teacher.assignedClasses : []
+            const studentList    = Array.isArray(students) ? students : []
+            const resultList     = Array.isArray(results)  ? results  : []
 
-            // for each assigned class, find matching students
-            const classData = assignedClasses.map((ac) => {
-                const classStudents = students.filter(s => s.studentClass === ac.className)
-                return {
-                    className: ac.className,
-                    subject: ac.subject,
-                    students: classStudents,
-                    results
-                }
-            })
+            console.log("Teacher data:", teacher)
+            console.log("Assigned classes:", assignedClasses)
+
+            const classData = assignedClasses.map((ac) => ({
+                className: ac.className,
+                subject:   ac.subject,
+                students:  studentList.filter(s => s.studentClass === ac.className),
+                results:   resultList
+            }))
 
             setClasses(classData)
         } catch (err) {
@@ -60,8 +60,9 @@ const MyClasses = () => {
     }
 
     useEffect(() => {
-        buildClasses()
-    }, [])
+        if (!user?.id) return
+        buildClasses(user.id)
+    }, [user])  // ✅ re-runs once user is loaded from localStorage by useTeacher
 
     const getStudentAvg = (studentId, results) => {
         const studentResults = results.filter(r => r.studentId === studentId)
@@ -73,7 +74,6 @@ const MyClasses = () => {
     return (
         <div>
             <Sidebar />
-
             <div className="md:ml-64 px-6 pt-8 pb-10">
                 <div className="mb-8">
                     <h1 className="text-2xl font-bold text-gray-800">My Classes</h1>
@@ -92,8 +92,6 @@ const MyClasses = () => {
                     <div className="flex flex-col gap-5">
                         {classes.map(({ className, subject, students, results }) => (
                             <div key={className} className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
-
-                                {/* Class Header */}
                                 <div className="flex items-center justify-between mb-5">
                                     <div className="flex items-center gap-3">
                                         <div className="bg-blue-50 p-2 rounded-xl">
@@ -110,7 +108,6 @@ const MyClasses = () => {
                                     </div>
                                 </div>
 
-                                {/* Students Grid */}
                                 {students.length === 0 ? (
                                     <p className="text-xs text-gray-400 text-center py-4">No students in this class yet</p>
                                 ) : (

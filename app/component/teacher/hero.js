@@ -1,9 +1,12 @@
 "use client"
 import { BookOpen, GraduationCap, DollarSign, CheckCircle, Calendar1Icon, Clock, Bell } from "lucide-react"
 import { useState, useEffect } from "react"
-import Sidebar from "./sidebar"
+import Sidebar from './sidebar'
+import { useTeacher, teacherFetch } from "./utils/api"
 
 const TeacherDashboard = () => {
+
+    const { user } = useTeacher()
 
     const [stats, setStats] = useState({
         myClasses: 0,
@@ -17,7 +20,10 @@ const TeacherDashboard = () => {
 
     const getStats = async () => {
         try {
-            const res = await fetch('http://localhost:5000/teacher/dashboard-stats')
+            const stored = localStorage.getItem("user")
+            if (!stored) return
+            const { id } = JSON.parse(stored)
+            const res = await teacherFetch(`http://localhost:5000/teacher/dashboard-stats/${id}`)
             const result = await res.json()
             setStats(result)
         } catch (err) {
@@ -27,10 +33,11 @@ const TeacherDashboard = () => {
 
     const getAnnouncements = async () => {
         try {
-            const res = await fetch('http://localhost:5000/alert/get')
+            const res = await teacherFetch('http://localhost:5000/alert/get')
             const result = await res.json()
+            const data = Array.isArray(result) ? result : []
             // only show announcements meant for teachers or all
-            const filtered = result.filter(a => a.to === 'Teachers' || a.to === 'All')
+            const filtered = data.filter(a => a.to === 'Teachers' || a.to === 'All')
             setAnnouncements(filtered)
         } catch (err) {
             console.log(err)
@@ -39,11 +46,12 @@ const TeacherDashboard = () => {
 
     const getMeetings = async () => {
         try {
-            const res = await fetch('http://localhost:5000/pta/stats')
+            const res = await teacherFetch('http://localhost:5000/pta/get')
             const result = await res.json()
-            // only show meetings meant for teachers or all
-            const filtered = result.filter(m => m.allTeachers === true)
-            setMeetings(filtered.slice(0, 3)) // show only 3 upcoming
+            const data = Array.isArray(result) ? result : []
+            // ✅ filter first, then slice — previous code set unfiltered data twice
+            const filtered = data.filter(m => m.allTeachers === true).slice(0, 3)
+            setMeetings(filtered)
         } catch (err) {
             console.log(err)
         }
@@ -94,7 +102,7 @@ const TeacherDashboard = () => {
             {/* Top Banner */}
             <div className="fixed top-0 left-0 right-0 md:ml-64 font-sans h-16 border-b border-gray-200 px-4 py-3 bg-white z-10 flex items-center justify-between">
                 <div>
-                    <h1 className="text-black font-semibold text-sm">WELCOME BACK,Mr</h1>
+                    <h1 className="text-black font-semibold text-sm">WELCOME BACK, {user?.name || "Teacher"}</h1>
                     <p className="text-xs text-gray-400">Here's your teaching overview</p>
                 </div>
             </div>
@@ -175,7 +183,7 @@ const TeacherDashboard = () => {
                     </div>
                 </div>
                 <div className="shadow-xl p-4 w-full h-30 bg-gray-200 ">
-                <span className="flex items-center gap-2 text-sm "><DollarSign size={20} className="text-green-400/50"/> <p>Salary History</p></span>
+                    <span className="flex items-center gap-2 text-sm "><DollarSign size={20} className="text-green-400/50"/> <p>Salary History</p></span>
                 </div>
             </div>
         </div>

@@ -1,147 +1,149 @@
 "use client"
-import { Calendar, User2Icon, Trash2, Pencil, User2 } from "lucide-react";
+import { Calendar, User2, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
-
 import Sidebar from "../sidevar";
+import { authFetch } from "../utils/api";
 
-const alert = () => {
+const AlertPage = () => {
     const [create, setCreate] = useState(false);
     const [title, setTitle] = useState("");
     const [message, setMessage] = useState("");
     const [to, setTo] = useState("All");
     const [display, setDisplay] = useState([]);
-    const [edit, setEdit] = useState(false)
-    const [editData, setEditData] = useState({ title: "", message: "", to: "" })
-    const [editId, setEditId] = useState(null)
-
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const handleDelete = async (id) => {
         try {
-            const res = await fetch(`http://localhost:5000/alert/${id}`, {
-                method: 'DELETE'
-            })
-            if (res.ok) {
-                getData() // re-fetch to update the list
-            }
-        } catch (err) {
-            console.log(err)
-        }
+            const res = await authFetch(`http://localhost:5000/alert/${id}`, { method: "DELETE" })
+            if (res.ok) getData()
+        } catch (err) { console.log(err) }
     }
 
     const Send = async (e) => {
         e.preventDefault()
-        console.log("Sending:", { title, message, to }) // 👈 check values aren't empty
         try {
-            const res = await fetch('http://localhost:5000/alert', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, message, to })
+            const res = await authFetch("http://localhost:5000/alert", {
+                method: "POST",
+                body: JSON.stringify({ title, message, to }),
             })
-            const result = await res.json()
-            console.log("Response:", result) // 👈 see what backend returns
-
             if (res.ok) {
                 setCreate(false)
-                getData()  // ← add this
-            } else {
-                throw new Error(result.error || 'invalid')
+                setTitle(""); setMessage(""); setTo("All")
+                getData()
             }
-        } catch (err) {
-            console.log(err)
-        }
+        } catch (err) { console.log(err) }
     }
+
     const getData = async () => {
-
         try {
-            const res = await fetch("http://localhost:5000/alert/get")
+            const res = await authFetch("http://localhost:5000/alert/get")
             const data = await res.json()
-            console.log(data)
-            setDisplay(data)
-
-        } catch (err) {
-            console.log(err)
-        }
+            setDisplay(Array.isArray(data) ? data : [])
+        } catch (err) { console.log(err) }
     }
 
-    useEffect(() => {
-        getData()
-    }, [])
+    useEffect(() => { getData() }, [])
 
     return (
-        <div>
-            <Sidebar />
-            <div className="p-4 md:p-6 ml-0 md:ml-70">
-                <span className="">
-                    <h1 className="text-xl font-bold">Create Announcement</h1>
+        <div className="flex min-h-screen bg-gray-50">
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            {sidebarOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden"
+                    onClick={() => setSidebarOpen(false)} />
+            )}
 
-                    <nav className="flex flex-col sm:flex-row sm:justify-between gap-2">
-                        <p className="text-gray-500 text-xs">Send announcements to teachers and parents</p>
-                        <button className="bg-blue-500 h-7 w-full sm:w-50 text-xs text-white rounded-xl" onClick={() => setCreate(true)}>+ Create Announcement</button>
-                    </nav>
-                </span>
-                <div>
+            <div className="flex-1 md:ml-64 min-h-screen">
+                {/* Mobile topbar */}
+                <div className="md:hidden flex items-center justify-between bg-white px-4 py-3 shadow-sm sticky top-0 z-10">
+                    <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100">
+                        <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <h1 className="font-semibold text-gray-800">Announcements</h1>
+                    <div className="w-8" />
+                </div>
 
-                    <div>
-                        {
-                            display.map((list) => (
-                                <div key={list._id} className=" p-5 w-full rounded-md shadow">
-                                    <h1 className=" text-black font-bold font-xl mb-2 flex justify-between">{list.title}   <button className="text-red-500" onClick={() => handleDelete(list._id)}>
-                                        <Trash2 size={15} />
-                                    </button>
-                                    </h1>
-                                    <span className="flex mb-3 items-center gap-2 text-xs font-gray-500">< Calendar size={15} />
-                                        <p>{new Date(list.createdAt).toLocaleDateString('en-US', {
-                                            year: 'numeric',
-                                            month: 'short',
-                                            day: 'numeric'
-                                        })}</p>
-                                        <p><User2 size={13} /></p> <span className="text-xs bg-blue-200 rounded-xl  w-15 text-center text-blue-400"> {list.to}</span></span>
-                                    <p className="text-gray-500 text-xs mb-3 ">{list.message}</p>
-                                    <p className="text-xs text-gray-500 p-3">-School headmaster</p>
-
-                                </div>
-                            ))
-                        }
+                <div className="px-4 md:px-6 pt-8 pb-10">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-800">Announcements</h1>
+                            <p className="text-xs text-gray-400 mt-1">Send announcements to teachers and parents</p>
+                        </div>
+                        <button onClick={() => setCreate(true)}
+                            className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs hover:bg-blue-600 transition">
+                            + Create Announcement
+                        </button>
                     </div>
 
-                    {create && (
-                        <div className="fixed inset-0 w-full bg-black/60 z-50 flex items-start justify-center px-4">
-                            <div className="bg-white rounded-xl p-5 w-full max-w-md mt-20">
-                                <h1 className="font-bold font-sans text-md">Create Announcement</h1>
-                                <p className="text-gray-500 text-xs font-light mb-6">Send an announcement to teachers, parents, or both</p>
-                                <p className="text-sm mb-2 text-gray-600">Title</p>
-                                <input
-                                    type="text"
-                                    placeholder="Enter Announcement Title"
-                                    id="title"
-                                    className="text-xs p-2 focus:outline-none focus:ring-1 mb-2 focus:ring-blue-500 w-full h-10 rounded-xl"
-                                    onChange={(e) => setTitle(e.target.value)}
-                                />
-                                <p className="text-sm mb-2 text-gray-600">Message</p>
-                                <textarea
-                                    placeholder="Enter Announcement Message"
-                                    id="message"
-                                    className="text-xs p-2 focus:outline-none shadow-sm focus:ring-1 focus:ring-blue-500 w-full h-28 rounded-xl"
-                                    onChange={(e) => setMessage(e.target.value)}
-                                />
-                                <p className="text-sm mb-2 text-gray-600">Send To</p>
-                                <select className="text-xs p-2 focus:outline-none shadow-sm focus:ring-1 mb-4 focus:ring-blue-500 w-full rounded-xl"
-                                    onChange={(e) => setTo(e.target.value)}
-                                >
+                    <div className="flex flex-col gap-4">
+                        {display.length === 0 ? (
+                            <div className="text-center text-xs text-gray-400 py-16">No announcements yet</div>
+                        ) : display.map((list) => (
+                            <div key={list._id} className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
+                                <div className="flex items-start justify-between mb-2">
+                                    <h2 className="font-bold text-gray-800 text-sm">{list.title}</h2>
+                                    <button className="text-red-400 hover:text-red-600 ml-3 flex-shrink-0"
+                                        onClick={() => handleDelete(list._id)}>
+                                        <Trash2 size={15} />
+                                    </button>
+                                </div>
+                                <div className="flex items-center gap-2 text-xs text-gray-400 mb-3">
+                                    <Calendar size={13} />
+                                    <span>{new Date(list.createdAt).toLocaleDateString("en-US", {
+                                        year: "numeric", month: "short", day: "numeric"
+                                    })}</span>
+                                    <User2 size={13} />
+                                    <span className="bg-blue-100 text-blue-500 px-2 py-0.5 rounded-full">{list.to}</span>
+                                </div>
+                                <p className="text-xs text-gray-500 mb-3">{list.message}</p>
+                                <p className="text-xs text-gray-400 italic">— School Headmaster</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Create Modal */}
+            {create && (
+                <div className="fixed inset-0 w-full bg-black/60 z-50 flex items-start justify-center px-4">
+                    <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md mt-20">
+                        <h2 className="font-bold text-gray-800 mb-1">Create Announcement</h2>
+                        <p className="text-xs text-gray-400 mb-5">Send an announcement to teachers, parents, or both</p>
+                        <div className="flex flex-col gap-3">
+                            <div>
+                                <label className="text-xs text-gray-500 mb-1 block">Title</label>
+                                <input type="text" placeholder="Announcement title"
+                                    className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    value={title} onChange={(e) => setTitle(e.target.value)} />
+                            </div>
+                            <div>
+                                <label className="text-xs text-gray-500 mb-1 block">Message</label>
+                                <textarea placeholder="Announcement message"
+                                    className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none"
+                                    value={message} onChange={(e) => setMessage(e.target.value)} />
+                            </div>
+                            <div>
+                                <label className="text-xs text-gray-500 mb-1 block">Send To</label>
+                                <select className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    value={to} onChange={(e) => setTo(e.target.value)}>
                                     <option>All</option>
                                     <option>Parent</option>
                                     <option>Teachers</option>
                                 </select>
-                                <span className="flex items-center justify-end gap-4">
-                                    <button onClick={() => setCreate(false)}>cancel</button>
-                                    <button onClick={Send} className="bg-blue-500 p-2 h-8 rounded-xl text-white text-xs">Schedule Meeting</button>
-                                </span>
                             </div>
                         </div>
-                    )}
+                        <div className="flex gap-3 mt-5">
+                            <button onClick={() => setCreate(false)}
+                                className="flex-1 text-xs text-gray-500 border border-gray-200 py-2 rounded-xl hover:bg-gray-50">Cancel</button>
+                            <button onClick={Send}
+                                className="flex-1 text-xs bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600">Send</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }
-export default alert;
+
+export default AlertPage;

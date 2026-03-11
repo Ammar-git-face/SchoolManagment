@@ -1,219 +1,606 @@
+// "use client"
+// import { Mic, VideoIcon, Calendar1Icon, Clock, File, X, Trash2, CheckCircle } from "lucide-react"
+// import { useState, useEffect } from "react"
+// import SideVar from "../sidevar"
+
+// const AdminPTA = () => {
+//     const [activeContent, setActiveContent] = useState('upcoming')
+//     const [call, setCall] = useState(false)
+//     const [meetings, setMeetings] = useState([])
+//     const [stats, setStats] = useState({ teachers: [], parents: [] })
+//     const [activeCall, setActiveCall] = useState(null) // holds meeting for Jitsi
+
+//     // form state
+//     const [title, setTitle] = useState("")
+//     const [agenda, setAgenda] = useState("")
+//     const [type, setType] = useState("video")
+//     const [time, setTime] = useState("")
+//     const [date, setDate] = useState("")
+//     const [duration, setDuration] = useState("30 minutes")
+//     const [allTeachers, setAllTeachers] = useState(false)
+//     const [allParents, setAllParents] = useState(false)
+//     const [loading, setLoading] = useState(false)
+//     const [msg, setMsg] = useState(null)
+
+//     const getMeetings = async () => {
+//         try {
+//             const res = await fetch('http://localhost:5000/pta/get')
+//             const result = await res.json()
+//             setMeetings(Array.isArray(result) ? result : [])
+//         } catch (err) { console.log(err) }
+//     }
+
+//     const getStats = async () => {
+//         try {
+//             const res = await fetch('http://localhost:5000/pta/stats')
+//             const result = await res.json()
+//             setStats(result)
+//         } catch (err) { console.log(err) }
+//     }
+
+//     useEffect(() => {
+//         getMeetings()
+//         getStats()
+//     }, [])
+
+//     const scheduleMeeting = async () => {
+//         if (!title || !date || !time) return setMsg({ type: 'error', text: 'Title, date and time are required' })
+//         setLoading(true)
+//         setMsg(null)
+//         try {
+//             const res = await fetch('http://localhost:5000/pta', {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ title, agenda, type, time, date, duration, allTeachers, allParents })
+//             })
+//             if (res.ok) {
+//                 setCall(false)
+//                 setTitle(""); setAgenda(""); setTime(""); setDate("")
+//                 setAllTeachers(false); setAllParents(false)
+//                 getMeetings()
+//             } else {
+//                 const data = await res.json()
+//                 setMsg({ type: 'error', text: data.error })
+//             }
+//         } catch (err) {
+//             setMsg({ type: 'error', text: 'Something went wrong' })
+//         } finally { setLoading(false) }
+//     }
+
+//     const handleComplete = async (id) => {
+//         try {
+//             await fetch(`http://localhost:5000/pta/complete/${id}`, { method: 'PUT' })
+//             getMeetings()
+//         } catch (err) { console.log(err) }
+//     }
+
+//     const handleDelete = async (id) => {
+//         try {
+//             await fetch(`http://localhost:5000/pta/${id}`, { method: 'DELETE' })
+//             getMeetings()
+//         } catch (err) { console.log(err) }
+//     }
+
+//     const upcoming = meetings.filter(m => m.status === 'upcoming')
+//     const history = meetings.filter(m => m.status === 'completed')
+//     const displayed = activeContent === 'upcoming' ? upcoming : history
+
+//     return (
+//         <div>
+//             <SideVar />
+
+//             <section className="px-4 md:px-0 md:ml-80 p-6 md:p-10">
+//                 <h1 className="font-bold text-xl text-black mb-1">PTA Meetings</h1>
+//                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-4">
+//                     <p className="text-xs text-gray-500">Schedule and manage Parent-Teacher meetings</p>
+//                     <button onClick={() => setCall(true)}
+//                         className="bg-blue-500 px-4 sm:ml-auto w-full sm:w-auto rounded-xl text-white text-xs h-8">
+//                         + Schedule Meeting
+//                     </button>
+//                 </div>
+//                 <span className="flex items-center gap-3 mb-6">
+//                     <button
+//                         onClick={() => setActiveContent('upcoming')}
+//                         className={`rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 transition-all
+//                             ${activeContent === 'upcoming' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+//                         <Calendar1Icon size={10} /> Upcoming ({upcoming.length})
+//                     </button>
+//                     <button
+//                         onClick={() => setActiveContent('history')}
+//                         className={`rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 transition-all
+//                             ${activeContent === 'history' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+//                         <Clock size={10} /> History ({history.length})
+//                     </button>
+//                 </span>
+//             </section>
+
+//             <div className="mx-4 md:ml-80 -mt-6">
+//                 {displayed.length === 0 ? (
+//                     <div className="text-center w-full md:w-3/5 h-40 bg-gray-100 shadow-xl rounded-xl flex flex-col items-center justify-center">
+//                         <File size={40} className="mb-3 text-gray-300" />
+//                         <p className="text-xs text-gray-400">
+//                             {activeContent === 'upcoming' ? 'No upcoming meetings' : 'No past meetings found'}
+//                         </p>
+//                     </div>
+//                 ) : (
+//                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+//                         {displayed.map((m) => (
+//                             <div key={m._id} className="shadow-xl hover:shadow-2xl rounded-xl p-4 bg-white">
+//                                 <nav className="flex justify-between items-center mb-3">
+//                                     <span className="flex items-center text-sm font-bold gap-1">
+//                                         {m.type === 'video'
+//                                             ? <VideoIcon size={15} className="text-blue-500" />
+//                                             : <Mic size={15} className="text-blue-500" />}
+//                                         {m.title}
+//                                     </span>
+//                                     <span className={`text-xs px-2 py-0.5 rounded-full
+//                                         ${m.status === 'upcoming' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
+//                                         {m.status}
+//                                     </span>
+//                                 </nav>
+//                                 <p className="text-xs text-gray-400 mb-3">{m.agenda}</p>
+//                                 <span className="flex flex-wrap gap-3 mb-4">
+//                                     <p className="flex items-center gap-1 text-gray-500 text-xs">
+//                                         <Calendar1Icon size={11} />{m.date}
+//                                     </p>
+//                                     <p className="flex items-center gap-1 text-gray-500 text-xs">
+//                                         <Clock size={11} />{m.time} ({m.duration})
+//                                     </p>
+//                                 </span>
+//                                 <div className="flex items-center gap-2">
+//                                     {m.status === 'upcoming' && (
+//                                         <button
+//                                             onClick={() => setActiveCall(m)}
+//                                             className="flex-1 flex items-center justify-center gap-1 text-xs bg-blue-500 text-white py-1.5 rounded-xl hover:bg-blue-600">
+//                                             {m.type === 'video' ? <VideoIcon size={12} /> : <Mic size={12} />}
+//                                             Start Call
+//                                         </button>
+//                                     )}
+//                                     {m.status === 'upcoming' && (
+//                                         <button onClick={() => handleComplete(m._id)}
+//                                             className="text-green-500 hover:text-green-600 p-1.5 rounded-xl border border-green-200 hover:bg-green-50">
+//                                             <CheckCircle size={14} />
+//                                         </button>
+//                                     )}
+//                                     <button onClick={() => handleDelete(m._id)}
+//                                         className="text-red-400 hover:text-red-500 p-1.5 rounded-xl border border-red-200 hover:bg-red-50">
+//                                         <Trash2 size={14} />
+//                                     </button>
+//                                 </div>
+//                             </div>
+//                         ))}
+//                     </div>
+//                 )}
+//             </div>
+
+//             {/* Jitsi Call Modal */}
+//             {activeCall && (
+//                 <div className="fixed inset-0 bg-black z-50 flex flex-col">
+//                     <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
+//                         <div className="flex items-center gap-2">
+//                             {activeCall.type === 'video'
+//                                 ? <VideoIcon size={16} className="text-blue-400" />
+//                                 : <Mic size={16} className="text-blue-400" />}
+//                             <span className="text-white text-sm font-semibold">{activeCall.title}</span>
+//                             <span className="text-gray-400 text-xs">— {activeCall.agenda}</span>
+//                         </div>
+//                         <button onClick={() => setActiveCall(null)}
+//                             className="text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-xl text-xs flex items-center gap-1">
+//                             <X size={12} /> End Call
+//                         </button>
+//                     </div>
+//                     <iframe
+//                         src={`https://meet.jit.si/${activeCall.roomName}#userInfo.displayName="Admin"`}
+//                         className="flex-1 w-full border-0"
+//                         allow="camera; microphone; fullscreen; display-capture"
+//                     />
+//                 </div>
+//             )}
+
+//             {/* Schedule Modal */}
+//             {call && (
+//                 <div className="fixed inset-0 bg-black/60 flex justify-center items-start z-50 overflow-y-auto px-4 py-8">
+//                     <div className="bg-gray-100 p-6 rounded-xl font-sans w-full max-w-lg">
+//                         <div className="flex justify-between items-center mb-4">
+//                             <h1 className="font-bold text-sm">Schedule PTA Meeting</h1>
+//                             <button onClick={() => setCall(false)}><X size={16} className="text-gray-400" /></button>
+//                         </div>
+
+//                         {msg && (
+//                             <div className={`text-xs p-3 rounded-xl mb-4 border ${msg.type === 'error'
+//                                 ? 'bg-red-50 text-red-600 border-red-200' : 'bg-green-50 text-green-600 border-green-200'}`}>
+//                                 {msg.text}
+//                             </div>
+//                         )}
+
+//                         <label className="block text-xs font-semibold mb-1">Meeting Title *</label>
+//                         <input type="text" placeholder="e.g 1st Parent Teacher Conference"
+//                             className="w-full border border-gray-300 p-2 rounded-xl mb-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                             value={title} onChange={(e) => setTitle(e.target.value)} />
+
+//                         <label className="block text-xs font-semibold mb-1">Agenda</label>
+//                         <textarea placeholder="Meeting topics and discussion points..."
+//                             className="w-full border border-gray-300 p-2 text-xs rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                             value={agenda} onChange={(e) => setAgenda(e.target.value)} />
+
+//                         <label className="block text-xs font-semibold mb-2">Meeting Type *</label>
+//                         <span className="flex items-center gap-2 mb-4">
+//                             <button onClick={() => setType("video")}
+//                                 className={`flex justify-center items-center gap-2 p-2 w-1/2 rounded-xl text-sm transition-all
+//                                     ${type === "video" ? "bg-blue-500 text-white" : "bg-white hover:bg-gray-200"}`}>
+//                                 <VideoIcon size={16} /> Video Call
+//                             </button>
+//                             <button onClick={() => setType("audio")}
+//                                 className={`flex justify-center items-center gap-2 p-2 w-1/2 rounded-xl text-sm transition-all
+//                                     ${type === "audio" ? "bg-blue-500 text-white" : "bg-white hover:bg-gray-200"}`}>
+//                                 <Mic size={16} /> Audio Call
+//                             </button>
+//                         </span>
+
+//                         <div className="flex flex-col sm:flex-row gap-2 mb-4">
+//                             <div className="w-full">
+//                                 <label className="block text-xs font-semibold mb-1">Time *</label>
+//                                 <input type="time"
+//                                     className="w-full border border-gray-300 p-2 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                                     value={time} onChange={(e) => setTime(e.target.value)} />
+//                             </div>
+//                             <div className="w-full">
+//                                 <label className="block text-xs font-semibold mb-1">Date *</label>
+//                                 <input type="date"
+//                                     className="w-full border border-gray-300 p-2 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                                     value={date} onChange={(e) => setDate(e.target.value)} />
+//                             </div>
+//                         </div>
+
+//                         <label className="block text-xs font-semibold mb-1">Duration</label>
+//                         <select className="w-full border border-gray-300 p-2 bg-white text-xs rounded-xl mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                             value={duration} onChange={(e) => setDuration(e.target.value)}>
+//                             <option>15 minutes</option>
+//                             <option>30 minutes</option>
+//                             <option>45 minutes</option>
+//                             <option>1 hour</option>
+//                             <option>2 hours</option>
+//                         </select>
+
+//                         <div className="bg-white rounded-xl p-3 mb-4 shadow-sm">
+//                             <label className="flex items-center gap-2 text-sm font-semibold mb-2 cursor-pointer">
+//                                 <input type="checkbox" checked={allTeachers}
+//                                     onChange={(e) => setAllTeachers(e.target.checked)} />
+//                                 Invite All Teachers ({stats.teachers?.length || 0})
+//                             </label>
+//                         </div>
+
+//                         <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
+//                             <label className="flex items-center gap-2 text-sm font-semibold mb-2 cursor-pointer">
+//                                 <input type="checkbox" checked={allParents}
+//                                     onChange={(e) => setAllParents(e.target.checked)} />
+//                                 Invite All Parents ({stats.parents?.length || 0})
+//                             </label>
+//                         </div>
+
+//                         <span className="flex items-center justify-end gap-4">
+//                             <button className="text-xs text-gray-500" onClick={() => setCall(false)}>Cancel</button>
+//                             <button onClick={scheduleMeeting} disabled={loading}
+//                                 className="bg-blue-500 px-4 py-2 rounded-xl text-white text-xs disabled:opacity-50">
+//                                 {loading ? 'Scheduling...' : 'Schedule Meeting'}
+//                             </button>
+//                         </span>
+//                     </div>
+//                 </div>
+//             )}
+//         </div>
+//     )
+// }
+
+// export default AdminPTA
+
 "use client"
-import { List, Mic, VideoIcon, Calendar1Icon, Clock, File } from "lucide-react"
+import { Mic, VideoIcon, Calendar1Icon, Clock, File, X, Trash2, CheckCircle } from "lucide-react"
 import { useState, useEffect } from "react"
 import SideVar from "../sidevar"
+import { authFetch } from "../utils/api"
 
-const pta = () => {
-    const handle = () => {
-        Setslected(!selected)
-    }
-    const [participants, setParticipants] = useState({
-        teachers: { all: false, selected: [] },
-        parents: { all: false, selected: [] }
-    });
+// ✅ Outside parent component — prevents cursor jump on inputs
+const ScheduleModal = ({ onClose, onSubmit, stats, loading, msg }) => {
+    const [title, setTitle]       = useState("")
+    const [agenda, setAgenda]     = useState("")
+    const [type, setType]         = useState("video")
+    const [time, setTime]         = useState("")
+    const [date, setDate]         = useState("")
+    const [duration, setDuration] = useState("30 minutes")
+    const [allTeachers, setAllTeachers] = useState(false)
+    const [allParents, setAllParents]   = useState(false)
 
-    const [call, setCall] = useState(false)
-    const [duration , setDuration] = useState([])
-    const [time , setTime]= useState([]);
-    const [agenda , setAgenda] = useState([])
-    const [date , setDate] = useState([])
-    const [title, setTitle] = useState("")
-    const [active, setActive] = useState(false);
-    const [teacher, setTeachers] = useState([])
-    const [student , setStudent] = useState([])
-    const [parent, setParent] = useState([])
-    const [history, setHistory] = useState(false)
-    const [meetings, setMeetings] = useState([])
-    const [Upcoming, setUpcoming] = useState(true)
-    const [activeContent, setActiveContent] = useState('')
+    return (
+        <div className="fixed inset-0 bg-black/60 flex justify-center items-start z-50 overflow-y-auto px-4 py-8">
+            <div className="bg-white p-6 rounded-2xl font-sans w-full max-w-lg shadow-xl">
+                <div className="flex justify-between items-center mb-4">
+                    <h1 className="font-bold text-sm">Schedule PTA Meeting</h1>
+                    <button onClick={onClose}><X size={16} className="text-gray-400" /></button>
+                </div>
 
-    const send = async()=>{
-        try{
+                {msg && (
+                    <div className={`text-xs p-3 rounded-xl mb-4 border ${msg.type === 'error'
+                        ? 'bg-red-50 text-red-600 border-red-200'
+                        : 'bg-green-50 text-green-600 border-green-200'}`}>
+                        {msg.text}
+                    </div>
+                )}
 
-        }catch(err){
-            
-        }
-    }
+                <label className="block text-xs font-semibold mb-1 text-gray-600">Meeting Title *</label>
+                <input type="text" placeholder="e.g 1st Parent Teacher Conference"
+                    className="w-full border border-gray-200 p-2.5 rounded-xl mb-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={title} onChange={e => setTitle(e.target.value)} />
+
+                <label className="block text-xs font-semibold mb-1 text-gray-600">Agenda</label>
+                <textarea placeholder="Meeting topics and discussion points..."
+                    className="w-full border border-gray-200 p-2.5 text-xs rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none h-20"
+                    value={agenda} onChange={e => setAgenda(e.target.value)} />
+
+                <label className="block text-xs font-semibold mb-2 text-gray-600">Meeting Type *</label>
+                <div className="flex gap-2 mb-4">
+                    <button onClick={() => setType("video")}
+                        className={`flex justify-center items-center gap-2 p-2 w-1/2 rounded-xl text-sm transition-all
+                            ${type === "video" ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+                        <VideoIcon size={14} /> Video Call
+                    </button>
+                    <button onClick={() => setType("audio")}
+                        className={`flex justify-center items-center gap-2 p-2 w-1/2 rounded-xl text-sm transition-all
+                            ${type === "audio" ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+                        <Mic size={14} /> Audio Call
+                    </button>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                    <div className="flex-1">
+                        <label className="block text-xs font-semibold mb-1 text-gray-600">Time *</label>
+                        <input type="time"
+                            className="w-full border border-gray-200 p-2.5 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={time} onChange={e => setTime(e.target.value)} />
+                    </div>
+                    <div className="flex-1">
+                        <label className="block text-xs font-semibold mb-1 text-gray-600">Date *</label>
+                        <input type="date"
+                            className="w-full border border-gray-200 p-2.5 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={date} onChange={e => setDate(e.target.value)} />
+                    </div>
+                </div>
+
+                <label className="block text-xs font-semibold mb-1 text-gray-600">Duration</label>
+                <select className="w-full border border-gray-200 p-2.5 text-xs rounded-xl mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={duration} onChange={e => setDuration(e.target.value)}>
+                    {["15 minutes", "30 minutes", "45 minutes", "1 hour", "2 hours"].map(d =>
+                        <option key={d}>{d}</option>
+                    )}
+                </select>
+
+                <div className="flex flex-col gap-3 mb-6">
+                    <label className="flex items-center gap-2 text-xs font-semibold bg-gray-50 border border-gray-100 rounded-xl p-3 cursor-pointer">
+                        <input type="checkbox" checked={allTeachers} onChange={e => setAllTeachers(e.target.checked)} />
+                        Invite All Teachers ({stats.teachers?.length || 0})
+                    </label>
+                    <label className="flex items-center gap-2 text-xs font-semibold bg-gray-50 border border-gray-100 rounded-xl p-3 cursor-pointer">
+                        <input type="checkbox" checked={allParents} onChange={e => setAllParents(e.target.checked)} />
+                        Invite All Parents ({stats.parents?.length || 0})
+                    </label>
+                </div>
+
+                <div className="flex items-center justify-end gap-3">
+                    <button className="text-xs text-gray-500" onClick={onClose}>Cancel</button>
+                    <button onClick={() => onSubmit({ title, agenda, type, time, date, duration, allTeachers, allParents })}
+                        disabled={loading}
+                        className="bg-blue-500 px-4 py-2 rounded-xl text-white text-xs disabled:opacity-50 hover:bg-blue-600">
+                        {loading ? 'Scheduling...' : 'Schedule Meeting'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const AdminPTA = () => {
+    const [activeContent, setActiveContent] = useState('upcoming')
+    const [showModal, setShowModal]   = useState(false)
+    const [meetings, setMeetings]     = useState([])
+    const [stats, setStats]           = useState({ teachers: [], parents: [] })
+    const [activeCall, setActiveCall] = useState(null)
+    const [loading, setLoading]       = useState(false)
+    const [msg, setMsg]               = useState(null)
+    const [sidebarOpen, setSidebarOpen] = useState(false)
 
     const getMeetings = async () => {
         try {
-            const res = await fetch('http://localhost:5000/pta/get')
-            const result = await res.json()
-            setMeetings(result)
+            const res = await authFetch('http://localhost:5000/pta/get')
+            const data = await res.json()
+            setMeetings(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }
     }
-    
-    useEffect(() => { 
-        fetchData()
-        fetchData()
-        getMeetings()
-    }, [])
 
-    const scheduleMeeting = async () => {
+    const getStats = async () => {
         try {
-            const res = await fetch('http://localhost:5000/pta', {
+            const res = await authFetch('http://localhost:5000/pta/stats')
+            const data = await res.json()
+            setStats(data)
+        } catch (err) { console.log(err) }
+    }
+
+    useEffect(() => { getMeetings(); getStats() }, [])
+
+    const handleSchedule = async (formData) => {
+        if (!formData.title || !formData.date || !formData.time)
+            return setMsg({ type: 'error', text: 'Title, date and time are required' })
+        setLoading(true); setMsg(null)
+        try {
+            const res = await authFetch('http://localhost:5000/pta', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, agenda, type: active, time, date, duration, teacher, parent })
+                body: JSON.stringify(formData),
             })
-            if (res.ok) {
-                setCall(false)
-                getMeetings() // immediately updates the list
+            if (res.ok) { setShowModal(false); getMeetings() }
+            else {
+                const d = await res.json()
+                setMsg({ type: 'error', text: d.error || 'Failed to schedule' })
             }
+        } catch { setMsg({ type: 'error', text: 'Something went wrong' }) }
+        finally { setLoading(false) }
+    }
+
+    const handleComplete = async (id) => {
+        try {
+            await authFetch(`http://localhost:5000/pta/complete/${id}`, { method: 'PUT' })
+            getMeetings()
         } catch (err) { console.log(err) }
     }
 
-    const fetchData = async () => {
+    const handleDelete = async (id) => {
+        if (!confirm('Delete this meeting?')) return
         try {
-            const res = await fetch('http://localhost:5000/pta/stats')
-            const result = await res.json();
-            setTeachers(result.teachers)
-            setStudent(result.students)
-        } catch (err) { console.log }
+            await authFetch(`http://localhost:5000/pta/${id}`, { method: 'DELETE' })
+            getMeetings()
+        } catch (err) { console.log(err) }
     }
-    useEffect(() => { fetchData(); }, [])
 
-
-    const coming = [
-        { icon: <Mic size={15} className="text-blue-500" />, title: "parent Awareness", task: "completed", agenda: "parent getting to know school", date: 'Feb 23, 2026', dicon: <Calendar1Icon />, time: "02:15 AM (50min)", ticon: <Clock size={10} />, id: 1 },
-        { icon: <Mic size={15} className="text-blue-500" />, title: "parent Awareness", task: "completed", agenda: "parent getting to know school", date: 'Feb 23, 2026', dicon: <Calendar1Icon />, time: "02:15 AM (50min)", ticon: <Clock size={10} />, id: 2 },
-        { icon: <Mic size={15} className="text-blue-500" />, title: "parent Awareness", task: "completed", agenda: "parent getting to know school", date: 'Feb 23, 2026', dicon: <Calendar1Icon />, time: "02:15 AM (50min)", ticon: <Clock size={10} />, id: 3 },
-    ]
+    const upcoming  = meetings.filter(m => m.status === 'upcoming')
+    const history   = meetings.filter(m => m.status === 'completed')
+    const displayed = activeContent === 'upcoming' ? upcoming : history
 
     return (
-        <div>
-            <SideVar />
+        <div className="flex min-h-screen bg-gray-50">
+            <SideVar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
-            <section className="px-4 md:px-0 md:ml-80 p-6 md:p-10">
-                <h1 className="font-bold text-xl text-black mb-1">PTA Meetings</h1>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-                    <p className="text-xs text-gray-500">Schedule and manage Parent-Teacher meetings</p>
-                    <button onClick={() => setCall(true)} className="bg-blue-500 p-1 sm:ml-auto w-full sm:w-45 rounded-xl text-white text-sm h-7">+ Schedule Meeting</button>
-                </div>
-                <span className="flex items-center gap-3">
-                    <button className={`bg-gray-100 rounded-sm shadow-sm w-23 text-center items-center gap-1 flex p-1 text-xs hover:bg-white ${activeContent === coming}`} onClick={() => setActiveContent(Upcoming)}>
-                        <Calendar1Icon size={10} />Upcoming
+            <div className="flex-1 md:ml-64 min-h-screen">
+                {/* Mobile topbar */}
+                <div className="md:hidden flex items-center justify-between bg-white px-4 py-3 shadow-sm sticky top-0 z-10">
+                    <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
                     </button>
-                    <button className={`bg-gray-100 rounded-sm shadow-sm w-23 text-center items-center gap-1 flex p-1 text-xs hover:bg-white ${activeContent === history}`} onClick={() => setActiveContent(history)}>
-                        <Clock size={10} />History
-                    </button>
-                </span>
-            </section>
-
-            {activeContent === history && (
-                <div className="mx-4 md:ml-80 text-center w-auto md:w-3/5 h-40 bg-gray-100 shadow-xl flex flex-col items-center justify-center">
-                    <File size={70} className="mb-4 p-2" />
-                    no Past meetings found
+                    <h1 className="font-semibold text-gray-800">PTA Meetings</h1>
+                    <div className="w-8" />
                 </div>
-            )}
 
-            {activeContent === Upcoming && (
-                <div className="mx-4 md:ml-80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {meetings.map((list) => (
-            <div key={list._id} className="shadow-xl hover:shadow-2xl rounded-xl p-3">
-                <nav className="flex justify-between items-center mb-4">
-                    <span className="flex items-center text-sm font-bold gap-1">
-                        {/* icon logic based on type */}
-                        {list.type === 'video' 
-                            ? <VideoIcon size={15} className="text-blue-500" /> 
-                            : <Mic size={15} className="text-blue-500" />
-                        }
-                        {list.title}
-                    </span>
-                    <nav className="text-xs bg-gray-200 rounded-xl px-2 h-4 text-center">upcoming</nav>
-                </nav>
-                <p className="text-xs text-gray-400 px-1 mb-4">{list.agenda}</p>
-                <span className="flex flex-wrap gap-4">
-                    <p className="flex items-center gap-1 text-gray-500 text-xs"><Calendar1Icon size={12} />{list.date}</p>
-                    <p className="text-xs text-gray-500 flex items-center gap-1"><Clock size={12} />{list.time}</p>
-                </span>
-            </div>
-        ))}
-                </div>
-            )}
-
-            {call && (
-                <div className="fixed inset-0 bg-black/60 flex justify-center items-start z-50 overflow-y-auto px-4 py-8">
-                    <div className="bg-gray-100 p-6 rounded-xl font-sans w-full max-w-lg">
-                        <h1 className="font-bold text-sm mb-4">Schedule PTA Meeting</h1>
-
-                        <label className="block text-xs font-semibold mb-2">Meeting Title *</label>
-                        <input
-                            type="text"
-                            className="w-full border border-gray-300 p-2 rounded-xl mb-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="e.g 1st Parent Teacher Conference"
-                            onChange={(e) => setTitle(e.target.value)}
-                        />
-
-                        <label className="block text-xs font-semibold mb-2">Agenda *</label>
-                        <textarea
-                            className="w-full border border-gray-300 p-2 text-xs rounded-xl mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Meeting Topics And Discussion Points..."
-                            onChange={(e)=> setAgenda(e.target.value)}
-                        />
-
-                        <label className="block text-xs font-semibold mb-2">Meeting Type *</label>
-                        <span className="flex items-center text-sm gap-2 mb-4">
-                            <button
-                                onClick={() => setActive("video")}
-                                className={`hover:bg-gray-200 rounded-xl shadow-sm flex justify-center gap-2 p-2 w-1/2 ${active === "video" ? "bg-blue-500 text-white" : "bg-white"}` }
-                            >
-                                <VideoIcon size={20} />video call
-                            </button>
-                            <button
-                                onClick={() => setActive("audio")}
-                                className={`hover:bg-gray-200 rounded-xl shadow-sm flex justify-center gap-2 p-2 w-1/2 ${active === "audio" ? "bg-blue-500 text-white" : "bg-white"}`}
-                            >
-                                <Mic size={20} />audio call
-                            </button>
-                        </span>
-
-                        <div className="flex flex-col sm:flex-row gap-2 mb-5">
-                            <div className="w-full">
-                                <label className="block text-xs font-semibold mb-1">Time *</label>
-                                <input type="time" className="w-full border border-gray-300 p-2 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"  onChange={(e)=> setTime(e.target.value)} />
-                            </div>
-                            <div className="w-full">
-                                <label className="block text-xs font-semibold mb-1">Date *</label>
-                                <input type="date" className="w-full border border-gray-300 p-2 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"  onChange={(e)=> setDate(e.target.value)}/>
-                            </div>
+                <div className="px-4 md:px-6 pt-8 pb-10">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-800">PTA Meetings</h1>
+                            <p className="text-xs text-gray-400 mt-1">Schedule and manage Parent-Teacher meetings</p>
                         </div>
-
-                        <label className="block text-xs font-semibold mb-2">Duration</label>
-                        <select className="focus:ring-1 shadow-xl p-2 bg-gray-200 text-xs focus:ring-blue-500 w-full mb-6 rounded-xl" onChange={(e) => setDuration(e.target.value)}>
-                            <option>15 minutes</option>
-                            <option>30 minutes</option>
-                            <option>45 minutes</option>
-                            <option>1 hour</option>
-                            <option>2 hours</option>
-                        </select>
-
-                        <div className="p-2 text-sm mb-6 shadow-md hover:shadow-xl w-full rounded-xl">
-                            <input type="checkbox" className="p-2 text-xs mb-2"  onChange={(e) => setTeachers(e.target.checked)} /> All Teachers
-                            {student.map((list) => (
-                                <div key={list._id} className="px-6 text-xs text-gray-500">
-                                    <input type="checkbox" className="p-2 text-xs" /> {list.fullname}
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="p-2 text-sm mb-6 shadow-md hover:shadow-xl w-full rounded-xl">
-                            <input type="checkbox" className="p-2 text-xs rounded-xl" onChange={(e) => setParent(e.target.checked)} /> All Parents
-                            {student.map((list) => (
-                                <div key={list._id} className="px-6 text-xs text-gray-500">
-                                    <input type="checkbox" className="p-2 text-xs mb-2" /> {list.parent}
-                                </div>
-                            ))}
-                        </div>
-
-                        <span className="flex items-center justify-end gap-4">
-                            <button onClick={() => setCall(false)}>cancel</button>
-                            <button onClick={scheduleMeeting} className="bg-blue-500 p-2 h-8 rounded-xl text-white text-xs">Schedule Meeting</button>
-                        </span>
+                        <button onClick={() => { setMsg(null); setShowModal(true) }}
+                            className="bg-blue-500 px-4 py-2 rounded-xl text-white text-xs hover:bg-blue-600">
+                            + Schedule Meeting
+                        </button>
                     </div>
+
+                    {/* Tabs */}
+                    <div className="flex items-center gap-2 mb-6">
+                        {[
+                            { key: 'upcoming', label: 'Upcoming', count: upcoming.length, icon: <Calendar1Icon size={10} /> },
+                            { key: 'history',  label: 'History',  count: history.length,  icon: <Clock size={10} /> },
+                        ].map(tab => (
+                            <button key={tab.key} onClick={() => setActiveContent(tab.key)}
+                                className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs transition-all
+                                    ${activeContent === tab.key ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                                {tab.icon} {tab.label} ({tab.count})
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Meetings grid */}
+                    {displayed.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-40 bg-white border border-gray-100 rounded-2xl">
+                            <File size={36} className="mb-3 text-gray-200" />
+                            <p className="text-xs text-gray-400">
+                                {activeContent === 'upcoming' ? 'No upcoming meetings' : 'No past meetings found'}
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {displayed.map(m => (
+                                <div key={m._id} className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5 hover:shadow-md transition-shadow">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className="flex items-center gap-1.5 font-bold text-sm text-gray-800">
+                                            {m.type === 'video'
+                                                ? <VideoIcon size={14} className="text-blue-500" />
+                                                : <Mic size={14} className="text-blue-500" />}
+                                            {m.title}
+                                        </span>
+                                        <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ml-2
+                                            ${m.status === 'upcoming' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
+                                            {m.status}
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-gray-400 mb-3">{m.agenda}</p>
+                                    <div className="flex flex-wrap gap-3 mb-4">
+                                        <p className="flex items-center gap-1 text-gray-500 text-xs">
+                                            <Calendar1Icon size={11} />{m.date}
+                                        </p>
+                                        <p className="flex items-center gap-1 text-gray-500 text-xs">
+                                            <Clock size={11} />{m.time} ({m.duration})
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        {m.status === 'upcoming' && (
+                                            <>
+                                                <button onClick={() => setActiveCall(m)}
+                                                    className="flex-1 flex items-center justify-center gap-1 text-xs bg-blue-500 text-white py-1.5 rounded-xl hover:bg-blue-600">
+                                                    {m.type === 'video' ? <VideoIcon size={12} /> : <Mic size={12} />}
+                                                    Start Call
+                                                </button>
+                                                <button onClick={() => handleComplete(m._id)}
+                                                    className="text-green-500 p-1.5 rounded-xl border border-green-200 hover:bg-green-50">
+                                                    <CheckCircle size={14} />
+                                                </button>
+                                            </>
+                                        )}
+                                        <button onClick={() => handleDelete(m._id)}
+                                            className="text-red-400 p-1.5 rounded-xl border border-red-200 hover:bg-red-50">
+                                            <Trash2 size={14} />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
+            </div>
+
+            {/* Jitsi Call Modal */}
+            {activeCall && (
+                <div className="fixed inset-0 bg-black z-50 flex flex-col">
+                    <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
+                        <div className="flex items-center gap-2">
+                            {activeCall.type === 'video'
+                                ? <VideoIcon size={16} className="text-blue-400" />
+                                : <Mic size={16} className="text-blue-400" />}
+                            <span className="text-white text-sm font-semibold">{activeCall.title}</span>
+                            <span className="text-gray-400 text-xs hidden sm:block">— {activeCall.agenda}</span>
+                        </div>
+                        <button onClick={() => setActiveCall(null)}
+                            className="text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-xl text-xs flex items-center gap-1">
+                            <X size={12} /> End Call
+                        </button>
+                    </div>
+                    <iframe
+                        src={`https://meet.jit.si/${activeCall.roomName}#userInfo.displayName="Admin"`}
+                        className="flex-1 w-full border-0"
+                        allow="camera; microphone; fullscreen; display-capture"
+                    />
+                </div>
+            )}
+
+            {/* Schedule Modal */}
+            {showModal && (
+                <ScheduleModal
+                    onClose={() => setShowModal(false)}
+                    onSubmit={handleSchedule}
+                    stats={stats}
+                    loading={loading}
+                    msg={msg}
+                />
             )}
         </div>
-    );
+    )
 }
-export default pta;
+
+export default AdminPTA

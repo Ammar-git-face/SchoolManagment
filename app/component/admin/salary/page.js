@@ -1,93 +1,190 @@
 "use client"
-import { DollarSign, Wallet2, Search, Users, Download, Wallet } from "lucide-react";
+import { DollarSign, Send, X, Loader } from "lucide-react"
+import { useState, useEffect } from "react"
 import Sidebar from "../sidevar"
-import {useState , useEffect} from "react"
+import { authFetch } from "../utils/api"
+const AdminSalaries = () => {
+    const [teachers, setTeachers] = useState([])
+    const [banks, setBanks] = useState([])
+    const [paying, setPaying] = useState(null)
+    const [msg, setMsg] = useState(null)
+    const [confirmTeacher, setConfirmTeacher] = useState(null)
 
-
-const salary = () => {
-    const fees = [
-        { Total: "Total Montly expense ", amount: '$1000', icon: <Wallet2 size={40} className=" shadow-md p-2 rounded-md text-green-400 bg-green-100 " />, id: 1 },
-        { Total: "Paid This Month", amount: '10', name: "Teachers", icon: <Users size={40} className=" shadow-md p-2 rounded-md text-blue-400 bg-blue-100 " />, id: 2 },
-        { Total: "Pending Payment", amount: '0', name: "Teachers", icon: <DollarSign size={40} className=" shadow-md p-2 rounded-md text-red-400 bg-red-100 " />, id: 3 }
-    ]
-    const colors = ['bg-green-100', 'bg-blue-100', 'bg-red-100']
-
-    const [teacher,setTeacher] = useState([]);
-
-
-    const getData = async (req, res) => {
+    const getTeachers = async () => {
         try {
-            const res = await fetch('http://localhost:5000/teacher/getTeachers')
-            const result = await res.json()
-            setTeacher(result)
-        } catch (err) {
-            console.log(err)
-        }
+            const token = localStorage.getItem("token")
+            const res = await authFetch("http://localhost:5000/teacher/getTeachers", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            const data = await res.json()
+            // match whatever key your API returns e.g. data.teachers / data.data
+            setTeachers(Array.isArray(data) ? data : data.teachers || [])
+        } catch (err) { console.log(err) }
+    }
+
+    const getBanks = async () => {
+        try {
+            const res = await authFetch("http://localhost:5000/fees/banks")
+            const data = await res.json()
+            setBanks(Array.isArray(data) ? data : [])
+        } catch (err) { console.log(err) }
     }
 
     useEffect(() => {
-        getData();
-    }, []);
+        getTeachers()
+        getBanks()
+    }, [])
+
+    const handlePaySalary = async (teacher) => {
+        if (!teacher.accountNumber || !teacher.bankCode) {
+            return setMsg({ type: "error", text: `${teacher.fullname} has no bank details saved` })
+        }
+        setPaying(teacher._id)
+        setMsg(null)
+        try {
+            const res = await authFetch("http://localhost:5000/fees/pay-salary", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify({
+                    teacherId: teacher._id,
+                    teacherName: teacher.fullname,
+                    accountNumber: teacher.accountNumber,
+                    bankCode: teacher.bankCode,
+                    amount: teacher.salary,
+                    narration: `Monthly salary - ${teacher.fullname}`
+                })
+            })
+            const data = await res.json()
+            if (!res.ok) return setMsg({ type: "error", text: data.error })
+            setMsg({ type: "success", text: `✓ Salary of ₦${teacher.salary?.toLocaleString()} sent to ${teacher.fullname}` })
+            getTeachers()
+        } catch (err) {
+            setMsg({ type: "error", text: "Transfer failed. Check your Flutterwave balance." })
+        } finally {
+            setPaying(null)
+            setConfirmTeacher(null)
+        }
+    }
+
+    const getBankName = (code) => {
+        const bank = banks.find(b => b.code === code)
+        return bank?.name || code
+    }
 
     return (
         <div>
             <Sidebar />
+            <div className="md:ml-64 px-6 pt-8 pb-10">
+                <div className="mb-8">
+                    <h1 className="text-2xl font-bold text-gray-800">Salary Management</h1>
+                    <p className="text-xs text-gray-400 mt-1">Pay teacher salaries directly via Flutterwave</p>
+                </div>
 
-            <div className="ml-0 md:ml-80 mt-10 md:mt-20 flex flex-col sm:flex-row items-center gap-4 md:gap-8 mb-10 px-4">
-                {
-                    fees.map((list, index) => (
-                        <nav key={list.id} className={`shadow-xl w-full sm:w-68 h-25 p-2 rounded-xl hover:shadow-2xl ${index === 0 ? 'bg-green-50' : index === 1 ? 'bg-blue-50' : 'bg-red-50'}`} >
-                            <p className="text-gray-400 text-xs mb-2">{list.Total}</p>
-                            <nav className="flex  gap-33 items-center text-black text-2xl font-semibold"><h1 className="p-2">{list.amount}</h1> {list.icon}</nav>
-                            <p className="mb-2 text-xs text-gray-400 pl-3">{list.name}</p>
-                        </nav>
-                    ))
-                }
-            </div>
+                {msg && (
+                    <div className={`text-xs p-3 rounded-xl mb-5 border ${msg.type === "success"
+                        ? "bg-green-50 text-green-600 border-green-200"
+                        : "bg-red-50 text-red-600 border-red-200"}`}>
+                        {msg.text}
+                    </div>
+                )}
 
-            <div className="px-4 md:ml-80 overflow-x-auto">
-                <table className="w-full min-w-[500px]">
-                    <thead>
-                        <tr className="bg-gray-200">
-                            <th className="px-6 py-3 text-left text-xs  text-gray-600">
-                                Teacher
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600">
-                                monthly salary
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600">
-                                This Month
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600">
-                                Action
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {teacher.map((student) => (
-                            <tr
-                                key={student._id}
-                                className="border-t text-xs border-gray-200 hover:bg-gray-50"
-                            >
-                                <td className="px-5 py-3 flex items-center">
-                                    <span className="text-xs">{student.fullname} <p className="text-gray-500 text-xs ">  {student.email}</p></span>
-                                </td>
-                                <td className="px-10">
-                                {student.salary}
-                                </td>
-                                <td>
-                                    <span className="bg-green-100 text-green-500 p-1 cursor-pointer hover:bg-blue-100 transition-all text-xs px-8 ml-5 rounded-xl">{student.paid}</span>
-                                </td>
-                                <td>
-                                    <span className=" text-gray-500 text-xs font-extralight rounded-xl px-5">{student.sunject}</span>
-                                </td>
+                <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto">
+                    <table className="w-full min-w-[700px]">
+                        <thead>
+                            <tr className="border-b border-gray-100">
+                                {["Teacher", "Subject", "Bank", "Account No", "Salary", "Status", "Action"].map(h => (
+                                    <th key={h} className="px-4 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {teachers.length === 0 ? (
+                                <tr><td colSpan={7} className="text-center text-xs text-gray-400 py-8">No teachers found</td></tr>
+                            ) : teachers.map(teacher => (
+                                <tr key={teacher._id} className="border-t border-gray-100 hover:bg-gray-50">
+                                    <td className="px-4 py-3 text-xs font-medium text-gray-700">{teacher.fullname}</td>
+                                    <td className="px-4 py-3 text-xs text-gray-500">{teacher.subject}</td>
+                                    <td className="px-4 py-3 text-xs text-gray-500">
+                                        {teacher.bankCode ? getBankName(teacher.bankCode) : <span className="text-red-400">No bank</span>}
+                                    </td>
+                                    <td className="px-4 py-3 text-xs text-gray-500">
+                                        {teacher.accountNumber || <span className="text-red-400">No account</span>}
+                                    </td>
+                                    <td className="px-4 py-3 text-xs font-semibold text-gray-700">
+                                        ₦{teacher.salary?.toLocaleString() || "0"}
+                                    </td>
+                                    <td className="px-4 py-3">
+                                        <span className={`text-xs px-2 py-1 rounded-full font-medium
+                                            ${teacher.paid === "paid"
+                                                ? "text-green-600 bg-green-50 border border-green-200"
+                                                : "text-red-500 bg-red-50 border border-red-200"}`}>
+                                            {teacher.paid === "paid" ? "Paid" : "Unpaid"}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-3">
+                                        <button
+                                            onClick={() => setConfirmTeacher(teacher)}
+                                            disabled={paying === teacher._id || teacher.paid === "paid"}
+                                            className="flex items-center gap-1 text-xs bg-green-500 text-white px-3 py-1.5 rounded-xl hover:bg-green-600 disabled:opacity-40">
+                                            {paying === teacher._id
+                                                ? <><Loader size={12} className="animate-spin" /> Sending...</>
+                                                : <><Send size={12} /> Pay Now</>}
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+            {/* Confirm Modal */}
+            {confirmTeacher && (
+                <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-sm font-bold text-gray-800">Confirm Salary Payment</h2>
+                            <button onClick={() => setConfirmTeacher(null)}><X size={16} className="text-gray-400" /></button>
+                        </div>
+                        <div className="bg-gray-50 rounded-xl p-4 mb-5 space-y-2">
+                            <div className="flex justify-between text-xs">
+                                <span className="text-gray-500">Teacher</span>
+                                <span className="font-semibold text-gray-700">{confirmTeacher.fullname}</span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-gray-500">Bank</span>
+                                <span className="font-semibold text-gray-700">{getBankName(confirmTeacher.bankCode)}</span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-gray-500">Account</span>
+                                <span className="font-semibold text-gray-700">{confirmTeacher.accountNumber}</span>
+                            </div>
+                            <div className="flex justify-between text-xs border-t border-gray-200 pt-2 mt-2">
+                                <span className="text-gray-500">Amount</span>
+                                <span className="font-bold text-green-600 text-sm">₦{confirmTeacher.salary?.toLocaleString()}</span>
+                            </div>
+                        </div>
+                        <div className="flex gap-3">
+                            <button onClick={() => setConfirmTeacher(null)}
+                                className="flex-1 text-xs text-gray-500 border border-gray-200 py-2 rounded-xl hover:bg-gray-50">
+                                Cancel
+                            </button>
+                            <button onClick={() => handlePaySalary(confirmTeacher)}
+                                disabled={paying === confirmTeacher._id}
+                                className="flex-1 text-xs bg-green-500 text-white py-2 rounded-xl hover:bg-green-600 disabled:opacity-50 flex items-center justify-center gap-1">
+                                {paying ? <><Loader size={12} className="animate-spin" /> Sending...</> : "Confirm & Pay"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-    );
+    )
 }
 
-export default salary;
+export default AdminSalaries
