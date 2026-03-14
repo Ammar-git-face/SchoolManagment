@@ -1,6 +1,7 @@
 "use client"
-import { X, Eye, EyeOff, User, Lock } from "lucide-react"
+import { X, Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
+import { teacherFetch, getUser, setUser, API_BASE } from "../teacher/utils/api"
 
 const Settings = ({ onClose, role }) => {
     const [activeTab, setActiveTab] = useState("profile")
@@ -10,28 +11,34 @@ const Settings = ({ onClose, role }) => {
     const [profileMsg, setProfileMsg] = useState(null)
     const [passwordMsg, setPasswordMsg] = useState(null)
 
-    const stored = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user") || "{}") : {}
-    const [name, setName] = useState(stored.name || "")
+    // ✅ Use getUser() helper — handles safe JSON parse
+    const stored = getUser()
+
+    // ✅ Handle both id and _id — login may save either shape
+    const userId = stored.id || stored._id
+
+    const [name, setName] = useState(stored.name || stored.fullname || "")
     const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
 
+    // ✅ API_BASE instead of hardcoded localhost — works for mobile too
+    // ✅ userId is now always defined — was `stored.id` which was undefined when login saved `_id`
     const endpoint = role === "teacher"
-        ? `http://localhost:5000/auth/teacher/update/${stored.id}`
-        : `http://localhost:5000/auth/parent/update/${stored.id}`
+        ? `${API_BASE}/auth/teacher/update/${userId}`
+        : `${API_BASE}/auth/parent/update/${userId}`
 
     const handleUpdateProfile = async () => {
+        if (!userId) return setProfileMsg({ type: "error", text: "User ID not found. Please log in again." })
         try {
-            const res = await fetch(endpoint, {
+            const res = await teacherFetch(endpoint, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
                 body: JSON.stringify({ fullname: name })
             })
             const data = await res.json()
             if (!res.ok) return setProfileMsg({ type: "error", text: data.error })
-            // update localStorage
-            localStorage.setItem("user", JSON.stringify({ ...stored, name }))
+            // ✅ setUser fires userUpdated event — sidebar and header update live
+            setUser({ name, fullname: name })
             setProfileMsg({ type: "success", text: "Name updated successfully!" })
         } catch (err) {
             setProfileMsg({ type: "error", text: "Something went wrong" })
@@ -45,12 +52,11 @@ const Settings = ({ onClose, role }) => {
             return setPasswordMsg({ type: "error", text: "New passwords do not match" })
         if (newPassword.length < 6)
             return setPasswordMsg({ type: "error", text: "Password must be at least 6 characters" })
+        if (!userId) return setPasswordMsg({ type: "error", text: "User ID not found. Please log in again." })
 
         try {
-            const res = await fetch(endpoint, {
+            const res = await teacherFetch(endpoint, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
                 body: JSON.stringify({ oldPassword, newPassword })
             })
             const data = await res.json()
@@ -65,104 +71,100 @@ const Settings = ({ onClose, role }) => {
     }
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-sm font-bold text-gray-800">Settings</h2>
-                    <button onClick={onClose}><X size={16} className="text-gray-400" /></button>
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
+                {/* Header */}
+                <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                    <h2 className="font-semibold text-gray-800 text-sm">Settings</h2>
+                    <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500">
+                        <X size={16} />
+                    </button>
                 </div>
 
                 {/* Tabs */}
-                <div className="flex gap-2 mb-6">
-                    <button onClick={() => setActiveTab("profile")}
-                        className={`flex items-center gap-2 text-xs px-4 py-2 rounded-xl border transition-all
-                            ${activeTab === "profile" ? "bg-blue-500 text-white border-blue-500" : "text-gray-600 border-gray-200 hover:bg-gray-50"}`}>
-                        <User size={13} /> Profile
-                    </button>
-                    <button onClick={() => setActiveTab("password")}
-                        className={`flex items-center gap-2 text-xs px-4 py-2 rounded-xl border transition-all
-                            ${activeTab === "password" ? "bg-blue-500 text-white border-blue-500" : "text-gray-600 border-gray-200 hover:bg-gray-50"}`}>
-                        <Lock size={13} /> Change Password
-                    </button>
+                <div className="flex border-b border-gray-100">
+                    {["profile", "password"].map(tab => (
+                        <button key={tab} onClick={() => setActiveTab(tab)}
+                            className={`flex-1 py-3 text-xs font-medium capitalize transition-colors
+                                ${activeTab === tab
+                                    ? "text-blue-600 border-b-2 border-blue-600"
+                                    : "text-gray-500 hover:text-gray-700"}`}>
+                            {tab}
+                        </button>
+                    ))}
                 </div>
 
-                {/* Profile Tab */}
-                {activeTab === "profile" && (
-                    <div>
-                        {profileMsg && (
-                            <div className={`text-xs p-3 rounded-xl mb-4 border
-                                ${profileMsg.type === "success" ? "bg-green-50 text-green-600 border-green-200" : "bg-red-50 text-red-600 border-red-200"}`}>
-                                {profileMsg.text}
+                <div className="p-5">
+                    {/* Profile Tab */}
+                    {activeTab === "profile" && (
+                        <div>
+                            {profileMsg && (
+                                <div className={`text-xs p-3 rounded-xl mb-4 border
+                                    ${profileMsg.type === "success"
+                                        ? "bg-green-50 text-green-600 border-green-200"
+                                        : "bg-red-50 text-red-600 border-red-200"}`}>
+                                    {profileMsg.text}
+                                </div>
+                            )}
+                            <div className="flex items-center gap-4 mb-5">
+                                <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-lg font-bold">
+                                    {name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
+                                </div>
+                                <div>
+                                    <p className="text-sm font-semibold text-gray-700">{name || "—"}</p>
+                                    <p className="text-xs text-gray-400 capitalize">{role}</p>
+                                </div>
                             </div>
-                        )}
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 text-lg font-bold">
-                                {name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()}
-                            </div>
-                            <div>
-                                <p className="text-sm font-semibold text-gray-700">{name}</p>
-                                <p className="text-xs text-gray-400 capitalize">{role}</p>
+                            <p className="text-xs font-semibold text-gray-600 mb-1">Full Name</p>
+                            <input type="text" value={name} onChange={(e) => setName(e.target.value)}
+                                className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-5" />
+                            <div className="flex justify-end">
+                                <button onClick={handleUpdateProfile}
+                                    className="bg-blue-500 text-white text-xs px-4 py-2 rounded-xl hover:bg-blue-600 transition">
+                                    Save Changes
+                                </button>
                             </div>
                         </div>
-                        <p className="text-xs font-semibold text-gray-600 mb-1">Full Name</p>
-                        <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-5" />
-                        <div className="flex justify-end">
-                            <button onClick={handleUpdateProfile}
-                                className="bg-blue-500 text-white text-xs px-4 py-2 rounded-xl hover:bg-blue-600">
-                                Save Changes
-                            </button>
-                        </div>
-                    </div>
-                )}
+                    )}
 
-                {/* Password Tab */}
-                {activeTab === "password" && (
-                    <div>
-                        {passwordMsg && (
-                            <div className={`text-xs p-3 rounded-xl mb-4 border
-                                ${passwordMsg.type === "success" ? "bg-green-50 text-green-600 border-green-200" : "bg-red-50 text-red-600 border-red-200"}`}>
-                                {passwordMsg.text}
+                    {/* Password Tab */}
+                    {activeTab === "password" && (
+                        <div>
+                            {passwordMsg && (
+                                <div className={`text-xs p-3 rounded-xl mb-4 border
+                                    ${passwordMsg.type === "success"
+                                        ? "bg-green-50 text-green-600 border-green-200"
+                                        : "bg-red-50 text-red-600 border-red-200"}`}>
+                                    {passwordMsg.text}
+                                </div>
+                            )}
+                            {[
+                                { label: "Current Password", val: oldPassword, set: setOldPassword, show: showOld, toggle: () => setShowOld(!showOld), ph: "Enter current password" },
+                                { label: "New Password",     val: newPassword, set: setNewPassword, show: showNew, toggle: () => setShowNew(!showNew), ph: "Enter new password" },
+                                { label: "Confirm Password", val: confirmPassword, set: setConfirmPassword, show: showConfirm, toggle: () => setShowConfirm(!showConfirm), ph: "Confirm new password" },
+                            ].map(({ label, val, set, show, toggle, ph }) => (
+                                <div key={label} className="mb-4">
+                                    <p className="text-xs font-semibold text-gray-600 mb-1">{label}</p>
+                                    <div className="relative">
+                                        <input type={show ? "text" : "password"} value={val}
+                                            onChange={(e) => set(e.target.value)} placeholder={ph}
+                                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" />
+                                        <button type="button" onClick={toggle}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                            {show ? <EyeOff size={14} /> : <Eye size={14} />}
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="flex justify-end">
+                                <button onClick={handleChangePassword}
+                                    className="bg-blue-500 text-white text-xs px-4 py-2 rounded-xl hover:bg-blue-600 transition">
+                                    Change Password
+                                </button>
                             </div>
-                        )}
-                        <p className="text-xs font-semibold text-gray-600 mb-1">Current Password</p>
-                        <div className="relative mb-4">
-                            <input type={showOld ? "text" : "password"} value={oldPassword}
-                                onChange={(e) => setOldPassword(e.target.value)} placeholder="Enter current password"
-                                className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" />
-                            <button type="button" onClick={() => setShowOld(!showOld)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                {showOld ? <EyeOff size={15} /> : <Eye size={15} />}
-                            </button>
                         </div>
-                        <p className="text-xs font-semibold text-gray-600 mb-1">New Password</p>
-                        <div className="relative mb-4">
-                            <input type={showNew ? "text" : "password"} value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)} placeholder="Enter new password"
-                                className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" />
-                            <button type="button" onClick={() => setShowNew(!showNew)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                {showNew ? <EyeOff size={15} /> : <Eye size={15} />}
-                            </button>
-                        </div>
-                        <p className="text-xs font-semibold text-gray-600 mb-1">Confirm New Password</p>
-                        <div className="relative mb-5">
-                            <input type={showConfirm ? "text" : "password"} value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm new password"
-                                className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" />
-                            <button type="button" onClick={() => setShowConfirm(!showConfirm)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                {showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
-                            </button>
-                        </div>
-                        <div className="flex justify-end">
-                            <button onClick={handleChangePassword}
-                                className="bg-blue-500 text-white text-xs px-4 py-2 rounded-xl hover:bg-blue-600">
-                                Change Password
-                            </button>
-                        </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </div>
     )

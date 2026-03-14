@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Users, Eye, EyeOff } from "lucide-react"
+import { API_BASE } from "../../admin/utils/api"
 
 const ParentLogin = () => {
     const router = useRouter()
@@ -16,7 +17,7 @@ const ParentLogin = () => {
         setError("")
         setLoading(true)
         try {
-            const res = await fetch("http://localhost:5000/auth/parent/login", {
+            const res = await fetch(`${API_BASE}/auth/parent/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -25,20 +26,18 @@ const ParentLogin = () => {
             const data = await res.json()
             if (!res.ok) return setError(data.error || "Login failed")
 
-            // Backend returns { token, user: { id, name, email, role, schoolCode, children } }
-            const token = data.token
-            const user  = data.user || {}
-
-            if (token) localStorage.setItem("token", token)
-
-            // ✅ children saved as array — every parent page depends on this
+            // ✅ Backend returns FLAT: { token, _id, fullname, email, schoolCode, children, role }
+            // NOT nested under data.user — that was the redirect loop bug
+            localStorage.setItem("token", data.token)
             localStorage.setItem("user", JSON.stringify({
-                id:         user.id         || user._id      || "",
-                name:       user.name       || user.fullname || "",
-                email:      user.email      || email,
+                id:         data._id       || "",
+                _id:        data._id       || "",
+                name:       data.fullname  || data.name || "",
+                fullname:   data.fullname  || data.name || "",
+                email:      data.email     || email,
                 role:       "parent",
-                schoolCode: user.schoolCode || "",
-                children:   Array.isArray(user.children) ? user.children : [],
+                schoolCode: data.schoolCode || "",
+                children:   Array.isArray(data.children) ? data.children : [],
             }))
 
             router.push("/component/parent")

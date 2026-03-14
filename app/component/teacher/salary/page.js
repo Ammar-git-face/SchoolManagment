@@ -1,154 +1,170 @@
-"use client"
-import { DollarSign, CheckCircle, Calendar } from "lucide-react"
-import { useState, useEffect } from "react"
-import Sidebar from "../sidebar"
+'use client'
+import { useState, useEffect } from 'react'
+import { DollarSign, Calendar, CheckCircle, Clock } from 'lucide-react'
+import Sidebar from '../sidebar'
+import { useTeacher, teacherFetch, API_BASE } from '../utils/api'
 
-const TeacherSalary = () => {
-    const [salaryData, setSalaryData] = useState(null)
-    const [history, setHistory] = useState([])
-    const [loading, setLoading] = useState(true)
+export default function TeacherSalary() {
+    const { user } = useTeacher()
+    const [teacher,  setTeacher]  = useState(null)
+    const [history,  setHistory]  = useState([])
+    const [loading,  setLoading]  = useState(true)
+    const [sidebarOpen, setSidebarOpen] = useState(false)
 
-    // TODO: replace with logged-in teacher's ID once auth is done
-    const TEACHER_ID = "TEACHER_ID_HERE"
+    // ✅ Read teacher ID properly — handles both id and _id shapes
+    const teacherId = user?.id || user?._id
 
-    const getSalaryData = async () => {
+    // ✅ Fetch teacher profile — correct route is /teacher/:id (NOT /teachers/:id)
+    const getSalaryData = async (id) => {
         try {
-            const res = await fetch(`http://localhost:5000/teachers/${TEACHER_ID}`)
+            const res = await teacherFetch(`${API_BASE}/teacher/${id}`)
+            if (!res.ok) return
             const data = await res.json()
-            setSalaryData(data)
+            setTeacher(data)
         } catch (err) {
-            console.log(err)
+            console.log('getSalaryData error:', err.message)
         }
     }
 
-    const getSalaryHistory = async () => {
+    // ✅ Fetch salary history — mounted at /teacherSalary in server.js
+    const getSalaryHistory = async (id) => {
         try {
-            const res = await fetch(`http://localhost:5000/salary/history/${TEACHER_ID}`)
+            const res = await teacherFetch(`${API_BASE}/teacherSalary/history/${id}`)
+            if (!res.ok) return
             const data = await res.json()
-            setHistory(data)
+            setHistory(Array.isArray(data) ? data : [])
         } catch (err) {
-            console.log(err)
+            console.log('getSalaryHistory error:', err.message)
         } finally {
             setLoading(false)
         }
     }
 
     useEffect(() => {
-        getSalaryData()
-        getSalaryHistory()
-    }, [])
+        if (!teacherId) { setLoading(false); return }
+        getSalaryData(teacherId)
+        getSalaryHistory(teacherId)
+    }, [teacherId])
 
-    // calculate total received (YTD) from paid history
-    const totalReceived = history
-        .filter(h => h.status === 'paid')
-        .reduce((acc, h) => acc + Number(h.amount), 0)
+    const statusColor = (status) =>
+        status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
 
     return (
-        <div>
-            <Sidebar />
+        <div className="flex min-h-screen bg-gray-50">
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            {sidebarOpen && (
+                <div className="fixed inset-0 bg-black/40 z-20 md:hidden"
+                    onClick={() => setSidebarOpen(false)} />
+            )}
 
-            <div className="md:ml-64 px-6 pt-8 pb-10">
-                {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-gray-800">My Salary</h1>
-                    <p className="text-xs text-gray-400 mt-1">View your salary details and payment history</p>
+            <div className="flex-1 md:ml-64">
+                {/* Mobile header */}
+                <div className="md:hidden flex items-center bg-white px-4 py-3 shadow-sm sticky top-0 z-10">
+                    <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100 mr-3">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <h1 className="font-semibold text-gray-800 text-sm">My Salary</h1>
                 </div>
 
-                {/* Stat Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                    {/* Monthly Salary */}
-                    <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 flex items-center justify-between">
-                        <div>
-                            <p className="text-xs text-gray-500 mb-2">Monthly Salary</p>
-                            <h2 className="text-2xl font-bold text-gray-800">
-                                ₦{Number(salaryData?.salary || 0).toLocaleString()}
-                            </h2>
+                <div className="p-4 md:p-8 max-w-4xl mx-auto">
+                    <h1 className="hidden md:block text-2xl font-bold text-gray-800 mb-6">My Salary</h1>
+
+                    {/* Salary summary cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                            <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs text-gray-500 font-medium">Monthly Salary</p>
+                                <DollarSign size={18} className="text-blue-500" />
+                            </div>
+                            <p className="text-xl font-bold text-gray-800">
+                                {loading ? '...' : `₦${Number(teacher?.salary || 0).toLocaleString()}`}
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1">Base pay</p>
                         </div>
-                        <div className="bg-blue-100 p-3 rounded-xl">
-                            <DollarSign size={22} className="text-blue-400" />
+
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                            <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs text-gray-500 font-medium">Current Status</p>
+                                {teacher?.paid === 'paid'
+                                    ? <CheckCircle size={18} className="text-green-500" />
+                                    : <Clock size={18} className="text-yellow-500" />
+                                }
+                            </div>
+                            <p className={`text-lg font-bold capitalize ${teacher?.paid === 'paid' ? 'text-green-600' : 'text-yellow-600'}`}>
+                                {loading ? '...' : (teacher?.paid || 'unpaid')}
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1">This month</p>
+                        </div>
+
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                            <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs text-gray-500 font-medium">Last Paid</p>
+                                <Calendar size={18} className="text-purple-500" />
+                            </div>
+                            <p className="text-sm font-bold text-gray-800">
+                                {loading ? '...' : teacher?.lastPaidAt
+                                    ? new Date(teacher.lastPaidAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                                    : 'Never'
+                                }
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1">
+                                {teacher?.lastPaidAmount ? `₦${Number(teacher.lastPaidAmount).toLocaleString()}` : '—'}
+                            </p>
                         </div>
                     </div>
 
-                    {/* Current Month Status */}
-                    <div className={`border rounded-2xl p-5 flex items-center justify-between
-                        ${salaryData?.paid === 'paid' ? 'bg-green-50 border-green-100' : 'bg-yellow-50 border-yellow-100'}`}>
-                        <div>
-                            <p className="text-xs text-gray-500 mb-2">Current Month Status</p>
-                            <h2 className={`text-2xl font-bold capitalize
-                                ${salaryData?.paid === 'paid' ? 'text-gray-800' : 'text-yellow-600'}`}>
-                                {salaryData?.paid || "Unpaid"}
-                            </h2>
+                    {/* Salary history */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+                        <div className="p-4 border-b border-gray-100">
+                            <h2 className="font-semibold text-sm text-gray-800">Payment History</h2>
                         </div>
-                        <div className={`p-3 rounded-xl ${salaryData?.paid === 'paid' ? 'bg-green-100' : 'bg-yellow-100'}`}>
-                            <CheckCircle size={22} className={salaryData?.paid === 'paid' ? 'text-green-400' : 'text-yellow-400'} />
-                        </div>
+                        {loading ? (
+                            <div className="text-center py-12 text-xs text-gray-400">Loading...</div>
+                        ) : history.length === 0 ? (
+                            <div className="text-center py-12">
+                                <DollarSign size={28} className="text-gray-200 mx-auto mb-2" />
+                                <p className="text-xs text-gray-400">No payment history yet.</p>
+                            </div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="bg-gray-50 text-left">
+                                            <th className="px-4 py-3 text-xs text-gray-500 font-medium">Month</th>
+                                            <th className="px-4 py-3 text-xs text-gray-500 font-medium">Amount</th>
+                                            <th className="px-4 py-3 text-xs text-gray-500 font-medium">Status</th>
+                                            <th className="px-4 py-3 text-xs text-gray-500 font-medium">Date Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-100">
+                                        {history.map((h) => (
+                                            <tr key={h._id} className="hover:bg-gray-50">
+                                                <td className="px-4 py-3 text-sm text-gray-700">{h.month}</td>
+                                                <td className="px-4 py-3 text-sm font-medium text-gray-800">
+                                                    ₦{Number(h.amount || 0).toLocaleString()}
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${statusColor(h.status)}`}>
+                                                        {h.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-4 py-3 text-xs text-gray-500">
+                                                    {h.paidDate
+                                                        ? new Date(h.paidDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                                                        : '—'
+                                                    }
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                     </div>
-
-                    {/* Total Received YTD */}
-                    <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 flex items-center justify-between">
-                        <div>
-                            <p className="text-xs text-gray-500 mb-2">Total Received (YTD)</p>
-                            <h2 className="text-2xl font-bold text-gray-800">
-                                ₦{totalReceived.toLocaleString()}
-                            </h2>
-                        </div>
-                        <div className="bg-gray-200 p-3 rounded-xl">
-                            <Calendar size={22} className="text-gray-400" />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Payment History Table */}
-                <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto">
-                    <table className="w-full min-w-[500px]">
-                        <thead>
-                            <tr className="border-b border-gray-100">
-                                <th className="px-6 py-4 text-left text-xs text-gray-500 font-medium">Month</th>
-                                <th className="px-6 py-4 text-left text-xs text-gray-500 font-medium">Amount</th>
-                                <th className="px-6 py-4 text-left text-xs text-gray-500 font-medium">Status</th>
-                                <th className="px-6 py-4 text-left text-xs text-gray-500 font-medium">Paid Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loading ? (
-                                <tr>
-                                    <td colSpan={4} className="text-center text-xs text-gray-400 py-10">Loading...</td>
-                                </tr>
-                            ) : history.length === 0 ? (
-                                <tr>
-                                    <td colSpan={4} className="text-center text-xs text-gray-400 py-10">No payment history found</td>
-                                </tr>
-                            ) : (
-                                history.map((item) => (
-                                    <tr key={item._id} className="border-t border-gray-100 hover:bg-gray-50">
-                                        <td className="px-6 py-4 text-sm text-gray-700">{item.month}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 font-medium">
-                                            ₦{Number(item.amount).toLocaleString()}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className={`text-xs font-medium px-3 py-1 rounded-full border
-                                                ${item.status === 'paid'
-                                                    ? 'text-green-600 bg-green-50 border-green-200'
-                                                    : 'text-yellow-600 bg-yellow-50 border-yellow-200'
-                                                }`}>
-                                                {item.status === 'paid' ? 'Paid' : 'Pending'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-400">
-                                            {item.paidDate
-                                                ? new Date(item.paidDate).toLocaleDateString('en-CA')
-                                                : '—'
-                                            }
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
     )
 }
-
-export default TeacherSalary

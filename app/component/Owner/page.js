@@ -13,6 +13,7 @@ import {
     Menu,
     X
 } from 'lucide-react'
+import { authFetch } from "../admin/utils/api"
 
 const COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444']
 
@@ -32,7 +33,7 @@ export default function OwnerDashboard() {
     const fetchStats = async () => {
         setLoading(true)
         try {
-            const res = await fetch('http://localhost:5000/payroll/owner-stats')
+            const res = await authFetch('http://localhost:5000/payroll/owner-stats')
             const data = await res.json()
             setStats(data)
         } catch (err) { console.log(err) }

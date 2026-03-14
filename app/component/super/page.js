@@ -149,8 +149,9 @@ const SuperAdminDashboard = () => {
             })
             const data = await res.json()
             if (!res.ok) return showMsg("error", data.error)
-            setSchools(prev => prev.map(s => s._id === id ? { ...s, isActive: data.isActive } : s))
+            setSchools(prev => prev.map(s => s._id?.toString() === id.toString() ? { ...s, isActive: data.isActive } : s))
             showMsg("success", data.message)
+            fetchSchools()   // ✅ re-fetch so UI is always in sync with DB
         } catch { showMsg("error", "Action failed") }
         finally { setActionLoading(null) }
     }
@@ -164,7 +165,7 @@ const SuperAdminDashboard = () => {
             })
             const data = await res.json()
             if (!res.ok) return showMsg("error", data.error)
-            setSchools(prev => prev.map(s => s._id === id ? { ...s, plan: data.plan } : s))
+            setSchools(prev => prev.map(s => s._id?.toString() === id.toString() ? { ...s, plan: data.plan } : s))
             showMsg("success", `Plan updated to ${plan}`)
         } catch { showMsg("error", "Action failed") }
         finally { setActionLoading(null) }
@@ -176,7 +177,7 @@ const SuperAdminDashboard = () => {
             await fetch(`http://localhost:5000/superadmin/school/${id}`, {
                 method: "DELETE", credentials: "include", headers
             })
-            setSchools(prev => prev.filter(s => s._id !== id))
+            setSchools(prev => prev.filter(s => s._id?.toString() !== id.toString()))
             showMsg("success", "School deleted")
         } catch { showMsg("error", "Delete failed") }
     }

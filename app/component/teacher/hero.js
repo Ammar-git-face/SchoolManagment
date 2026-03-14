@@ -2,7 +2,7 @@
 import { BookOpen, GraduationCap, DollarSign, CheckCircle, Calendar1Icon, Clock, Bell } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from './sidebar'
-import { useTeacher, teacherFetch } from "./utils/api"
+import { useTeacher, teacherFetch, API_BASE } from "./utils/api"
 
 const TeacherDashboard = () => {
 
@@ -16,44 +16,55 @@ const TeacherDashboard = () => {
     })
 
     const [announcements, setAnnouncements] = useState([])
-    const [meetings, setMeetings] = useState([])
+    const [meetings, setMeetings]           = useState([])
 
     const getStats = async () => {
         try {
+            // ✅ Read id from localStorage — same object saved at login
             const stored = localStorage.getItem("user")
             if (!stored) return
-            const { id } = JSON.parse(stored)
-            const res = await teacherFetch(`http://localhost:5000/teacher/dashboard-stats/${id}`)
+            const parsed = JSON.parse(stored)
+            const id = parsed.id || parsed._id   // handles both key shapes
+            if (!id) return
+
+            // ✅ API_BASE — no more hardcoded localhost
+            const res = await teacherFetch(`${API_BASE}/teacher/dashboard-stats/${id}`)
+            if (!res.ok) return
             const result = await res.json()
-            setStats(result)
+            setStats({
+                myClasses:     result.myClasses     || 0,
+                totalStudents: result.totalStudents || 0,
+                monthlySalary: result.monthlySalary || 0,
+                salaryStatus:  result.salaryStatus  || "unpaid"
+            })
         } catch (err) {
-            console.log(err)
+            console.log("Stats error:", err.message)
         }
     }
 
     const getAnnouncements = async () => {
         try {
-            const res = await teacherFetch('http://localhost:5000/alert/get')
+            // ✅ API_BASE
+            const res    = await teacherFetch(`${API_BASE}/alert/get`)
+            if (!res.ok) return
             const result = await res.json()
-            const data = Array.isArray(result) ? result : []
-            // only show announcements meant for teachers or all
-            const filtered = data.filter(a => a.to === 'Teachers' || a.to === 'All')
-            setAnnouncements(filtered)
+            const data   = Array.isArray(result) ? result : []
+            setAnnouncements(data.filter(a => a.to === "Teachers" || a.to === "All"))
         } catch (err) {
-            console.log(err)
+            console.log("Announcements error:", err.message)
         }
     }
 
     const getMeetings = async () => {
         try {
-            const res = await teacherFetch('http://localhost:5000/pta/get')
+            // ✅ API_BASE
+            const res    = await teacherFetch(`${API_BASE}/pta/get`)
+            if (!res.ok) return
             const result = await res.json()
-            const data = Array.isArray(result) ? result : []
-            // ✅ filter first, then slice — previous code set unfiltered data twice
-            const filtered = data.filter(m => m.allTeachers === true).slice(0, 3)
-            setMeetings(filtered)
+            const data   = Array.isArray(result) ? result : []
+            setMeetings(data.filter(m => m.allTeachers === true).slice(0, 3))
         } catch (err) {
-            console.log(err)
+            console.log("Meetings error:", err.message)
         }
     }
 
@@ -67,29 +78,29 @@ const TeacherDashboard = () => {
         {
             title: "My Classes",
             value: stats.myClasses,
-            sub: "Active classes",
-            icon: <BookOpen size={34} className="p-1.5 text-blue-500 bg-blue-100 rounded-xl" />,
+            sub:   "Active classes",
+            icon:  <BookOpen size={34} className="p-1.5 text-blue-500 bg-blue-100 rounded-xl" />,
             id: 1
         },
         {
             title: "Total Students",
             value: stats.totalStudents,
-            sub: "In your classes",
-            icon: <GraduationCap size={34} className="p-1.5 text-green-500 bg-green-100 rounded-xl" />,
+            sub:   "In your classes",
+            icon:  <GraduationCap size={34} className="p-1.5 text-green-500 bg-green-100 rounded-xl" />,
             id: 2
         },
         {
             title: "Monthly Salary",
             value: `₦${Number(stats.monthlySalary).toLocaleString()}`,
-            sub: "This month",
-            icon: <DollarSign size={34} className="p-1.5 text-yellow-500 bg-yellow-100 rounded-xl" />,
+            sub:   "This month",
+            icon:  <DollarSign size={34} className="p-1.5 text-yellow-500 bg-yellow-100 rounded-xl" />,
             id: 3
         },
         {
             title: "Salary Status",
             value: stats.salaryStatus,
-            sub: "Current period",
-            icon: <CheckCircle size={34} className="p-1.5 text-purple-500 bg-purple-100 rounded-xl" />,
+            sub:   "Current period",
+            icon:  <CheckCircle size={34} className="p-1.5 text-purple-500 bg-purple-100 rounded-xl" />,
             id: 4,
             isStatus: true
         }
@@ -102,7 +113,10 @@ const TeacherDashboard = () => {
             {/* Top Banner */}
             <div className="fixed top-0 left-0 right-0 md:ml-64 font-sans h-16 border-b border-gray-200 px-4 py-3 bg-white z-10 flex items-center justify-between">
                 <div>
-                    <h1 className="text-black font-semibold text-sm">WELCOME BACK, {user?.name || "Teacher"}</h1>
+                    {/* ✅ user.name from useTeacher hook — updates live on profile change */}
+                    <h1 className="text-black font-semibold text-sm">
+                        WELCOME BACK, {user?.name || user?.fullname || "Teacher"}
+                    </h1>
                     <p className="text-xs text-gray-400">Here's your teaching overview</p>
                 </div>
             </div>
@@ -119,10 +133,10 @@ const TeacherDashboard = () => {
                             </p>
                             <h1 className={`text-xl font-bold font-sans mb-1 capitalize
                                 ${card.isStatus
-                                    ? card.value === 'paid'
-                                        ? 'text-green-500'
-                                        : 'text-red-500'
-                                    : 'text-black'
+                                    ? card.value === "paid"
+                                        ? "text-green-500"
+                                        : "text-red-500"
+                                    : "text-black"
                                 }`}>
                                 {card.value}
                             </h1>
@@ -149,11 +163,17 @@ const TeacherDashboard = () => {
                                             <p className="text-xs font-semibold text-gray-700">{m.title}</p>
                                             <p className="text-xs text-gray-400">{m.agenda}</p>
                                             <span className="flex items-center gap-3 mt-1">
-                                                <p className="text-xs text-gray-400 flex items-center gap-1"><Calendar1Icon size={10} />{m.date}</p>
-                                                <p className="text-xs text-gray-400 flex items-center gap-1"><Clock size={10} />{m.time}</p>
+                                                <p className="text-xs text-gray-400 flex items-center gap-1">
+                                                    <Calendar1Icon size={10} />{m.date}
+                                                </p>
+                                                <p className="text-xs text-gray-400 flex items-center gap-1">
+                                                    <Clock size={10} />{m.time}
+                                                </p>
                                             </span>
                                         </div>
-                                        <span className="text-xs bg-blue-100 text-blue-500 px-2 py-0.5 rounded-xl capitalize">{m.type}</span>
+                                        <span className="text-xs bg-blue-100 text-blue-500 px-2 py-0.5 rounded-xl capitalize">
+                                            {m.type}
+                                        </span>
                                     </div>
                                 ))}
                             </div>
@@ -174,7 +194,9 @@ const TeacherDashboard = () => {
                                         <p className="text-xs font-semibold text-gray-700 mb-1">{a.title}</p>
                                         <p className="text-xs text-gray-400">{a.message}</p>
                                         <p className="text-xs text-gray-300 mt-1">
-                                            {new Date(a.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                            {new Date(a.createdAt).toLocaleDateString("en-US", {
+                                                year: "numeric", month: "short", day: "numeric"
+                                            })}
                                         </p>
                                     </div>
                                 ))}
@@ -182,8 +204,13 @@ const TeacherDashboard = () => {
                         )}
                     </div>
                 </div>
-                <div className="shadow-xl p-4 w-full h-30 bg-gray-200 ">
-                    <span className="flex items-center gap-2 text-sm "><DollarSign size={20} className="text-green-400/50"/> <p>Salary History</p></span>
+
+                {/* Salary History placeholder */}
+                <div className="shadow-xl p-4 w-full bg-gray-200">
+                    <span className="flex items-center gap-2 text-sm">
+                        <DollarSign size={20} className="text-green-400/50" />
+                        <p>Salary History</p>
+                    </span>
                 </div>
             </div>
         </div>

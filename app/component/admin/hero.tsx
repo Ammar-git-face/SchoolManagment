@@ -1,43 +1,58 @@
-"use client";
+"use client"
 
-import { Book, User2, GraduationCap, DollarSignIcon } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Pie, PieChart, Tooltip, Cell, BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
-import Sidebar from "./sidevar";
-import { authFetch } from "./utils/api"
+import { Book, User2, GraduationCap, DollarSignIcon, Menu } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Pie, PieChart, Tooltip, Cell, BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts"
+import Sidebar from "./sidevar"
+import { authFetch, API_BASE, getUser } from "./utils/api"
 
-const COLORS = ["#4F46E5", "#F59E0B", "#EF4444", "#22C55E"];
+const COLORS = ["#4F46E5", "#F59E0B", "#EF4444", "#22C55E"]
 
-const hero = () => {
+const Hero = () => {
+    const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [adminName, setAdminName] = useState("")
     const [stats, setStats] = useState({
-        totalStudents: 0,
-        totalTeachers: 0,
-        totalClasses: 0,
-        feesCollected: 0,
-        feesPending: 0,
-        pieData: [],
-        barData: [],
-        recentPayments: []
+        totalStudents: 0, totalTeachers: 0, totalClasses: 0,
+        feesCollected: 0, feesPending: 0,
+        pieData: [], barData: [], recentPayments: []
     })
     const [loading, setLoading] = useState(true)
 
+    useEffect(() => {
+        // ✅ Read name from localStorage — same source as sidebar
+        const u = getUser()
+        setAdminName(u.name || u.fullname || "Admin")
+
+        // Listen for profile updates (same event sidebar uses)
+        const onUpdate = () => {
+            const updated = getUser()
+            setAdminName(updated.name || updated.fullname || "Admin")
+        }
+        window.addEventListener("userUpdated", onUpdate)
+        window.addEventListener("storage", onUpdate)
+        return () => {
+            window.removeEventListener("userUpdated", onUpdate)
+            window.removeEventListener("storage", onUpdate)
+        }
+    }, [])
+
     const getStats = async () => {
         try {
-            const res = await authFetch('http://localhost:5000/stats/dashboard-stats')
+            // ✅ Use API_BASE — not hardcoded localhost
+            const res    = await authFetch(`${API_BASE}/stats/dashboard-stats`)
             const result = await res.json()
-            // ✅ always merge with safe defaults so no field is ever undefined
             setStats({
-                totalStudents: result.totalStudents || 0,
-                totalTeachers: result.totalTeachers || 0,
-                totalClasses: result.totalClasses || 0,
-                feesCollected: result.feesCollected || 0,
-                feesPending: result.feesPending || 0,
-                pieData: Array.isArray(result.pieData) ? result.pieData : [],
-                barData: Array.isArray(result.barData) ? result.barData : [],
+                totalStudents:  result.totalStudents  || 0,
+                totalTeachers:  result.totalTeachers  || 0,
+                totalClasses:   result.totalClasses   || 0,
+                feesCollected:  result.feesCollected  || 0,
+                feesPending:    result.feesPending    || 0,
+                pieData:        Array.isArray(result.pieData)        ? result.pieData        : [],
+                barData:        Array.isArray(result.barData)        ? result.barData        : [],
                 recentPayments: Array.isArray(result.recentPayments) ? result.recentPayments : []
             })
         } catch (err) {
-            console.log(err)
+            console.log("Dashboard stats error:", err.message)
         } finally {
             setLoading(false)
         }
@@ -73,24 +88,49 @@ const hero = () => {
     ]
 
     return (
-        <div>
-            <Sidebar />
-            <div className="fixed top-0 left-0 right-0 md:ml-64 font-sans border-gray-300 px-4 py-3  bg-gray-200 z-10">
-                <h1 className="text-black font-semibold">WELCOME BACK Mr, Ammar</h1>
-                <p className="text-sm text-gray-400">Here is what is going on in your school</p>
+        <div className="min-h-screen bg-gray-50">
+            {/* ✅ Sidebar with required props */}
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+            {/* Mobile overlay */}
+            {sidebarOpen && (
+                <div className="fixed inset-0 bg-black/40 z-20 md:hidden"
+                    onClick={() => setSidebarOpen(false)} />
+            )}
+
+            {/* Top header */}
+            <div className="fixed top-0 left-0 right-0 md:ml-64 bg-white border-b border-gray-200 px-4 py-3 z-10 flex items-center justify-between shadow-sm">
+                {/* Mobile hamburger */}
+                <button onClick={() => setSidebarOpen(true)}
+                    className="md:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600 mr-3">
+                    <Menu size={20} />
+                </button>
+                <div className="min-w-0">
+                    {/* ✅ Dynamic name from localStorage — same as sidebar */}
+                    <h1 className="text-gray-800 font-semibold text-sm truncate">
+                        Welcome back, {adminName} 👋
+                    </h1>
+                    <p className="text-xs text-gray-400 hidden sm:block">
+                        Here is what is going on in your school
+                    </p>
+                </div>
+                <div className="flex items-center gap-2 ml-auto">
+                    {/* Avatar — matches sidebar initials */}
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs flex-shrink-0">
+                        {adminName.charAt(0).toUpperCase()}
+                    </div>
+                </div>
             </div>
 
             {/* Stat Cards */}
-
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-4 md:ml-64 pt-20 pb-6">
                 {cards.map((card, i) => (
-                    <div key={i} className="p-4.5 shadow-md rounded-md h-30 space-x-2 bg-gray-100">
-                        <p className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                    <div key={i} className="p-4 shadow-sm rounded-xl bg-white border border-gray-100">
+                        <p className="flex items-center justify-between text-xs text-gray-500 mb-2">
                             {card.title} <span>{card.icon}</span>
                         </p>
-                        <h1 className="text-xl font-bold font-sans mb-1">{card.heading}</h1>
-                        <p className="text-sm text-gray-400">{card.content}</p>
+                        <h1 className="text-xl font-bold text-gray-800 mb-1">{card.heading}</h1>
+                        <p className="text-xs text-gray-400">{card.content}</p>
                     </div>
                 ))}
             </div>
@@ -98,10 +138,10 @@ const hero = () => {
             <div className="px-4 md:ml-64">
 
                 {/* Charts */}
-                <div className="flex flex-col lg:flex-row gap-6 mb-8">
+                <div className="flex flex-col lg:flex-row gap-6 mb-6">
 
                     {/* Bar Chart */}
-                    <section className="shadow-md w-full lg:w-1/2 rounded-md">
+                    <section className="shadow-sm border border-gray-100 w-full lg:w-1/2 rounded-xl bg-white">
                         <div className="p-4">
                             <p className="text-sm font-semibold text-gray-700 mb-1">Students per Class</p>
                             <p className="text-xs text-gray-400 mb-3">Live distribution across all classes</p>
@@ -125,9 +165,9 @@ const hero = () => {
                     </section>
 
                     {/* Pie Chart */}
-                    <section className="shadow-md w-full lg:w-1/2 rounded-md flex flex-col items-center justify-center p-4">
-                        <p className="text-sm font-semibold text-gray-700 mb-1 self-start">Fee Payment Status</p>
-                        <p className="text-xs text-gray-400 mb-3 self-start">Paid vs pending breakdown</p>
+                    <section className="shadow-sm border border-gray-100 w-full lg:w-1/2 rounded-xl bg-white flex flex-col p-4">
+                        <p className="text-sm font-semibold text-gray-700 mb-1">Fee Payment Status</p>
+                        <p className="text-xs text-gray-400 mb-3">Paid vs pending breakdown</p>
                         {loading ? (
                             <div className="h-48 flex items-center justify-center text-xs text-gray-400">Loading...</div>
                         ) : stats.pieData.length === 0 ? (
@@ -136,16 +176,9 @@ const hero = () => {
                             <>
                                 <ResponsiveContainer width="100%" height={220}>
                                     <PieChart>
-                                        <Pie
-                                            data={stats.pieData}
-                                            dataKey="value"
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius={50}
-                                            outerRadius={80}
-                                            paddingAngle={3}
-                                            isAnimationActive
-                                        >
+                                        <Pie data={stats.pieData} dataKey="value"
+                                            cx="50%" cy="50%" innerRadius={50} outerRadius={80}
+                                            paddingAngle={3} isAnimationActive>
                                             {stats.pieData.map((_, index) => (
                                                 <Cell key={index} fill={COLORS[index % COLORS.length]} />
                                             ))}
@@ -153,15 +186,15 @@ const hero = () => {
                                         <Tooltip formatter={(value, name) => [value, name]} />
                                     </PieChart>
                                 </ResponsiveContainer>
-                                <nav className="flex items-center gap-4 flex-wrap justify-center mt-2">
+                                <div className="flex items-center gap-4 flex-wrap justify-center mt-2">
                                     {stats.pieData.map((item, i) => (
                                         <div key={i} className="flex items-center gap-1">
-                                            <i className="w-3 h-3 rounded-full inline-block"
-                                                style={{ backgroundColor: COLORS[i % COLORS.length] }}></i>
+                                            <span className="w-3 h-3 rounded-full inline-block"
+                                                style={{ backgroundColor: COLORS[i % COLORS.length] }} />
                                             <span className="text-xs text-gray-600">{item.name}: {item.value}</span>
                                         </div>
                                     ))}
-                                </nav>
+                                </div>
                             </>
                         )}
                     </section>
@@ -171,13 +204,13 @@ const hero = () => {
                 <div className="flex flex-col lg:flex-row gap-6 mb-8">
 
                     {/* Recent Fee Payments */}
-                    <div className="w-full lg:w-1/2 rounded-md shadow-md overflow-x-auto">
-                        <h1 className="p-5 font-bold text-md">Recent Fee Payments</h1>
-                        <table className="rounded-xl p-2 w-full min-w-[400px]">
+                    <div className="w-full lg:w-1/2 rounded-xl shadow-sm border border-gray-100 bg-white overflow-x-auto">
+                        <h1 className="p-4 font-bold text-sm text-gray-800 border-b border-gray-100">Recent Fee Payments</h1>
+                        <table className="w-full min-w-[400px]">
                             <thead>
-                                <tr className="bg-gray-200">
+                                <tr className="bg-gray-50">
                                     {["Student", "Amount", "Term", "Description", "Status"].map(h => (
-                                        <th key={h} className="px-4 py-3 text-left text-xs text-gray-600 font-medium">{h}</th>
+                                        <th key={h} className="px-4 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -187,7 +220,7 @@ const hero = () => {
                                 ) : stats.recentPayments.length === 0 ? (
                                     <tr><td colSpan={5} className="text-center text-xs text-gray-400 py-6">No payments yet</td></tr>
                                 ) : stats.recentPayments.map((payment) => (
-                                    <tr key={payment._id} className="border-t text-xs border-gray-200 hover:bg-gray-50">
+                                    <tr key={payment._id} className="border-t border-gray-100 text-xs hover:bg-gray-50">
                                         <td className="px-4 py-3 font-medium text-gray-700">{payment.studentName}</td>
                                         <td className="px-4 py-3 text-gray-700">₦{(payment.amount || 0).toLocaleString()}</td>
                                         <td className="px-4 py-3 text-gray-500">{payment.term}</td>
@@ -202,18 +235,18 @@ const hero = () => {
                     </div>
 
                     {/* Quick Stats */}
-                    <div className="shadow-xl w-full lg:w-1/2 rounded-md p-5">
-                        <h1 className="font-bold text-md mb-4">Quick Stats</h1>
+                    <div className="shadow-sm border border-gray-100 w-full lg:w-1/2 rounded-xl bg-white p-5">
+                        <h1 className="font-bold text-sm text-gray-800 mb-4">Quick Stats</h1>
                         {loading ? (
                             <p className="text-xs text-gray-400">Loading...</p>
                         ) : (
-                            <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-3">
                                 {[
-                                    { label: "Total Fees Collected", value: `₦${stats.feesCollected.toLocaleString()}`, color: "bg-green-100 text-green-700" },
-                                    { label: "Total Fees Pending", value: `₦${stats.feesPending.toLocaleString()}`, color: "bg-yellow-100 text-yellow-700" },
-                                    { label: "Total Students", value: stats.totalStudents, color: "bg-blue-100 text-blue-700" },
-                                    { label: "Total Teachers", value: stats.totalTeachers, color: "bg-purple-100 text-purple-700" },
-                                    { label: "Total Classes", value: stats.totalClasses, color: "bg-orange-100 text-orange-700" },
+                                    { label: "Total Fees Collected",  value: `₦${stats.feesCollected.toLocaleString()}`, color: "bg-green-100 text-green-700" },
+                                    { label: "Total Fees Pending",    value: `₦${stats.feesPending.toLocaleString()}`,   color: "bg-yellow-100 text-yellow-700" },
+                                    { label: "Total Students",        value: stats.totalStudents,                         color: "bg-blue-100 text-blue-700" },
+                                    { label: "Total Teachers",        value: stats.totalTeachers,                         color: "bg-purple-100 text-purple-700" },
+                                    { label: "Total Classes",         value: stats.totalClasses,                          color: "bg-orange-100 text-orange-700" },
                                 ].map((item, i) => (
                                     <div key={i} className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
                                         <span className="text-xs text-gray-600">{item.label}</span>
@@ -224,10 +257,9 @@ const hero = () => {
                         )}
                     </div>
                 </div>
-
             </div>
         </div>
-    );
+    )
 }
 
-export default hero;
+export default Hero

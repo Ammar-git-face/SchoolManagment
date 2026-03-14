@@ -110,7 +110,7 @@ export default function AdminAttendance() {
                         {['overview', 'records'].map(tab => (
                             <button key={tab} onClick={() => setActiveTab(tab)}
                                 className={`px-4 md:px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all
-                                    ${activeTab === tab ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100 shadow'}`}>
+                                    ${activeTab === tab ? 'bg-blue-200 text-black' : 'bg-white text-gray-600 hover:bg-gray-100 shadow'}`}>
                                 {tab === 'overview' ? '📊 Class Overview' : '📋 All Records'}
                             </button>
                         ))}

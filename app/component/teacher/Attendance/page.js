@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import Sidebar from "../sidebar"
-import { useTeacher, teacherFetch } from "../utils/api"
+// ✅ FIX 1: import API_BASE alongside existing imports
+import { useTeacher, teacherFetch, API_BASE } from "../utils/api"
 
 const TERMS = ['First Term', 'Second Term', 'Third Term']
 const SESSIONS = ['2024/2025', '2025/2026', '2026/2027']
@@ -12,7 +13,12 @@ const STATUS_COLORS = {
 }
 
 export default function TeacherAttendance() {
-    const { user, classes: assignedClasses } = useTeacher()
+    const { user } = useTeacher()
+    // ✅ FIX 2: useTeacher() returns { user } — not { user, classes }
+    //    Read assignedClasses from user object with safe [] fallback
+    //    This is what was undefined and crashing on .length at line 132
+    const assignedClasses = user?.assignedClasses || []
+
     const [selectedClass, setSelectedClass] = useState('')
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
     const [term, setTerm] = useState('First Term')
@@ -24,7 +30,7 @@ export default function TeacherAttendance() {
     const [message, setMessage] = useState('')
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
-    // ✅ Set first class once assignedClasses loads from useTeacher
+    // Set first class once assignedClasses loads from useTeacher
     useEffect(() => {
         if (assignedClasses.length > 0 && !selectedClass)
             setSelectedClass(assignedClasses[0].className)
@@ -34,8 +40,9 @@ export default function TeacherAttendance() {
         if (!selectedClass || !selectedDate || !user?.id) return
         setLoading(true)
         try {
+            // ✅ FIX 3: API_BASE replaces hardcoded localhost — works on mobile too
             const res = await teacherFetch(
-                `http://localhost:5000/attendance/class/${encodeURIComponent(selectedClass)}/${selectedDate}?teacherId=${user.id}`
+                `${API_BASE}/attendance/class/${encodeURIComponent(selectedClass)}/${selectedDate}?teacherId=${user.id}`
             )
             const data = await res.json()
             setStudents(data.students || [])
@@ -64,8 +71,8 @@ export default function TeacherAttendance() {
         setSubmitting(true)
         setMessage('')
         try {
-            // ✅ teacherFetch instead of fetch — token attached automatically
-            const res = await teacherFetch('http://localhost:5000/attendance/mark', {
+            // ✅ FIX 3 (same): API_BASE here too
+            const res = await teacherFetch(`${API_BASE}/attendance/mark`, {
                 method: 'POST',
                 body: JSON.stringify({
                     teacherId: user.id,
