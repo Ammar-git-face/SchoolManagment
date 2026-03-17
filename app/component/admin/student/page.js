@@ -3,6 +3,7 @@ import { Search, Pencil, Trash2, X } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidevar"
 import { authFetch } from "../utils/api"
+import { API } from "../../../config/api"
 
 // ✅ Outside parent component to prevent re-render focus loss
 const StudentForm = ({ title, data, setData, classes, onSubmit, onClose, showFamilyCode = false, familyCode, setFamilyCode }) => (
@@ -76,7 +77,7 @@ const Student = () => {
     const fetchStudents = async () => {
         try {
             setLoading(true)
-            const res = await authFetch("http://localhost:5000/student/getStudent")
+            const res = await authFetch(`${API}/student/getStudent`)
             const data = await res.json()
             setStudents(Array.isArray(data) ? data : [])
         } catch { setErr("Failed to load students") }
@@ -85,7 +86,7 @@ const Student = () => {
 
     const fetchClasses = async () => {
         try {
-            const res = await authFetch("http://localhost:5000/class")
+            const res = await authFetch(`${API}/class`)
             const data = await res.json()
             setClasses(Array.isArray(data) ? data : [])
         } catch { console.log("Failed to load classes") }
@@ -99,12 +100,12 @@ const Student = () => {
     const handleAdd = async () => {
         if (!addData.fullname || !addData.studentClass) return setErr("Name and class are required")
         try {
-            const res = await authFetch("http://localhost:5000/student", {
+            const res = await authFetch(`${API}/student`, {
                 method: "POST",
                 body: JSON.stringify({ ...addData, familyCode }),
             })
             const d = await res.json()
-            if (!res.ok) return setErr(d.error || "Failed to add student")
+            if (!res.ok) return setErr(d.error || "Failed to add student"),
             setAddData({ fullname: "", studentClass: "", parent: "" })
             setFamilyCode("")
             setShowAdd(false); setErr(""); fetchStudents()
@@ -113,7 +114,7 @@ const Student = () => {
 
     const handleEdit = async () => {
         try {
-            const res = await authFetch(`http://localhost:5000/student/${editId}`, {
+            const res = await authFetch(`${API}/student/${editId}`, {
                 method: "PUT",
                 body: JSON.stringify(editData),
             })
@@ -123,7 +124,7 @@ const Student = () => {
 
     const handleDelete = async (id) => {
         if (!confirm("Delete this student?")) return
-        const res = await authFetch(`http://localhost:5000/student/${id}`, { method: "DELETE" })
+        const res = await authFetch(`${API}/student/${id}`, { method: "DELETE" })
         if (res.ok) fetchStudents()
     }
 

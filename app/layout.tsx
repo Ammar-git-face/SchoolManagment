@@ -1,6 +1,16 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+// import { useEffect } from "react";
+
+
+// in any layout or root component
+// useEffect(() => {
+//   const ping = setInterval(() => {
+//       fetch(`${process.env.NEXT_PUBLIC_API_URL}/health`).catch(() => {})
+//   }, 10 * 60 * 1000) // ping every 10 minutes
+//   return () => clearInterval(ping)
+// }, [])
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

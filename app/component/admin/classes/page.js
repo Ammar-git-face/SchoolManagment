@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import Sidebar from "../sidevar"
 import { Pencil, Trash2, Book, X } from "lucide-react"
 import { authFetch } from "../utils/api"
+import { API } from "../../../config/api"
 
 // ✅ MUST be outside the parent component — fixes the "cursor jumps to next line" bug
 const ClassForm = ({ data, setData, onSubmit, onClose, title }) => (
@@ -51,7 +52,7 @@ const Classes = () => {
     const fetchClasses = async () => {
         try {
             setLoading(true)
-            const res = await authFetch("http://localhost:5000/class")
+            const res = await authFetch(`${API}/class`)
             const data = await res.json()
             setClasses(Array.isArray(data) ? data : [])
         } catch { setErr("Failed to load classes") }
@@ -63,7 +64,7 @@ const Classes = () => {
     const handleAdd = async () => {
         if (!formData.name || !formData.grade) return setErr("All fields required")
         try {
-            const res = await authFetch("http://localhost:5000/class", { method: "POST", body: JSON.stringify(formData) })
+            const res = await authFetch(`${API}/class`, { method: "POST", body: JSON.stringify(formData) })
             const d = await res.json()
             if (!res.ok) return setErr(d.error || "Failed")
             setFormData({ name: "", grade: "" })
@@ -73,14 +74,14 @@ const Classes = () => {
 
     const handleEdit = async () => {
         try {
-            const res = await authFetch(`http://localhost:5000/class/${editId}`, { method: "PUT", body: JSON.stringify(editData) })
+            const res = await authFetch(`${API}/class/${editId}`, { method: "PUT", body: JSON.stringify(editData) })
             if (res.ok) { setShowEdit(false); fetchClasses() }
         } catch { console.log("edit error") }
     }
 
     const handleDelete = async (id) => {
         if (!confirm("Delete this class?")) return
-        const res = await authFetch(`http://localhost:5000/class/${id}`, { method: "DELETE" })
+        const res = await authFetch(`${API}/class/${id}`, { method: "DELETE" })
         if (res.ok) fetchClasses()
     }
 

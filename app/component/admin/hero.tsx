@@ -1,5 +1,5 @@
 "use client"
-
+import { API } from "../../config/api"
 import { Book, User2, GraduationCap, DollarSignIcon, Menu } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Pie, PieChart, Tooltip, Cell, BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts"

@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Users, Eye, EyeOff } from "lucide-react"
 import { API_BASE } from "../../admin/utils/api"
+// import { API } from "../../../config/api"
 
 const ParentLogin = () => {
     const router = useRouter()
@@ -90,7 +91,7 @@ const ParentLogin = () => {
 
                 <p className="text-xs text-center text-gray-400 mt-4">
                     Don't have an account?{" "}
-                    <button onClick={() => router.push("/component/auth/parentRegister")}
+                    <button onClick={() => router.push("/component/auth/parentSignup")}
                         className="text-purple-500 hover:underline font-medium">Register</button>
                 </p>
             </div>

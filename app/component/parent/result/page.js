@@ -2,6 +2,7 @@
 import { Printer, Download } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidebar"
+import { API } from "../../../config/api"
 import { useParent, parentFetch } from "../utils/useParent"
 
 const TERMS    = ["First Term", "Second Term", "Third Term"]
@@ -45,7 +46,7 @@ const ParentResults = () => {
         const fetchResults = async () => {
             setLoading(true)
             try {
-                const res  = await parentFetch("http://localhost:5000/result/approved")
+                const res  = await parentFetch(`${API}/result/approved`)
                 const data = await res.json()
                 setResults(Array.isArray(data) ? data : [])
             } catch (err) { console.log(err) }
@@ -69,7 +70,7 @@ const ParentResults = () => {
         setDownloading(true)
         try {
             const params = new URLSearchParams({ term: selectedTerm, session: selectedSession })
-            const res    = await parentFetch(`http://localhost:5000/result/report-card/${selectedChild._id}?${params}`)
+            const res    = await parentFetch(`${API}/result/report-card/${selectedChild._id}?${params}`)
             if (!res.ok) { const e = await res.json(); alert(e.error || "Failed"); return }
             const blob = await res.blob()
             const url  = URL.createObjectURL(blob)

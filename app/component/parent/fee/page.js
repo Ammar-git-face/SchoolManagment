@@ -3,6 +3,7 @@ import { CreditCard, CheckCircle, Clock, Download, Plus, X } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidebar"
 import { useParent, parentFetch } from "../utils/useParent"
+import { API } from "../../../config/api"
 
 const ParentFeePayments = () => {
     const { user, children } = useParent()
@@ -18,7 +19,7 @@ const ParentFeePayments = () => {
     const fetchFees = async () => {
         if (!user?.id) return
         try {
-            const res  = await parentFetch(`http://localhost:5000/fees/parent/${user.id}`)
+            const res  = await parentFetch(`${API}/fees/parent/${user.id}`)
             const data = await res.json()
             setFees(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }
@@ -36,7 +37,7 @@ const ParentFeePayments = () => {
             return setMsg({ type: "error", text: "Please fill all fields" })
         setLoading(true); setMsg(null)
         try {
-            const feeRes = await parentFetch("http://localhost:5000/fees/create", {
+            const feeRes = await parentFetch(`${API}/fees/create`, {
                 method: "POST",
                 body: JSON.stringify({
                     parentId:    user.id,
@@ -53,7 +54,7 @@ const ParentFeePayments = () => {
             const feeData = await feeRes.json()
             if (!feeRes.ok) return setMsg({ type: "error", text: feeData.error })
 
-            const payRes = await parentFetch("http://localhost:5000/fees/initialize", {
+            const payRes = await parentFetch(`${API}/fees/initialize`, {
                 method: "POST",
                 body: JSON.stringify({
                     feeId:       feeData._id,
@@ -77,7 +78,7 @@ const ParentFeePayments = () => {
                     customizations:  { title: "School Fee Payment", description: form.description },
                     callback: async (response) => {
                         if (response.status === "successful") {
-                            await parentFetch("http://localhost:5000/fees/verify", {
+                            await parentFetch(`${API}/fees/verify`, {
                                 method: "POST",
                                 body: JSON.stringify({ txRef: response.tx_ref, feeId: feeData._id })
                             })
@@ -96,7 +97,7 @@ const ParentFeePayments = () => {
 
     const handleDownloadReceipt = async (fee) => {
         try {
-            const res  = await parentFetch(`http://localhost:5000/fees/receipt/${fee._id}`)
+            const res  = await parentFetch(`${API}/fees/receipt/${fee._id}`)
             const blob = await res.blob()
             const url  = URL.createObjectURL(blob)
             const a    = document.createElement("a")

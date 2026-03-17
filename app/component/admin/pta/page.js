@@ -24,7 +24,7 @@
 
 //     const getMeetings = async () => {
 //         try {
-//             const res = await fetch('http://localhost:5000/pta/get')
+//             const res = await fetch('${API}/pta/get')
 //             const result = await res.json()
 //             setMeetings(Array.isArray(result) ? result : [])
 //         } catch (err) { console.log(err) }
@@ -32,7 +32,7 @@
 
 //     const getStats = async () => {
 //         try {
-//             const res = await fetch('http://localhost:5000/pta/stats')
+//             const res = await fetch('${API}/pta/stats')
 //             const result = await res.json()
 //             setStats(result)
 //         } catch (err) { console.log(err) }
@@ -48,7 +48,7 @@
 //         setLoading(true)
 //         setMsg(null)
 //         try {
-//             const res = await fetch('http://localhost:5000/pta', {
+//             const res = await fetch('${API}/pta', {
 //                 method: 'POST',
 //                 headers: { 'Content-Type': 'application/json' },
 //                 body: JSON.stringify({ title, agenda, type, time, date, duration, allTeachers, allParents })
@@ -69,14 +69,14 @@
 
 //     const handleComplete = async (id) => {
 //         try {
-//             await fetch(`http://localhost:5000/pta/complete/${id}`, { method: 'PUT' })
+//             await fetch(`${API}/pta/complete/${id}`, { method: 'PUT' })
 //             getMeetings()
 //         } catch (err) { console.log(err) }
 //     }
 
 //     const handleDelete = async (id) => {
 //         try {
-//             await fetch(`http://localhost:5000/pta/${id}`, { method: 'DELETE' })
+//             await fetch(`${API}/pta/${id}`, { method: 'DELETE' })
 //             getMeetings()
 //         } catch (err) { console.log(err) }
 //     }
@@ -299,6 +299,7 @@ import { Mic, VideoIcon, Calendar1Icon, Clock, File, X, Trash2, CheckCircle } fr
 import { useState, useEffect } from "react"
 import SideVar from "../sidevar"
 import { authFetch } from "../utils/api"
+import { API } from "../../../config/api"
 
 // ✅ Outside parent component — prevents cursor jump on inputs
 const ScheduleModal = ({ onClose, onSubmit, stats, loading, msg }) => {
@@ -410,7 +411,7 @@ const AdminPTA = () => {
 
     const getMeetings = async () => {
         try {
-            const res = await authFetch('http://localhost:5000/pta/get')
+            const res = await authFetch('${API}/pta/get')
             const data = await res.json()
             setMeetings(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }
@@ -418,7 +419,7 @@ const AdminPTA = () => {
 
     const getStats = async () => {
         try {
-            const res = await authFetch('http://localhost:5000/pta/stats')
+            const res = await authFetch('${API}/pta/stats')
             const data = await res.json()
             setStats(data)
         } catch (err) { console.log(err) }
@@ -431,7 +432,7 @@ const AdminPTA = () => {
             return setMsg({ type: 'error', text: 'Title, date and time are required' })
         setLoading(true); setMsg(null)
         try {
-            const res = await authFetch('http://localhost:5000/pta', {
+            const res = await authFetch('${API}/pta', {
                 method: 'POST',
                 body: JSON.stringify(formData),
             })
@@ -446,7 +447,7 @@ const AdminPTA = () => {
 
     const handleComplete = async (id) => {
         try {
-            await authFetch(`http://localhost:5000/pta/complete/${id}`, { method: 'PUT' })
+            await authFetch(`${API}/pta/complete/${id}`, { method: 'PUT' })
             getMeetings()
         } catch (err) { console.log(err) }
     }
@@ -454,7 +455,7 @@ const AdminPTA = () => {
     const handleDelete = async (id) => {
         if (!confirm('Delete this meeting?')) return
         try {
-            await authFetch(`http://localhost:5000/pta/${id}`, { method: 'DELETE' })
+            await authFetch(`${API}/pta/${id}`, { method: 'DELETE' })
             getMeetings()
         } catch (err) { console.log(err) }
     }

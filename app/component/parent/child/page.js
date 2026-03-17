@@ -3,6 +3,7 @@ import { GraduationCap, TrendingUp, AlertTriangle, CheckCircle } from "lucide-re
 import { useState, useEffect } from "react"
 import Sidebar from "../sidebar"
 import { useParent, parentFetch } from "../utils/useParent"
+import { API } from "../../../config/api"
 
 const getInitials  = (name = "") => name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()
 const getScoreColor = (s) => s >= 70 ? "text-green-500" : s >= 50 ? "text-yellow-500" : "text-red-500"
@@ -19,7 +20,7 @@ const MyChildren = () => {
         if (!user?.id) return
         const fetchResults = async () => {
             try {
-                const res  = await parentFetch("http://localhost:5000/result")
+                const res  = await parentFetch(`${API}/result`)
                 const data = await res.json()
                 setResults(Array.isArray(data) ? data : [])
             } catch (err) { console.log(err) }

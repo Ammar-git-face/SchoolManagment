@@ -3,6 +3,7 @@ import { Mic, VideoIcon, Calendar1Icon, Clock, File, X } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidebar"
 import { useTeacher, teacherFetch } from "../utils/api"
+import { API } from "../../../config/api"
 
 const TeacherPTA = () => {
     const { user } = useTeacher()
@@ -16,7 +17,7 @@ const TeacherPTA = () => {
 
     const getMeetings = async () => {
         try {
-            const res = await teacherFetch('http://localhost:5000/pta/get')
+            const res = await teacherFetch(`${API}/pta/get`)
             const result = await res.json()
             setMeetings(Array.isArray(result) ? result : [])
         } catch (err) { console.log(err) }

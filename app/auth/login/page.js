@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { Users } from "lucide-react"
 import Image from '@/node_modules/next/image';
+import { API } from "../../config/api"
 
 export default function SimpleLogin() {
   const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ export default function SimpleLogin() {
 
   const handleLogin = async () => {
 
-    const res = await fetch('http://localhost:5000/login', {
+    const res = await fetch('${API}/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -36,7 +37,7 @@ export default function SimpleLogin() {
     const checkLoggedIn = async () => {
       try {
         // Ping the protected route to verify JWT
-        const res = await fetch('http://localhost:5000/protected-route', {
+        const res = await fetch('${API}/protected-route', {
           method: 'GET',
           credentials: 'include',
         });

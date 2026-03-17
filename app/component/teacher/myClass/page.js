@@ -3,6 +3,7 @@ import { BookOpen, Users } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidebar"
 import { useTeacher, teacherFetch } from "../utils/api"
+import { API } from "../../../config/api"
 
 const getInitials = (name = "") =>
     name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
@@ -28,9 +29,9 @@ const MyClasses = () => {
         setLoading(true)
         try {
             const [teacherRes, studentRes, resultRes] = await Promise.all([
-                teacherFetch(`http://localhost:5000/teacher/${id}`),
-                teacherFetch("http://localhost:5000/student/getStudent"),
-                teacherFetch("http://localhost:5000/teacherResult")
+                teacherFetch(`${API}/teacher/${id}`),
+                teacherFetch(`${API}/student/getStudent`),
+                teacherFetch(`${API}/teacherResult`)
             ])
 
             const teacherData = await teacherRes.json()

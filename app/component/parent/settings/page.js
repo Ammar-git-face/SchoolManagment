@@ -1,6 +1,7 @@
 "use client"
 import { X, Eye, EyeOff, User, Lock } from "lucide-react"
 import { useState } from "react"
+import { API } from "../../../config/api"
 
 const Settings = ({ onClose, role }) => {
     const [activeTab, setActiveTab] = useState("profile")
@@ -17,8 +18,8 @@ const Settings = ({ onClose, role }) => {
     const [confirmPassword, setConfirmPassword] = useState("")
 
     const endpoint = role === "teacher"
-        ? `http://localhost:5000/auth/teacher/update/${stored.id}`
-        : `http://localhost:5000/auth/parent/update/${stored.id}`
+        ? `${API}/auth/teacher/update/${stored.id}`
+        : `${API}/auth/parent/update/${stored.id}`
 
     const handleUpdateProfile = async () => {
         try {

@@ -29,7 +29,7 @@
 //                 setClasses(saved)
 //             } else if (parsed.id && tok) {
 //                 // assignedClasses not in localStorage — fetch from backend
-//                 fetch(`http://localhost:5000/teacher/${parsed.id}`, {
+//                 fetch(`${API}/teacher/${parsed.id}`, {
 //                     credentials: "include",
 //                     headers: {
 //                         "Content-Type": "application/json",
@@ -71,7 +71,7 @@
 "use client"
 import { useState, useEffect } from "react"
 
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL || "${API}"
 
 export const getToken = () => {
     if (typeof window === "undefined") return ""

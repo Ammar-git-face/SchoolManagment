@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Logout from "../admin/logout"
+import { API } from "../../config/api"
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
@@ -12,7 +13,7 @@ export default function Dashboard() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch('http://localhost:5000/protected-route', {
+        const res = await fetch(`${API}/protected-route`, {
           method: 'GET',
           credentials: 'include',
         });

@@ -3,6 +3,7 @@ import { Bell, Calendar, Search } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidebar"
 import { useParent, parentFetch } from "../utils/useParent"
+import { API } from "../../../config/api"
 
 const ParentAnnouncements = () => {
     const [announcements, setAnnouncements] = useState([])
@@ -11,7 +12,7 @@ const ParentAnnouncements = () => {
 
     const getAnnouncements = async () => {
         try {
-            const res = await parentFetch("http://localhost:5000/alert/get")
+            const res = await parentFetch(`${API}/alert/get`)
             const data = await res.json()
             // only show announcements meant for parents or all
             const filtered = data.filter(a => a.to === "Parent" || a.to === "All")

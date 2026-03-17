@@ -3,11 +3,12 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Users, Eye, EyeOff } from "lucide-react"
+import { API } from "../../../config/api"
 
 const ParentRegister = () => {
     const router = useRouter()
-    const [loading,  setLoading]  = useState(false)
-    const [error,    setError]    = useState("")
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
     const [showPass, setShowPass] = useState(false)
     const [form, setForm] = useState({
         fullname: "", email: "", password: "", phone: "", familyCode: ""
@@ -24,7 +25,7 @@ const ParentRegister = () => {
         setLoading(true)
         setError("")
         try {
-            const res = await fetch("http://localhost:5000/auth/parent/register", {
+            const res = await fetch(`${API}/auth/parent/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -85,6 +86,17 @@ const ParentRegister = () => {
                             className="absolute right-3 top-8 text-gray-400 hover:text-gray-600">
                             {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
+                    </div>
+                    <div>
+                        <label className="text-xs text-gray-500 mb-1 block">
+                            School Code * <span className="text-gray-400">(given to you by the school)</span>
+                        </label>
+                        <input type="text" placeholder="e.g. BZNLFHTB"
+                            className="w-full border-2 border-purple-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono uppercase"
+                            value={form.schoolCode} onChange={e => set("schoolCode", e.target.value.toUpperCase())} />
+                        <p className="text-xs text-gray-400 mt-1">
+                            This ensures your account is linked to the correct school.
+                        </p>
                     </div>
 
                     {/* ✅ Family Code — not school code */}

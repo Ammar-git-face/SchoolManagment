@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { GraduationCap, Eye, EyeOff } from "lucide-react"
 import { API_BASE } from "../../admin/utils/api"
+import { API } from "../../../config/api"
 
 const TeacherLogin = () => {
     const router = useRouter()

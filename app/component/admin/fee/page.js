@@ -1,93 +1,260 @@
 "use client"
-import { DollarSign, Search, Download } from "lucide-react";
+import { DollarSign, Search, Download, Users, BookOpen } from "lucide-react"
 import { useState, useEffect } from "react"
-import Sidebar from "../sidevar";
+import Sidebar from "../sidevar"
+import { authFetch, API_BASE } from "../utils/api"
+import { API } from "../../../config/api"
 
-const fee = () => {
-    const fees = [
-        { Total: "Total Collected ", amount: '$1000', icon: <DollarSign size={40} className="shadow-md p-2 rounded-md text-green-400 bg-green-100" />, id: 1 },
-        { Total: "Pending Payment", amount: '$1000', icon: <DollarSign size={40} className="shadow-md p-2 rounded-md text-blue-400 bg-blue-100" />, id: 2 },
-        { Total: "Overdue Payment", amount: '$1000', icon: <DollarSign size={40} className="shadow-md p-2 rounded-md text-red-400 bg-red-100" />, id: 3 }
-    ]
-    const [teacher, setTeacher] = useState({fullname:0, salart:0, })
-    const student = [
-        { name: teacher.fullname, money: "$100", term: "first", due: "20/02/26", status: "paid", action: "print", id: 1 },
-        { name: 'alex', money: "$100", term: "first", due: "24/02/10", status: "Due.", action: "print", id: 2 },
-        { name: 'alex', money: "$100", term: "first", due: "24/02/10", status: "Due", action: "print", id: 3 },
-        { name: 'alex', money: "$100", term: "first", due: "24/02/10", status: "paid", action: "print", id: 4 }
-    ]
-   
+// ── Receipt generator ─────────────────────────────────────────────────────────
+const downloadReceipt = (record, type) => {
+    const isTeacher = type === "teacher"
+    const lines = [
+        "========================================",
+        "           PAYMENT RECEIPT              ",
+        "========================================",
+        `Date:        ${new Date().toLocaleDateString("en-GB")}`,
+        `Type:        ${isTeacher ? "Salary Payment" : "Fee Payment"}`,
+        "----------------------------------------",
+        `Name:        ${isTeacher ? record.teacherName : record.studentName}`,
+        isTeacher
+            ? `Month:       ${record.month} ${record.year}`
+            : `Class:       ${record.studentClass || "—"}`,
+        isTeacher
+            ? `Basic Salary: ₦${Number(record.basicSalary || 0).toLocaleString()}`
+            : `Term:        ${record.term}`,
+        isTeacher
+            ? `Net Pay:     ₦${Number(record.netPay || 0).toLocaleString()}`
+            : `Amount:      ₦${Number(record.amount || 0).toLocaleString()}`,
+        `Status:      ${record.status?.toUpperCase()}`,
+        record.paidAt
+            ? `Paid On:     ${new Date(record.paidAt).toLocaleDateString("en-GB")}`
+            : "",
+        record.flwRef
+            ? `Reference:   ${record.flwRef}`
+            : record.txRef
+            ? `TX Ref:      ${record.txRef}`
+            : "",
+        "----------------------------------------",
+        "  Thank you. Keep this receipt safe.    ",
+        "========================================",
+    ].filter(Boolean).join("\n")
 
-    const getData = async () => {
-        try {
-            const res = await fetch('http://localhost:5000/teacher/getTeachers')
-            const result = await res.json()
-            setTeacher(result)
-        } catch (err) {
-            console.log(err)
-        }
+    const blob = new Blob([lines], { type: "text/plain" })
+    const url  = URL.createObjectURL(blob)
+    const a    = document.createElement("a")
+    a.href     = url
+    a.download = `receipt-${(isTeacher ? record.teacherName : record.studentName)?.replace(/\s+/g, "-")}-${Date.now()}.txt`
+    a.click()
+    URL.revokeObjectURL(url)
+}
+
+// ── Status badge ──────────────────────────────────────────────────────────────
+const Badge = ({ status }) => {
+    const cfg = {
+        paid:    "bg-green-100 text-green-700",
+        pending: "bg-yellow-100 text-yellow-700",
+        unpaid:  "bg-red-100 text-red-700",
     }
+    return (
+        <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${cfg[status] || cfg.pending}`}>
+            {status}
+        </span>
+    )
+}
+
+export default function AdminFees() {
+    const [tab,          setTab]          = useState("students")  // "students" | "teachers"
+    const [fees,         setFees]         = useState([])
+    const [payrolls,     setPayrolls]     = useState([])
+    const [loading,      setLoading]      = useState(true)
+    const [search,       setSearch]       = useState("")
+    const [statusFilter, setStatusFilter] = useState("all")
+
+    // ── Fetch both datasets ───────────────────────────────────────────────────
     useEffect(() => {
-        getData()
+        const load = async () => {
+            setLoading(true)
+            try {
+                const [fRes, pRes] = await Promise.all([
+                    authFetch(`${API_BASE}/fees/all`),
+                    authFetch(`${API_BASE}/payroll/all`),
+                ])
+                if (fRes.ok) setFees(await fRes.json())
+                if (pRes.ok) { const pd = await pRes.json(); setPayrolls(Array.isArray(pd) ? pd : (pd.records || [])) }
+            } catch (err) {
+                console.log("Fee load error:", err.message)
+            } finally {
+                setLoading(false)
+            }
+        }
+        load()
     }, [])
 
+    // ── Summary calculations ──────────────────────────────────────────────────
+    const feeCollected = fees.filter(f => f.status === "paid").reduce((s, f) => s + (f.amount || 0), 0)
+    const feePending   = fees.filter(f => f.status !== "paid").reduce((s, f) => s + (f.amount || 0), 0)
+    const salaryPaid   = payrolls.filter(p => p.status === "paid").reduce((s, p) => s + (p.netPay || 0), 0)
+    const salaryPend   = payrolls.filter(p => p.status !== "paid").reduce((s, p) => s + (p.netPay || 0), 0)
+
+    const cards = tab === "students"
+        ? [
+            { label: "Total Collected",  amount: feeCollected, color: "bg-green-50", icon: "text-green-500 bg-green-100" },
+            { label: "Pending Payment",  amount: feePending,   color: "bg-yellow-50", icon: "text-yellow-500 bg-yellow-100" },
+            { label: "Total Records",    amount: fees.length,  color: "bg-blue-50",  icon: "text-blue-500 bg-blue-100",  isCount: true },
+        ]
+        : [
+            { label: "Salary Paid",      amount: salaryPaid,    color: "bg-green-50",  icon: "text-green-500 bg-green-100" },
+            { label: "Salary Pending",   amount: salaryPend,    color: "bg-yellow-50", icon: "text-yellow-500 bg-yellow-100" },
+            { label: "Total Records",    amount: payrolls.length, color: "bg-blue-50", icon: "text-blue-500 bg-blue-100", isCount: true },
+        ]
+
+    // ── Filter logic ──────────────────────────────────────────────────────────
+    const activeData = tab === "students" ? fees : payrolls
+
+    const filtered = activeData.filter(r => {
+        const name   = tab === "students" ? r.studentName : r.teacherName
+        const matchS = name?.toLowerCase().includes(search.toLowerCase())
+        const matchF = statusFilter === "all" || r.status === statusFilter
+        return matchS && matchF
+    })
+
+    // ── Table columns ─────────────────────────────────────────────────────────
+    const headers = tab === "students"
+        ? ["Name", "Class", "Amount", "Term", "Session", "Status", "Paid On", "Receipt"]
+        : ["Name", "Month", "Year", "Basic Salary", "Net Pay", "Status", "Paid On", "Receipt"]
+
     return (
-        <div className="overflow-x-hidden">
+        <div className="min-h-screen bg-gray-50">
             <Sidebar />
-            <nav>
-                {/* top cards */}
-                <div className="ml-0 md:ml-80 mt-10 md:mt-20 flex flex-col sm:flex-row items-center gap-4 md:gap-8 mb-10 px-4">
-                    {fees.map((list, index) => (
-                        <nav key={list.id} className={`shadow-xl w-full sm:w-68 h-25 p-2 rounded-xl hover:shadow-2xl ${index === 0 ? 'bg-green-50' : index === 1 ? 'bg-blue-50' : 'bg-red-50'}`}>
-                            <p className="text-gray-400 text-xs mb-2">{list.Total}</p>
-                            <nav className="flex justify-between items-center text-black text-2xl font-semibold">
-                                <h1>{list.amount}</h1>
-                                {list.icon}
-                            </nav>
-                        </nav>
+
+            {/* Header */}
+            <div className="fixed top-0 left-0 right-0 md:ml-64 bg-white border-b border-gray-200 px-4 py-3 z-10 shadow-sm">
+                <h1 className="text-sm font-semibold text-gray-800">Finance Overview</h1>
+                <p className="text-xs text-gray-400">Student fees & teacher payroll</p>
+            </div>
+
+            <div className="md:ml-64 pt-20 px-4 pb-10">
+
+                {/* Tabs */}
+                <div className="flex gap-2 mb-5">
+                    {[
+                        { key: "students", label: "Student Fees",     icon: <Users size={14} /> },
+                        { key: "teachers", label: "Teacher Payroll",  icon: <BookOpen size={14} /> },
+                    ].map(t => (
+                        <button key={t.key} onClick={() => { setTab(t.key); setSearch(""); setStatusFilter("all") }}
+                            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition
+                                ${tab === t.key
+                                    ? "bg-blue-200 text-black shadow-sm"
+                                    : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"}`}>
+                            {t.icon}{t.label}
+                        </button>
                     ))}
                 </div>
 
-                {/* Search */}
-                <div className="relative px-4 md:ml-80 max-w-sm mb-4">
-                    <Search size={15} className="absolute left-5 md:left-6 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input
-                        type="text"
-                        placeholder="Search students..."
-                        className="w-full pl-6 py-2 border rounded-lg focus:outline-none focus:ring-1 h-8 text-sm focus:ring-blue-500"
-                    />
+                {/* Summary Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    {cards.map((c, i) => (
+                        <div key={i} className={`rounded-xl p-4 shadow-sm border border-gray-100 ${c.color}`}>
+                            <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs text-gray-500 font-medium">{c.label}</p>
+                                <div className={`p-2 rounded-lg ${c.icon}`}>
+                                    <DollarSign size={16} />
+                                </div>
+                            </div>
+                            <p className="text-xl font-bold text-gray-800">
+                                {c.isCount ? c.amount : `₦${Number(c.amount).toLocaleString()}`}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Search + Filter */}
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                    <div className="relative flex-1 max-w-xs">
+                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <input type="text" placeholder={`Search ${tab === "students" ? "students" : "teachers"}...`}
+                            value={search} onChange={e => setSearch(e.target.value)}
+                            className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white" />
+                    </div>
+                    <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
+                        className="border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white">
+                        <option value="all">All Status</option>
+                        <option value="paid">Paid</option>
+                        <option value="pending">Pending</option>
+                    </select>
                 </div>
 
                 {/* Table */}
-                <div className="px-4 md:ml-80 overflow-x-auto">
-                    <table className="shadow-xl w-full min-w-[500px]">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
+                    <table className="w-full min-w-[600px]">
                         <thead>
-                            <tr className="bg-gray-200">
-                                <th className="px-4 py-3 text-left text-xs text-gray-600">Student</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Amount</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Term</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Due Date</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Status</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Action</th>
+                            <tr className="bg-gray-50 border-b border-gray-100">
+                                {headers.map(h => (
+                                    <th key={h} className="px-4 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {student.map((b) => (
-                                <tr key={b.id} className="text-xs border-gray-200 border-t hover:bg-gray-100">
-                                    <td className="px-4 py-3 text-xs text-gray-700">{b.name}</td>
-                                    <td className="px-4 py-3 text-xs text-gray-700">{b.money}</td>
-                                    <td className="px-4 py-3 text-xs text-gray-700">{b.term}</td>
-                                    <td className="px-4 py-3 text-xs text-gray-700">{b.due}</td>
-                                    <td className="px-4 py-3 text-xs text-gray-700">{b.status}</td>
-                                    <td className="px-4 py-3 text-xs flex items-center gap-2 text-gray-700"><Download size={15} />{b.action}</td>
-                                </tr>
-                            ))}
+                            {loading ? (
+                                <tr><td colSpan={headers.length} className="text-center py-10 text-xs text-gray-400">Loading...</td></tr>
+                            ) : filtered.length === 0 ? (
+                                <tr><td colSpan={headers.length} className="text-center py-10 text-xs text-gray-400">No records found</td></tr>
+                            ) : tab === "students" ? (
+                                filtered.map((f, i) => (
+                                    <tr key={f._id || i} className="border-t border-gray-100 hover:bg-gray-50 text-xs">
+                                        <td className="px-4 py-3 font-medium text-gray-800">{f.studentName || "—"}</td>
+                                        <td className="px-4 py-3 text-gray-600">{f.studentClass || "—"}</td>
+                                        <td className="px-4 py-3 text-gray-700 font-medium">₦{Number(f.amount || 0).toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-gray-600">{f.term || "—"}</td>
+                                        <td className="px-4 py-3 text-gray-600">{f.session || "—"}</td>
+                                        <td className="px-4 py-3"><Badge status={f.status} /></td>
+                                        <td className="px-4 py-3 text-gray-500">
+                                            {f.paidAt ? new Date(f.paidAt).toLocaleDateString("en-GB") : "—"}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <button onClick={() => downloadReceipt(f, "student")}
+                                                disabled={f.status !== "paid"}
+                                                className="flex items-center gap-1 text-blue-600 hover:text-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed transition">
+                                                <Download size={13} />
+                                                <span>Receipt</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                filtered.map((p, i) => (
+                                    <tr key={p._id || i} className="border-t border-gray-100 hover:bg-gray-50 text-xs">
+                                        <td className="px-4 py-3 font-medium text-gray-800">{p.teacherName || "—"}</td>
+                                        <td className="px-4 py-3 text-gray-600">{p.month || "—"}</td>
+                                        <td className="px-4 py-3 text-gray-600">{p.year || "—"}</td>
+                                        <td className="px-4 py-3 text-gray-700">₦{Number(p.basicSalary || 0).toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-gray-700 font-medium">₦{Number(p.netPay || 0).toLocaleString()}</td>
+                                        <td className="px-4 py-3"><Badge status={p.status} /></td>
+                                        <td className="px-4 py-3 text-gray-500">
+                                            {p.paidAt ? new Date(p.paidAt).toLocaleDateString("en-GB") : "—"}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <button onClick={() => downloadReceipt(p, "teacher")}
+                                                disabled={p.status !== "paid"}
+                                                className="flex items-center gap-1 text-blue-600 hover:text-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed transition">
+                                                <Download size={13} />
+                                                <span>Receipt</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>
-            </nav>
-        </div>
-    );
-}
 
-export default fee;
+                {/* Row count */}
+                {!loading && (
+                    <p className="text-xs text-gray-400 mt-3">
+                        Showing {filtered.length} of {activeData.length} records
+                    </p>
+                )}
+            </div>
+        </div>
+    )
+}

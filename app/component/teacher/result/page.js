@@ -3,8 +3,9 @@ import { useState, useEffect, useCallback } from "react"
 import { Save, Send, ChevronDown, CheckCircle, Clock, AlertCircle, BookOpen, RefreshCw, Eye } from "lucide-react"
 import { authFetch } from "../../admin/utils/api"
 import Sidebar from "../sidebar"
+import { API } from "../../../config/api"
 
-const API = "http://localhost:5000"
+//const API = `${API}`
 const TERMS    = ["First Term", "Second Term", "Third Term"]
 const SESSIONS = ["2024/2025", "2025/2026", "2026/2027"]
 

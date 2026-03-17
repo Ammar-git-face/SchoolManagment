@@ -3,6 +3,7 @@ import { Mic, VideoIcon, Calendar1Icon, Clock, File, X } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidebar"
 import { useParent, parentFetch } from "../utils/useParent"
+import { API } from "../../../config/api"
 
 const ParentPTA = () => {
     const { user }         = useParent()
@@ -12,7 +13,7 @@ const ParentPTA = () => {
 
     const getMeetings = async () => {
         try {
-            const res    = await parentFetch('http://localhost:5000/pta/get')
+            const res    = await parentFetch(`${API}/pta/get`)
             const result = await res.json()
             setMeetings(Array.isArray(result) ? result : [])
         } catch (err) { console.log(err) }

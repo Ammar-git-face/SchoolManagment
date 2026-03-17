@@ -6,6 +6,7 @@ import {
     ChevronDown, CheckCircle, XCircle, BarChart2
 } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts"
+import { API } from "../../config/api"
 
 // ─── LOGIN PAGE ───────────────────────────────────────────────
 const LoginPage = ({ onLogin }) => {
@@ -18,7 +19,7 @@ const LoginPage = ({ onLogin }) => {
         e.preventDefault()
         setLoading(true); setError("")
         try {
-            const res = await fetch("http://localhost:5000/superadmin/login", {
+            const res = await fetch(`${API}/superadmin/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -111,7 +112,7 @@ const SuperAdminDashboard = () => {
 
     const fetchStats = async () => {
         try {
-            const res = await fetch("http://localhost:5000/superadmin/stats", { credentials: "include", headers })
+            const res = await fetch(`${API}/superadmin/stats`, { credentials: "include", headers })
             const data = await res.json()
             setStats(data)
             // count schools registered in last 24h as "new"
@@ -124,7 +125,7 @@ const SuperAdminDashboard = () => {
     const fetchSchools = async () => {
         setLoading(true)
         try {
-            const res = await fetch("http://localhost:5000/superadmin/schools", { credentials: "include", headers })
+            const res = await fetch(`${API}/superadmin/schools`, { credentials: "include", headers })
             const data = await res.json()
             setSchools(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }
@@ -144,7 +145,7 @@ const SuperAdminDashboard = () => {
     const toggleStatus = async (id) => {
         setActionLoading(id + "_toggle")
         try {
-            const res = await fetch(`http://localhost:5000/superadmin/toggle/${id}`, {
+            const res = await fetch(`${API}/superadmin/toggle/${id}`, {
                 method: "PUT", credentials: "include", headers
             })
             const data = await res.json()
@@ -159,7 +160,7 @@ const SuperAdminDashboard = () => {
     const updatePlan = async (id, plan) => {
         setActionLoading(id + "_plan")
         try {
-            const res = await fetch(`http://localhost:5000/superadmin/plan/${id}`, {
+            const res = await fetch(`${API}/superadmin/plan/${id}`, {
                 method: "PUT", credentials: "include", headers,
                 body: JSON.stringify({ plan })
             })
@@ -174,7 +175,7 @@ const SuperAdminDashboard = () => {
     const deleteSchool = async (id, name) => {
         if (!confirm(`Delete "${name}"? This cannot be undone.`)) return
         try {
-            await fetch(`http://localhost:5000/superadmin/school/${id}`, {
+            await fetch(`${API}/superadmin/school/${id}`, {
                 method: "DELETE", credentials: "include", headers
             })
             setSchools(prev => prev.filter(s => s._id?.toString() !== id.toString()))

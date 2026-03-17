@@ -3,6 +3,7 @@ import { Search, Pencil, Trash2, BookPlus, X, Trash, KeyRound, CheckCircle } fro
 import { useState, useEffect } from "react"
 import Sidebar from "../sidevar"
 import { authFetch } from "../utils/api"
+import { API } from "../../../config/api"
 
 // ✅ Outside parent — fixes cursor-jump bug on inputs
 const AddEditModal = ({ title, data, setData, banks, onSubmit, onClose }) => (
@@ -75,7 +76,7 @@ const Teachers = () => {
     const getTeachers = async () => {
         try {
             setLoading(true)
-            const res = await authFetch("http://localhost:5000/teacher/getTeachers")
+            const res = await authFetch(`${API}/teacher/getTeachers`)
             const data = await res.json()
             setTeachers(Array.isArray(data) ? data : [])
         } catch { setErr("Failed to load teachers") }
@@ -84,7 +85,7 @@ const Teachers = () => {
 
     const getBanks = async () => {
         try {
-            const res = await authFetch("http://localhost:5000/fees/banks")
+            const res = await authFetch(`${API}/fees/banks`)
             const data = await res.json()
             setBanks(Array.isArray(data) ? data : [])
         } catch { console.log("banks fetch failed") }
@@ -92,7 +93,7 @@ const Teachers = () => {
 
     const fetchClasses = async () => {
         try {
-            const res = await authFetch("http://localhost:5000/class")
+            const res = await authFetch(`${API}/class`)
             const data = await res.json()
             setLiveClasses(Array.isArray(data) ? data : [])
         } catch { console.log("classes fetch failed") }
@@ -104,7 +105,7 @@ const Teachers = () => {
     const handleAdd = async () => {
         if (!addData.fullname || !addData.email) return setErr("Name and email required")
         try {
-            const res = await authFetch("http://localhost:5000/teacher", {
+            const res = await authFetch(`${API}/teacher`, {
                 method: "POST",
                 body: JSON.stringify({
                     ...addData,
@@ -122,7 +123,7 @@ const Teachers = () => {
     // ── Edit Teacher ─────────────────────────────────────
     const handleEdit = async () => {
         try {
-            const res = await authFetch(`http://localhost:5000/teacher/${editId}`, {
+            const res = await authFetch(`${API}/teacher/${editId}`, {
                 method: "PUT",
                 body: JSON.stringify({
                     ...editData,
@@ -137,7 +138,7 @@ const Teachers = () => {
     // ── Delete Teacher ───────────────────────────────────
     const handleDelete = async (id) => {
         if (!confirm("Delete this teacher?")) return
-        const res = await authFetch(`http://localhost:5000/teacher/${id}`, { method: "DELETE" })
+        const res = await authFetch(`${API}/teacher/${id}`, { method: "DELETE" })
         if (res.ok) getTeachers()
     }
 
@@ -145,7 +146,7 @@ const Teachers = () => {
     const handleAssign = async () => {
         if (!assignClass || !assignSubject) return alert("Please fill in both class and subject")
         try {
-            const res = await authFetch(`http://localhost:5000/teacher/${assignTeacher._id}/assign-class`, {
+            const res = await authFetch(`${API}/teacher/${assignTeacher._id}/assign-class`, {
                 method: "PUT",
                 body: JSON.stringify({ className: assignClass, subject: assignSubject }),
             })
@@ -155,7 +156,7 @@ const Teachers = () => {
 
     const handleRemoveClass = async (teacherId, classId) => {
         try {
-            const res = await authFetch(`http://localhost:5000/teacher/${teacherId}/remove-class`, {
+            const res = await authFetch(`${API}/teacher/${teacherId}/remove-class`, {
                 method: "PUT",
                 body: JSON.stringify({ classId }),
             })
@@ -168,7 +169,7 @@ const Teachers = () => {
         if (!newPassword) return alert("Please enter a password")
         setAccountLoading(true); setAccountMsg(null)
         try {
-            const res = await authFetch("http://localhost:5000/auth/teacher/create-account", {
+            const res = await authFetch(`${API}/auth/teacher/create-account`, {
                 method: "POST",
                 body: JSON.stringify({ teacherId: accountTeacher._id, password: newPassword }),
             })

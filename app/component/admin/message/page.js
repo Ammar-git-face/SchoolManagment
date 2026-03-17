@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../sidevar";
 import { authFetch } from "../utils/api";
+import { API } from "../../../config/api"
 
 const MessagePage = () => {
     const [teachers, setTeachers] = useState([])
@@ -12,8 +13,8 @@ const MessagePage = () => {
         const fetchData = async () => {
             try {
                 const [tRes, pRes] = await Promise.all([
-                    authFetch("http://localhost:5000/teacher/getTeachers"),
-                    authFetch("http://localhost:5000/student/getStudent"),
+                    authFetch(`${API}/teacher/getTeachers`),
+                    authFetch(`${API}/student/getStudent`),
                 ])
                 const tData = await tRes.json()
                 const pData = await pRes.json()

@@ -3,6 +3,7 @@ import { Calendar, User2, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Sidebar from "../sidevar";
 import { authFetch } from "../utils/api";
+import { API } from "../../../config/api"
 
 const AlertPage = () => {
     const [create, setCreate] = useState(false);
@@ -14,7 +15,7 @@ const AlertPage = () => {
 
     const handleDelete = async (id) => {
         try {
-            const res = await authFetch(`http://localhost:5000/alert/${id}`, { method: "DELETE" })
+            const res = await authFetch(`${API}/alert/${id}`, { method: "DELETE" })
             if (res.ok) getData()
         } catch (err) { console.log(err) }
     }
@@ -22,7 +23,7 @@ const AlertPage = () => {
     const Send = async (e) => {
         e.preventDefault()
         try {
-            const res = await authFetch("http://localhost:5000/alert", {
+            const res = await authFetch(`${API}/alert`, {
                 method: "POST",
                 body: JSON.stringify({ title, message, to }),
             })
@@ -36,7 +37,7 @@ const AlertPage = () => {
 
     const getData = async () => {
         try {
-            const res = await authFetch("http://localhost:5000/alert/get")
+            const res = await authFetch(`${API}/alert/get`)
             const data = await res.json()
             setDisplay(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }

@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { API } from "../../../config/api"
 import { useRouter } from 'next/navigation'
 
 export default function OwnerLogin() {
@@ -15,7 +16,7 @@ export default function OwnerLogin() {
         setLoading(true)
         setError('')
         try {
-            const res = await fetch('http://localhost:5000/payroll/owner-login', {
+            const res = await fetch(`${API}/payroll/owner-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })

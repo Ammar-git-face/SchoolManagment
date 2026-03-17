@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Sidebar from "../sidebar"
 import { useParent, parentFetch } from "../utils/useParent"
+import { API } from "../../../config/api"
 
 const TERMS    = ['First Term', 'Second Term', 'Third Term']
 const SESSIONS = ['2024/2025', '2025/2026', '2026/2027']
@@ -34,7 +35,7 @@ export default function ParentAttendance() {
         setLoading(true)
         try {
             const res  = await parentFetch(
-                `http://localhost:5000/attendance/student/${selectedChild._id}?term=${encodeURIComponent(term)}&session=${encodeURIComponent(session)}`
+                `${API}/attendance/student/${selectedChild._id}?term=${encodeURIComponent(term)}&session=${encodeURIComponent(session)}`
             )
             const data = await res.json()
             setRecords(Array.isArray(data.records) ? data.records : [])

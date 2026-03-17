@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { API } from "../../config/api"
 
 export default function SimpleLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleTest = async () => {
-    const res = await fetch('http://localhost:5000/signup', {
+    const res = await fetch('${API}/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),

@@ -2,6 +2,7 @@
 import { GraduationCap, Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { API } from "../../../config/api"
 
 const AdminLogin = () => {
     const [email, setEmail] = useState("")
@@ -16,7 +17,7 @@ const AdminLogin = () => {
         setError("")
         setLoading(true)
         try {
-            const res = await fetch("http://localhost:5000/auth/admin/login", {
+            const res = await fetch(`${API}/auth/admin/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",

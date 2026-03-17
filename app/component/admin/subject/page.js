@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Sidebar from '../sidevar'
 import { authFetch } from "../utils/api"
+import { API } from "../../../config/api"
 
 export default function AdminSubjects() {
     const [subjects, setSubjects] = useState([])
@@ -28,7 +29,7 @@ export default function AdminSubjects() {
     // ✅ fetch live classes from the class route
     const fetchLiveClasses = async () => {
         try {
-            const res = await authFetch('http://localhost:5000/class')
+            const res = await authFetch(`${API}/class`)
             const data = await res.json()
             setLiveClasses(Array.isArray(data) ? data : [])
         } catch (err) { console.error('fetchLiveClasses:', err.message) }
@@ -37,7 +38,7 @@ export default function AdminSubjects() {
     const fetchSubjects = useCallback(async () => {
         setLoading(true)
         try {
-            let url = 'http://localhost:5000/academic/all'
+            let url = `${API}/academic/all`
             if (filterClass) url += `?className=${encodeURIComponent(filterClass)}`
             const res = await authFetch(url)
             const data = await res.json()
@@ -62,7 +63,7 @@ export default function AdminSubjects() {
         }
         setAdding(true)
         try {
-            const res = await authFetch('http://localhost:5000/academic/create', {
+            const res = await authFetch(`${API}/academic/create`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newSubject)
@@ -80,7 +81,7 @@ export default function AdminSubjects() {
     const handleEdit = async () => {
         setSaving(true)
         try {
-            const res = await authFetch(`http://localhost:5000/academic/update/${editModal._id}`, {
+            const res = await authFetch(`${API}/academic/update/${editModal._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: editModal.name, maxCA: editModal.maxCA, maxExam: editModal.maxExam })
@@ -97,7 +98,7 @@ export default function AdminSubjects() {
     const handleDelete = async (id, name) => {
         if (!confirm(`Remove "${name}"? This won't delete existing results.`)) return
         try {
-            await authFetch(`http://localhost:5000/academic/delete/${id}`, { method: 'DELETE' })
+            await authFetch(`${API}/academic/delete/${id}`, { method: 'DELETE' })
             showMessage('✅ Subject removed')
             fetchSubjects()
         } catch { showMessage('❌ Error removing subject') }
@@ -110,7 +111,7 @@ export default function AdminSubjects() {
         setBulkAdding(true)
         let successCount = 0, skipCount = 0
         for (const name of names) {
-            const res = await authFetch('http://localhost:5000/academic/create', {
+            const res = await authFetch(`${API}/academic/create`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, className: bulkClass, maxCA: bulkMaxCA, maxExam: bulkMaxExam })

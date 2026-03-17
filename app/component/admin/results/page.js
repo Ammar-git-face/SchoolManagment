@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react"
 import { Search, Printer, CheckCircle, Clock, AlertCircle, ChevronDown, Eye, Users, RefreshCw } from "lucide-react"
 import Sidebar from "../sidevar"
 import { authFetch } from "../utils/api"
+import { API } from "../../../config/api"
 
 const TERMS    = ["First Term", "Second Term", "Third Term"]
 const SESSIONS = ["2024/2025", "2025/2026", "2026/2027"]
@@ -51,7 +52,7 @@ const AdminResults = () => {
     const fetchPending = useCallback(async () => {
         setLoading(true)
         try {
-            const res  = await authFetch("http://localhost:5000/result/admin/pending")
+            const res  = await authFetch(`${API}/result/admin/pending`)
             const data = await res.json()
             setPendingGroups(Array.isArray(data) ? data : [])
         } catch (e) { console.error(e) }
@@ -62,8 +63,8 @@ const AdminResults = () => {
     const fetchAll = useCallback(async () => {
         try {
             const [sRes, rRes] = await Promise.all([
-                authFetch("http://localhost:5000/student/getStudent"),
-                authFetch("http://localhost:5000/result"),
+                authFetch(`${API}/student/getStudent`),
+                authFetch(`${API}/result`),
             ])
             const sData = await sRes.json()
             const rData = await rRes.json()
@@ -83,7 +84,7 @@ const AdminResults = () => {
         const key = `${subject}||${term}||${session}`
         setApproving(key)
         try {
-            const res  = await authFetch("http://localhost:5000/result/approve", {
+            const res  = await authFetch(`${API}/result/approve`, {
                 method: "POST",
                 body: JSON.stringify({ subject, term, session, teacherRemark, principalRemark })
             })

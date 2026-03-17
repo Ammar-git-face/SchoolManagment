@@ -5,6 +5,7 @@
 "use client"
 import { useState, useRef } from "react"
 import { Upload, Check, School } from "lucide-react"
+import { API } from "../../../config/api"
 
 const SchoolLogoUpload = () => {
     const [preview,   setPreview]   = useState("")
@@ -29,7 +30,7 @@ const SchoolLogoUpload = () => {
         setMsg(null)
         try {
             const token = localStorage.getItem("token")
-            const res = await fetch("http://localhost:5000/school/logo", {
+            const res = await fetch(`${API}/school/logo`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

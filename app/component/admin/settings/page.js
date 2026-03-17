@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react"
 import { Upload, Save, School, Phone, MapPin, Mail, CheckCircle, AlertCircle, Image, X } from "lucide-react"
 import Sidebar from "../sidevar"
 import { authFetch, API_BASE, getUser, setUser } from "../utils/api"
+import { API } from "../../../config/api"
 
 export default function SchoolSettings() {
     const [sidebarOpen, setSidebarOpen] = useState(false)

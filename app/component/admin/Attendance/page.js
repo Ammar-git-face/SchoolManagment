@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Sidebar from '../sidevar'
 import { authFetch } from "../utils/api"
+import { API } from "../../../config/api"
 
 const TERMS = ['First Term', 'Second Term', 'Third Term']
 const SESSIONS = ['2024/2025', '2025/2026', '2026/2027']
@@ -25,7 +26,7 @@ export default function AdminAttendance() {
 
     const fetchClassSummary = useCallback(async () => {
         try {
-            const res = await authFetch(`http://localhost:5000/attendance/summary?term=${encodeURIComponent(term)}&session=${encodeURIComponent(session)}`)
+            const res = await authFetch(`${API}/attendance/summary?term=${encodeURIComponent(term)}&session=${encodeURIComponent(session)}`)
             const data = await res.json()
             setClassSummary(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }
@@ -34,7 +35,7 @@ export default function AdminAttendance() {
     const fetchRecords = useCallback(async () => {
         setLoading(true)
         try {
-            let url = `http://localhost:5000/attendance/all?term=${encodeURIComponent(term)}&session=${encodeURIComponent(session)}`
+            let url = `${API}/attendance/all?term=${encodeURIComponent(term)}&session=${encodeURIComponent(session)}`
             if (filterClass) url += `&className=${encodeURIComponent(filterClass)}`
             if (filterDate) url += `&date=${filterDate}`
             const res = await authFetch(url)

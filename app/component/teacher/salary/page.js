@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { DollarSign, Calendar, CheckCircle, Clock } from 'lucide-react'
 import Sidebar from '../sidebar'
 import { useTeacher, teacherFetch, API_BASE } from '../utils/api'
+import { API } from "../../../config/api"
 
 export default function TeacherSalary() {
     const { user } = useTeacher()
@@ -29,7 +30,7 @@ export default function TeacherSalary() {
     // ✅ Fetch salary history — mounted at /teacherSalary in server.js
     const getSalaryHistory = async (id) => {
         try {
-            const res = await teacherFetch(`${API_BASE}/teacherSalary/history/${id}`)
+            const res = await teacherFetch(`${API}/teacherSalary/history/${id}`)
             if (!res.ok) return
             const data = await res.json()
             setHistory(Array.isArray(data) ? data : [])

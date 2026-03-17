@@ -2,9 +2,9 @@
 import { Send, Search, Circle } from "lucide-react"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { io } from "socket.io-client"
-import { authFetch } from "./admin/utils/api"
+import { API } from "../config/api"
 
-const SOCKET_URL = "http://localhost:5000"
+const SOCKET_URL = `${API}`
 
 const getInitials = (name = "") =>
     name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
@@ -29,8 +29,12 @@ const Chat = ({ Sidebar }) => {
     const activeContactRef = useRef(null)
 
     // keep ref in sync so socket callbacks can read current activeContact
+    // also persist to localStorage so messages reload after refresh
     useEffect(() => {
         activeContactRef.current = activeContact
+        if (activeContact) {
+            localStorage.setItem("lastActiveContact", JSON.stringify(activeContact))
+        }
     }, [activeContact])
 
     // scroll to bottom on new messages
@@ -40,7 +44,7 @@ const Chat = ({ Sidebar }) => {
 
     const fetchContacts = useCallback(async (userId) => {
         try {
-            const res = await authFetch(`${SOCKET_URL}/messages/contacts/${userId}`)
+            const res = await fetch(`${SOCKET_URL}/messages/contacts/${userId}`)
             const data = await res.json()
             // FIX: guard against non-array response
             setContacts(Array.isArray(data) ? data : [])
@@ -65,9 +69,14 @@ const Chat = ({ Sidebar }) => {
 
         setUser(parsed)
 
+        // FIX: declare mounted guard BEFORE socket and all callbacks
+        let mounted = true
+
+        // FIX: use websocket transport only — polling requires CORS preflight
+        // which fails when credentials:true + wildcard origin on some servers
         const socket = io(SOCKET_URL, {
             withCredentials: true,
-            transports: ['websocket', 'polling'],   // websocket first — faster + more reliable
+            transports: ['websocket'],
             reconnectionAttempts: 5,
             reconnectionDelay: 2000
         })
@@ -79,8 +88,6 @@ const Chat = ({ Sidebar }) => {
 
         socket.on("connect_error", (err) => {
             console.error("Socket connection error:", err.message)
-            // "xhr poll error" = backend is down or not reachable on port 5000
-            // Check: is the server running? any startup crash in the terminal?
         })
 
         socket.on("online_users", (users) => {
@@ -154,9 +161,25 @@ const Chat = ({ Sidebar }) => {
             console.error("Message send error:", errMsg)
         })
 
-        fetchContacts(parsed.id)
+        if (mounted) fetchContacts(parsed.id)
+
+        // FIX: restore last active contact from localStorage on mount
+        // so messages are visible again after a page refresh
+        const lastContact = localStorage.getItem("lastActiveContact")
+        if (lastContact && mounted) {
+            try {
+                const contact = JSON.parse(lastContact)
+                setActiveContact(contact)
+                // reload messages for this contact
+                authFetch(`${SOCKET_URL}/messages/${parsed.id}/${contact._id}`)
+                    .then(r => r.json())
+                    .then(data => { if (mounted) setMessages(Array.isArray(data) ? data : []) })
+                    .catch(console.error)
+            } catch { /* ignore */ }
+        }
 
         return () => {
+            mounted = false
             socket.disconnect()
             socketRef.current = null
         }
@@ -168,12 +191,12 @@ const Chat = ({ Sidebar }) => {
         setLoading(true)
         try {
             const stored = JSON.parse(localStorage.getItem("user"))
-            const res = await authFetch(`${SOCKET_URL}/messages/${stored.id}/${contact._id}`)
+            const res = await fetch(`${SOCKET_URL}/messages/${stored.id}/${contact._id}`)
             const data = await res.json()
             setMessages(Array.isArray(data) ? data : [])
 
             socketRef.current?.emit("mark_read", { userId: stored.id, otherId: contact._id })
-            await authFetch(`${SOCKET_URL}/messages/read/${stored.id}/${contact._id}`, { method: "PUT" })
+            await fetch(`${SOCKET_URL}/messages/read/${stored.id}/${contact._id}`, { method: "PUT" })
 
             setContacts((prev) =>
                 prev.map((c) => (c._id === contact._id ? { ...c, unreadCount: 0 } : c))

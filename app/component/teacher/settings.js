@@ -2,6 +2,7 @@
 import { X, Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 import { teacherFetch, getUser, setUser, API_BASE } from "../teacher/utils/api"
+import { API } from "../../config/api"
 
 const Settings = ({ onClose, role }) => {
     const [activeTab, setActiveTab] = useState("profile")

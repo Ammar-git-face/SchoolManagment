@@ -3,6 +3,7 @@ import { GraduationCap, TrendingUp, DollarSign, Bell, Calendar } from "lucide-re
 import { useState, useEffect } from "react"
 import Sidebar from "./sidebar"
 import { authFetch } from "../admin/utils/api"  // ✅ reuse the same helper
+import { API } from "../../config/api"
 
 const getInitials = (name = "") =>
     name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
@@ -22,7 +23,7 @@ const ParentDashboard = () => {
 
     const getChildren = async (parentId) => {
         try {
-            const res  = await authFetch(`http://localhost:5000/student/parent/${parentId}`)
+            const res  = await authFetch(`${API}/student/parent/${parentId}`)
             const data = await res.json()
             const list = Array.isArray(data) ? data : []  // ✅ guard
             setChildren(list)
@@ -32,7 +33,7 @@ const ParentDashboard = () => {
 
     const getResults = async () => {
         try {
-            const res  = await authFetch("http://localhost:5000/result")
+            const res  = await authFetch(`${API}/result`)
             const data = await res.json()
             setResults(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }
@@ -40,7 +41,7 @@ const ParentDashboard = () => {
 
     const getAnnouncements = async () => {
         try {
-            const res  = await authFetch("http://localhost:5000/alert/get")
+            const res  = await authFetch(`${API}/alert/get`)
             const data = await res.json()
             const list = Array.isArray(data) ? data : []
             setAnnouncements(list.filter(a => a.to === "Parent" || a.to === "All"))
@@ -51,7 +52,7 @@ const ParentDashboard = () => {
         try {
             const allFees = await Promise.all(
                 childrenList.map(child =>
-                    authFetch(`http://localhost:5000/fees/student/${child._id}`)
+                    authFetch(`${API}/fees/parent/${child._id}`)
                         .then(r => r.json())
                         .then(d => Array.isArray(d) ? d : [])
                 )

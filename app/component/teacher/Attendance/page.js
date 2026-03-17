@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Sidebar from "../sidebar"
 // ✅ FIX 1: import API_BASE alongside existing imports
 import { useTeacher, teacherFetch, API_BASE } from "../utils/api"
+import { API } from "../../../config/api"
 
 const TERMS = ['First Term', 'Second Term', 'Third Term']
 const SESSIONS = ['2024/2025', '2025/2026', '2026/2027']
@@ -291,7 +292,7 @@ export default function TeacherAttendance() {
 
                     {students.length > 0 && (
                         <button onClick={handleSubmit} disabled={submitting}
-                            className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 disabled:opacity-50 transition text-sm md:text-base">
+                            className="w-full bg-blue-200 text-white py-3 rounded-xl font-semibold hover:bg-blue-200 disabled:opacity-50 transition text-sm md:text-base">
                             {submitting ? 'Saving...' : alreadyMarked ? 'Update Attendance' : 'Submit Attendance'}
                         </button>
                     )}

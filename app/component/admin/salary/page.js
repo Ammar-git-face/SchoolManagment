@@ -3,6 +3,7 @@ import { DollarSign, Send, X, Loader } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidevar"
 import { authFetch } from "../utils/api"
+import { API } from "../../../config/api"
 const AdminSalaries = () => {
     const [teachers, setTeachers] = useState([])
     const [banks, setBanks] = useState([])
@@ -13,7 +14,7 @@ const AdminSalaries = () => {
     const getTeachers = async () => {
         try {
             const token = localStorage.getItem("token")
-            const res = await authFetch("http://localhost:5000/teacher/getTeachers", {
+            const res = await authFetch(`${API}/teacher/getTeachers`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -26,7 +27,7 @@ const AdminSalaries = () => {
 
     const getBanks = async () => {
         try {
-            const res = await authFetch("http://localhost:5000/fees/banks")
+            const res = await authFetch(`${API}/fees/banks`)
             const data = await res.json()
             setBanks(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }
@@ -44,7 +45,7 @@ const AdminSalaries = () => {
         setPaying(teacher._id)
         setMsg(null)
         try {
-            const res = await authFetch("http://localhost:5000/fees/pay-salary", {
+            const res = await authFetch(`${API}/fees/pay-salary`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

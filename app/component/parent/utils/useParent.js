@@ -1,7 +1,7 @@
 // app/component/parent/utils/useParent.js
 import { useState, useEffect } from "react"
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "${API}"
 
 export const parentFetch = (url, options = {}) => {
     const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : ""

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useParent, parentFetch } from "../utils/useParent"
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from "recharts"
 import Sidebar from "../sidebar"
+import { API } from "../../../config/api"
 
 const getGradeLabel = (avg) => {
     if (avg >= 90) return { grade: "A+", gpa: 4.0, label: "Excellent" }
@@ -30,37 +31,30 @@ const scoreColor = (val, max) => {
 }
 
 const Performance = () => {
-    const { children }       = useParent()
-    // const [children, setChildren] = useState([])
+    // FIX: children comes from useParent — no need for getChildren or setChildren
+    const { children } = useParent()
     const [selectedChild, setSelectedChild] = useState(null)
     const [results, setResults] = useState([])
     const [loading, setLoading] = useState(true)
 
-    const getChildren = async (parentId) => {
-        try {
-            const res = await fetch(`http://localhost:5000/student/parent/${parentId}`)
-            const data = await res.json()
-            setChildren(data)
-            if (data.length > 0) setSelectedChild(data[0])
-        } catch (err) { console.log(err) }
-    }
+    // FIX: set default selected child when children load
+    useEffect(() => {
+        if (children.length > 0 && !selectedChild) {
+            setSelectedChild(children[0])
+        }
+    }, [children])
 
     const getResults = async () => {
         try {
-            const res = await parentFetch("http://localhost:5000/result/approved")
+            const res = await parentFetch(`${API}/result/approved`)
             const data = await res.json()
-            setResults(data)
+            setResults(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }
         finally { setLoading(false) }
     }
 
     useEffect(() => {
-        const stored = localStorage.getItem("user")
-        if (stored) {
-            const parsed = JSON.parse(stored)
-            getChildren(parsed.id)
-            getResults()
-        }
+        getResults()
     }, [])
 
     const childResults = selectedChild ? results.filter(r => r.studentId === selectedChild._id) : []
@@ -90,7 +84,7 @@ const Performance = () => {
 
     return (
         <div>
-               <Sidebar />
+            <Sidebar />
             <div className="md:ml-64 px-6 pt-8 pb-10">
                 <div className="mb-6">
                     <h1 className="text-2xl font-bold text-gray-800">Performance Analytics</h1>
@@ -159,7 +153,7 @@ const Performance = () => {
 
                         <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto">
                             <h2 className="font-bold text-sm p-5 flex items-center gap-2 border-b border-gray-100">
-                                <span className="text-yellow-500">🏆</span> Detailed Results
+                                Detailed Results
                             </h2>
                             <table className="w-full min-w-[800px]">
                                 <thead>
@@ -190,7 +184,7 @@ const Performance = () => {
                                         </tr>
                                     ))}
                                 </tbody>
-                            </table>
+            </table>
                         </div>
                     </>
                 )}

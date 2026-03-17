@@ -8,6 +8,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { API_BASE, getUser, setUser } from "./utils/api"
+import { API } from "../../config/api"
 
 const items = [
     { title: "Dashboard",    icon: <LayoutDashboard size={16} />, url: "/component/admin" },
@@ -18,11 +19,11 @@ const items = [
     { title: "Attendance",   icon: <ClipboardList size={16} />,   url: "/component/admin/Attendance" },
     { title: "Results",      icon: <File size={16} />,            url: "/component/admin/results" },
     { title: "Fee Management", icon: <DollarSign size={16} />,    url: "/component/admin/fee" },
-    { title: "Payroll",      icon: <Wallet size={16} />,          url: "/component/admin/payroll" },
+    { title: "salaries",      icon: <Wallet size={16} />,          url: "/component/admin/salary" },
     { title: "PTA Meetings", icon: <Video size={16} />,           url: "/component/admin/pta" },
     { title: "Announcements", icon: <Bell size={16} />,           url: "/component/admin/alert" },
     { title: "Messages",     icon: <MessageCircle size={16} />,   url: "/component/admin/chat" },
-    { title: "Settings",     icon: <Settings size={16} />,        url: "/component/admin/school" },
+    { title: "Settings",     icon: <Settings size={16} />,        url: "/component/admin/settings" },
 ]
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -33,6 +34,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     const [schoolName,  setSchoolName]  = useState("School Management")
     const [schoolLogo,  setSchoolLogo]  = useState("")
     const [notifCount,  setNotifCount]  = useState(0)
+
 
     const loadFromStorage = () => {
         const u = getUser()
@@ -116,8 +118,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                         <img src={schoolLogo} alt="Logo"
                             className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-gray-200" />
                     ) : (
-                        <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <School size={18} className="text-white" />
+                        <div className="w-9 h-9 bg-blue-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <School size={18} className="text-black" />
                         </div>
                     )}
                     <div className="overflow-hidden">
@@ -138,7 +140,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     return (
                         <Link key={item.url} href={item.url} onClick={onClose}
                             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all
-                                ${active ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"}`}>
+                                ${active ? "bg-blue-200 text-black" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"}`}>
                             <span>{item.icon}</span>
                             <span className="flex-1">{item.title}</span>
                             {showBadge && (

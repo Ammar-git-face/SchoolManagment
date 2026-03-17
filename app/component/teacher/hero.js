@@ -3,6 +3,7 @@ import { BookOpen, GraduationCap, DollarSign, CheckCircle, Calendar1Icon, Clock,
 import { useState, useEffect } from "react"
 import Sidebar from './sidebar'
 import { useTeacher, teacherFetch, API_BASE } from "./utils/api"
+import { API } from "../../config/api"
 
 const TeacherDashboard = () => {
 

@@ -8,6 +8,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import Settings from "./settings/page"
+import { API } from "../../config/api"
 
 const links = [
     { label: "Dashboard",     icon: <LayoutDashboard size={18} />, href: "/component/parent" },
@@ -46,7 +47,7 @@ const Sidebar = () => {
     useEffect(() => { setIsOpen(false) }, [pathname])
 
     const handleLogout = async () => {
-        await fetch("http://localhost:5000/auth/logout", { method: "POST", credentials: "include" })
+        await fetch(`${API}/auth/logout`, { method: "POST", credentials: "include" })
         localStorage.removeItem("user")
         localStorage.removeItem("token")
         router.push("/component/auth/parentLogin")
