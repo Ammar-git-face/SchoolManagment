@@ -52,7 +52,7 @@ const Hero = () => {
                 recentPayments: Array.isArray(result.recentPayments) ? result.recentPayments : []
             })
         } catch (err) {
-            console.log("Dashboard stats error:", err.message)
+            console.log("Dashboard stats error:", err)
         } finally {
             setLoading(false)
         }
