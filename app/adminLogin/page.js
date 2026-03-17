@@ -5,7 +5,7 @@
 "use client"
 import { useState, useRef } from "react"
 import { Upload, Check, School } from "lucide-react"
-import { API } from "../../../config/api"
+import { API } from "../config/api"
 
 const SchoolLogoUpload = () => {
     const [preview,   setPreview]   = useState("")
