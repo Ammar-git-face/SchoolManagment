@@ -2,31 +2,44 @@
 import { Send, Search, Circle } from "lucide-react"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { io } from "socket.io-client"
-import { API } from "../config/api"
 
-const SOCKET_URL = `${API}`
+const SOCKET_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+
+// FIX: all message fetches need the token — attachSchool middleware requires it
+const authFetch = (url, options = {}) => {
+    const token = localStorage.getItem("token")
+    return fetch(url, {
+        ...options,
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            ...(options.headers || {}),
+        },
+    })
+}
 
 const getInitials = (name = "") =>
     name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
 
 const roleColor = (role) => {
-    if (role === "admin") return "bg-blue-100 text-blue-500"
+    if (role === "admin")   return "bg-blue-100 text-blue-500"
     if (role === "teacher") return "bg-green-100 text-green-500"
     return "bg-orange-100 text-orange-500"
 }
 
 const Chat = ({ Sidebar }) => {
-    const [user, setUser] = useState(null)
-    const [contacts, setContacts] = useState([])
+    const [user, setUser]               = useState(null)
+    const [contacts, setContacts]       = useState([])
     const [activeContact, setActiveContact] = useState(null)
-    const [messages, setMessages] = useState([])
-    const [text, setText] = useState("")
+    const [messages, setMessages]       = useState([])
+    const [text, setText]               = useState("")
     const [onlineUsers, setOnlineUsers] = useState([])
-    const [search, setSearch] = useState("")
-    const [loading, setLoading] = useState(false)
-    const messagesEndRef = useRef(null)
-    const socketRef = useRef(null)
-    const activeContactRef = useRef(null)
+    const [search, setSearch]           = useState("")
+    const [loading, setLoading]         = useState(false)
+    const messagesEndRef                = useRef(null)
+    const socketRef                     = useRef(null)
+    const activeContactRef              = useRef(null)
 
     // keep ref in sync so socket callbacks can read current activeContact
     // also persist to localStorage so messages reload after refresh
@@ -42,11 +55,11 @@ const Chat = ({ Sidebar }) => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [messages])
 
+    // FIX: fetchContacts now uses authFetch — sends token so attachSchool passes
     const fetchContacts = useCallback(async (userId) => {
         try {
-            const res = await fetch(`${SOCKET_URL}/messages/contacts/${userId}`)
+            const res  = await authFetch(`${SOCKET_URL}/messages/contacts/${userId}`)
             const data = await res.json()
-            // FIX: guard against non-array response
             setContacts(Array.isArray(data) ? data : [])
         } catch (err) {
             console.error("fetchContacts error:", err)
@@ -58,7 +71,6 @@ const Chat = ({ Sidebar }) => {
         const stored = localStorage.getItem("user")
         if (!stored) return
 
-        // FIX: safe JSON parse
         let parsed
         try {
             parsed = JSON.parse(stored)
@@ -69,16 +81,14 @@ const Chat = ({ Sidebar }) => {
 
         setUser(parsed)
 
-        // FIX: declare mounted guard BEFORE socket and all callbacks
         let mounted = true
 
-        // FIX: use websocket transport only — polling requires CORS preflight
-        // which fails when credentials:true + wildcard origin on some servers
+        // websocket transport only — polling causes CORS preflight failures
         const socket = io(SOCKET_URL, {
             withCredentials: true,
-            transports: ['websocket'],
+            transports: ["websocket"],
             reconnectionAttempts: 5,
-            reconnectionDelay: 2000
+            reconnectionDelay: 2000,
         })
         socketRef.current = socket
 
@@ -91,20 +101,14 @@ const Chat = ({ Sidebar }) => {
         })
 
         socket.on("online_users", (users) => {
-            // FIX: normalise all IDs to strings — ObjectId vs string mismatch
-            // was causing onlineUsers.includes(String(contact._id)) to always return false
             setOnlineUsers(Array.isArray(users) ? users.map(String) : [])
         })
 
         socket.on("receiveMessage", (message) => {
             const current = activeContactRef.current
+            const fromCurrentContact =
+                current && String(message.senderId) === String(current._id)
 
-            // FIX: compare as strings to avoid ObjectId type mismatch
-            const fromCurrentContact = current &&
-                String(message.senderId) === String(current._id)
-
-            // FIX: only append to messages if from the open conversation
-            // prevents messages from other chats leaking into the active window
             if (fromCurrentContact) {
                 setMessages((prev) => {
                     if (prev.find((m) => String(m._id) === String(message._id))) return prev
@@ -112,7 +116,6 @@ const Chat = ({ Sidebar }) => {
                 })
             }
 
-            // always update contact list preview + unread badge
             setContacts((prev) =>
                 prev.map((c) =>
                     String(c._id) === String(message.senderId)
@@ -129,16 +132,14 @@ const Chat = ({ Sidebar }) => {
             )
         })
 
-        // FIX: messageSent ONLY here, never inside sendMessage
         socket.on("messageSent", (message) => {
             setMessages((prev) => {
                 if (prev.find((m) => m._id === message._id)) return prev
-                // replace the optimistic entry — temp ids are numeric Date.now strings (≤15 chars)
                 const filtered = prev.filter(
                     (m) =>
                         !(
-                            m.senderId === message.senderId &&
-                            m.message === message.message &&
+                            m.senderId  === message.senderId &&
+                            m.message   === message.message &&
                             String(m._id).length <= 15
                         )
                 )
@@ -163,17 +164,18 @@ const Chat = ({ Sidebar }) => {
 
         if (mounted) fetchContacts(parsed.id)
 
-        // FIX: restore last active contact from localStorage on mount
-        // so messages are visible again after a page refresh
+        // restore last active contact from localStorage on mount
         const lastContact = localStorage.getItem("lastActiveContact")
         if (lastContact && mounted) {
             try {
                 const contact = JSON.parse(lastContact)
                 setActiveContact(contact)
-                // reload messages for this contact
+                // FIX: use authFetch here too
                 authFetch(`${SOCKET_URL}/messages/${parsed.id}/${contact._id}`)
-                    .then(r => r.json())
-                    .then(data => { if (mounted) setMessages(Array.isArray(data) ? data : []) })
+                    .then((r) => r.json())
+                    .then((data) => {
+                        if (mounted) setMessages(Array.isArray(data) ? data : [])
+                    })
                     .catch(console.error)
             } catch { /* ignore */ }
         }
@@ -191,12 +193,19 @@ const Chat = ({ Sidebar }) => {
         setLoading(true)
         try {
             const stored = JSON.parse(localStorage.getItem("user"))
-            const res = await fetch(`${SOCKET_URL}/messages/${stored.id}/${contact._id}`)
+
+            // FIX: use authFetch — plain fetch was returning 401
+            const res  = await authFetch(`${SOCKET_URL}/messages/${stored.id}/${contact._id}`)
             const data = await res.json()
             setMessages(Array.isArray(data) ? data : [])
 
             socketRef.current?.emit("mark_read", { userId: stored.id, otherId: contact._id })
-            await fetch(`${SOCKET_URL}/messages/read/${stored.id}/${contact._id}`, { method: "PUT" })
+
+            // FIX: use authFetch for mark-read too
+            await authFetch(
+                `${SOCKET_URL}/messages/read/${stored.id}/${contact._id}`,
+                { method: "PUT" }
+            )
 
             setContacts((prev) =>
                 prev.map((c) => (c._id === contact._id ? { ...c, unreadCount: 0 } : c))
@@ -209,20 +218,19 @@ const Chat = ({ Sidebar }) => {
 
     const sendMessage = () => {
         if (!text.trim() || !activeContact || !user) return
-        // FIX: guard against undefined / disconnected socket
         if (!socketRef.current?.connected) {
             console.error("Socket not connected")
             return
         }
 
         const messageData = {
-            senderId: user.id,
-            senderName: user.name,
-            senderRole: user.role,
-            receiverId: activeContact._id,
+            senderId:     user.id,
+            senderName:   user.name,
+            senderRole:   user.role,
+            receiverId:   activeContact._id,
             receiverName: activeContact.name,
             receiverRole: activeContact.role,
-            message: text.trim(),
+            message:      text.trim(),
         }
 
         socketRef.current.emit("sendMessage", messageData)
@@ -232,9 +240,9 @@ const Chat = ({ Sidebar }) => {
             ...prev,
             {
                 ...messageData,
-                _id: Date.now().toString(),
+                _id:       Date.now().toString(),
                 createdAt: new Date().toISOString(),
-                read: false,
+                read:      false,
             },
         ])
 
@@ -246,7 +254,6 @@ const Chat = ({ Sidebar }) => {
             )
         )
 
-        // FIX: setText only once
         setText("")
     }
 
@@ -270,8 +277,8 @@ const Chat = ({ Sidebar }) => {
 
     const formatDate = (date) => {
         if (!date) return ""
-        const d = new Date(date)
-        const today = new Date()
+        const d         = new Date(date)
+        const today     = new Date()
         if (d.toDateString() === today.toDateString()) return "Today"
         const yesterday = new Date(today)
         yesterday.setDate(yesterday.getDate() - 1)
@@ -411,10 +418,7 @@ const Chat = ({ Sidebar }) => {
                                                     <div className="flex-1 h-px bg-gray-200" />
                                                 </div>
                                                 {msgs.map((message) => {
-                                                    // FIX: compare as strings — MongoDB _id vs localStorage id may differ in type
-                                                    const isMine = String(message.senderId) === String(user?.id)
-                                                    // FIX: use senderRole from the message itself, not activeContact.role
-                                                    // this ensures correct color regardless of who sent it (parent, teacher, admin)
+                                                    const isMine     = String(message.senderId) === String(user?.id)
                                                     const senderRole = isMine ? user?.role : (message.senderRole || activeContact.role)
                                                     const senderName = isMine ? user?.name : (message.senderName || activeContact.name)
                                                     return (

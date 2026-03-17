@@ -1,5 +1,4 @@
 "use client"
-import { API } from "../../config/api"
 import { Book, User2, GraduationCap, DollarSignIcon, Menu } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Pie, PieChart, Tooltip, Cell, BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts"
@@ -8,10 +7,23 @@ import { authFetch, API_BASE, getUser } from "./utils/api"
 
 const COLORS = ["#4F46E5", "#F59E0B", "#EF4444", "#22C55E"]
 
+type PieItem = { name: string; value: number }
+type BarItem = { name: string; value: number }
+type Payment = { _id: string; studentName: string; amount: number; term: string; description: string }
+
 const Hero = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [adminName, setAdminName] = useState("")
-    const [stats, setStats] = useState({
+    const [stats, setStats] = useState<{
+        totalStudents:  number
+        totalTeachers:  number
+        totalClasses:   number
+        feesCollected:  number
+        feesPending:    number
+        pieData:        PieItem[]
+        barData:        BarItem[]
+        recentPayments: Payment[]
+    }>({
         totalStudents: 0, totalTeachers: 0, totalClasses: 0,
         feesCollected: 0, feesPending: 0,
         pieData: [], barData: [], recentPayments: []
