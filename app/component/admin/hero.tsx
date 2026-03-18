@@ -179,7 +179,7 @@ const Hero = () => {
                     {/* Pie Chart */}
                     <section className="shadow-sm border border-gray-100 w-full lg:w-1/2 rounded-xl bg-white flex flex-col p-4">
                         <p className="text-sm font-semibold text-gray-700 mb-1">Fee Payment Status</p>
-                        <p className="text-xs text-gray-400 mb-3">Paid vs pending breakdown</p>
+                        <p className="text-xs text-gray-400 mb-3">pending vs paid breakdown</p>
                         {loading ? (
                             <div className="h-48 flex items-center justify-center text-xs text-gray-400">Loading...</div>
                         ) : stats.pieData.length === 0 ? (
@@ -191,8 +191,8 @@ const Hero = () => {
                                         <Pie data={stats.pieData} dataKey="value"
                                             cx="50%" cy="50%" innerRadius={50} outerRadius={80}
                                             paddingAngle={3} isAnimationActive>
-                                            {stats.pieData.map((_, index) => (
-                                                <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                                         {stats.pieData.map((item: {name: string; value: number}, i) => (
+                                                <Cell key={i} fill={COLORS[i % COLORS.length]} />
                                             ))}
                                         </Pie>
                                         <Tooltip formatter={(value, name) => [value, name]} />
