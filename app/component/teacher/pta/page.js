@@ -99,7 +99,7 @@ const TeacherPTA = () => {
 
             {/* Jitsi Call */}
             {activeCall && (
-                <div className="fixed inset-0   z-50 flex flex-col">
+                <div className="fixed inset-0 bg-black z-50 flex flex-col">
                     <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
                         <div className="flex items-center gap-2">
                             {activeCall.type === 'video'

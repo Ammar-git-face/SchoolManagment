@@ -111,7 +111,7 @@ export default function TeacherAttendance() {
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             {sidebarOpen && (
-                <div className="fixed inset-0   bg-opacity-40 z-20 md:hidden"
+                <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden"
                     onClick={() => setSidebarOpen(false)} />
             )}
 

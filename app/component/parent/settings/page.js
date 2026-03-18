@@ -66,7 +66,7 @@ const Settings = ({ onClose, role }) => {
     }
 
     return (
-        <div className="fixed inset-0  /50 flex justify-center items-center z-50 px-4">
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-sm font-bold text-black">Settings</h2>

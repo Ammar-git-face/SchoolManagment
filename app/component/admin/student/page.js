@@ -7,7 +7,7 @@ import { API } from "../../../config/api"
 
 // ✅ Outside parent component to prevent re-render focus loss
 const StudentForm = ({ title, data, setData, classes, onSubmit, onClose, showFamilyCode = false, familyCode, setFamilyCode }) => (
-    <div className="fixed inset-0  /50 flex justify-center items-center z-50 px-4">
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
         <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-black">{title}</h2>
@@ -133,9 +133,9 @@ const Student = () => {
     )
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex min-h-screen bg-gray-50 overflow-hidden">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-            {sidebarOpen && <div className="fixed inset-0   bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
+            {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
             <div className="flex-1 md:ml-64 min-h-screen">
                 <div className="md:hidden flex items-center justify-between bg-white px-4 py-3 shadow-sm sticky top-0 z-10">
@@ -167,7 +167,7 @@ const Student = () => {
 
                     {err && <div className="bg-red-50 border border-red-200 text-red-600 text-xs p-3 rounded-xl mb-4">{err}</div>}
 
-                    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto">
+                    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto w-full max-w-full">
                         <table className="w-full min-w-[500px]">
                             <thead>
                                 <tr className="border-b border-gray-100">

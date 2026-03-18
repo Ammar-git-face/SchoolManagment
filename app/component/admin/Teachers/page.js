@@ -7,7 +7,7 @@ import { API } from "../../../config/api"
 
 // ✅ Outside parent — fixes cursor-jump bug on inputs
 const AddEditModal = ({ title, data, setData, banks, onSubmit, onClose }) => (
-    <div className="fixed inset-0  /50 flex justify-center items-center z-50 px-4 overflow-y-auto py-8">
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4 overflow-y-auto py-8">
         <div className="bg-white shadow-xl rounded-2xl w-full max-w-sm p-5 my-auto">
             <div className="flex items-center justify-between mb-4">
                 <h1 className="text-sm font-bold">{title}</h1>
@@ -187,9 +187,9 @@ const Teachers = () => {
     const filtered = teachers.filter(t => t.fullname?.toLowerCase().includes(search.toLowerCase()))
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex min-h-screen bg-gray-50 overflow-hidden">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-            {sidebarOpen && <div className="fixed inset-0   bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
+            {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
             <div className="flex-1 md:ml-64 min-h-screen">
                 {/* Mobile topbar */}
@@ -320,7 +320,7 @@ const Teachers = () => {
 
             {/* Assign Class Modal */}
             {assignModal && assignTeacher && (
-                <div className="fixed inset-0  /50 flex justify-center items-center z-50 px-4">
+                <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
                     <div className="bg-white shadow-xl rounded-2xl w-full max-w-md p-5">
                         <div className="flex justify-between items-center mb-1">
                             <h1 className="text-sm font-bold">Assign Class</h1>
@@ -382,7 +382,7 @@ const Teachers = () => {
 
             {/* Create Account Modal */}
             {accountModal && accountTeacher && (
-                <div className="fixed inset-0  /50 flex justify-center items-center z-50 px-4">
+                <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
                     <div className="bg-white shadow-xl rounded-2xl w-full max-w-sm p-5">
                         <div className="flex justify-between items-center mb-1">
                             <h1 className="text-sm font-bold">Create Login Account</h1>

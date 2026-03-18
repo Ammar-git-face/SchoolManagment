@@ -49,7 +49,7 @@ const AlertPage = () => {
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             {sidebarOpen && (
-                <div className="fixed inset-0   bg-opacity-40 z-20 md:hidden"
+                <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden"
                     onClick={() => setSidebarOpen(false)} />
             )}
 
@@ -107,7 +107,7 @@ const AlertPage = () => {
 
             {/* Create Modal */}
             {create && (
-                <div className="fixed inset-0 w-full  /60 z-50 flex items-start justify-center px-4">
+                <div className="fixed inset-0 w-full bg-black/60 z-50 flex items-start justify-center px-4">
                     <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md mt-20">
                         <h2 className="font-bold text-black mb-1">Create Announcement</h2>
                         <p className="text-xs text-gray-400 mb-5">Send an announcement to teachers, parents, or both</p>

@@ -7,7 +7,7 @@ import { API } from "../../../config/api"
 
 // ✅ MUST be outside the parent component — fixes the "cursor jumps to next line" bug
 const ClassForm = ({ data, setData, onSubmit, onClose, title }) => (
-    <div className="fixed inset-0  /50 flex justify-center items-center z-50 px-4">
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
         <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-black">{title}</h2>
@@ -88,7 +88,7 @@ const Classes = () => {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-            {sidebarOpen && <div className="fixed inset-0   bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
+            {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
             <div className="flex-1 md:ml-64 min-h-screen">
                 <div className="md:hidden flex items-center justify-between bg-white px-4 py-3 shadow-sm sticky top-0 z-10">

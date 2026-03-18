@@ -50,7 +50,7 @@ export default function ParentAttendance() {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-            {sidebarOpen && <div className="fixed inset-0   bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
+            {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
             <div className="flex-1 md:ml-64 min-h-screen">
                 <div className="md:hidden flex items-center justify-between bg-white px-4 py-3 shadow-sm sticky top-0 z-10">

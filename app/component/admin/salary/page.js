@@ -84,7 +84,7 @@ const AdminSalaries = () => {
 
             {/* FIX: mobile overlay */}
             {sidebarOpen && (
-                <div className="fixed inset-0  /40 z-20 md:hidden"
+                <div className="fixed inset-0 bg-black/40 z-20 md:hidden"
                     onClick={() => setSidebarOpen(false)} />
             )}
 
@@ -162,7 +162,7 @@ const AdminSalaries = () => {
 
             {/* Confirm Modal */}
             {confirmTeacher && (
-                <div className="fixed inset-0  /50 flex justify-center items-center z-50 px-4">
+                <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-sm font-bold text-black">Confirm Salary Payment</h2>

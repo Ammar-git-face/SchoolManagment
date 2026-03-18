@@ -175,7 +175,7 @@
 
 //             {/* Jitsi Call Modal */}
 //             {activeCall && (
-//                 <div className="fixed inset-0   z-50 flex flex-col">
+//                 <div className="fixed inset-0 bg-black z-50 flex flex-col">
 //                     <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
 //                         <div className="flex items-center gap-2">
 //                             {activeCall.type === 'video'
@@ -199,7 +199,7 @@
 
 //             {/* Schedule Modal */}
 //             {call && (
-//                 <div className="fixed inset-0  /60 flex justify-center items-start z-50 overflow-y-auto px-4 py-8">
+//                 <div className="fixed inset-0 bg-black/60 flex justify-center items-start z-50 overflow-y-auto px-4 py-8">
 //                     <div className="bg-gray-100 p-6 rounded-xl font-sans w-full max-w-lg">
 //                         <div className="flex justify-between items-center mb-4">
 //                             <h1 className="font-bold text-sm">Schedule PTA Meeting</h1>
@@ -313,7 +313,7 @@ const ScheduleModal = ({ onClose, onSubmit, stats, loading, msg }) => {
     const [allParents, setAllParents]   = useState(false)
 
     return (
-        <div className="fixed inset-0  /60 flex justify-center items-start z-50 overflow-y-auto px-4 py-8">
+        <div className="fixed inset-0 bg-black/60 flex justify-center items-start z-50 overflow-y-auto px-4 py-8">
             <div className="bg-white p-6 rounded-2xl font-sans w-full max-w-lg shadow-xl">
                 <div className="flex justify-between items-center mb-4">
                     <h1 className="font-bold text-sm">Schedule PTA Meeting</h1>
@@ -467,7 +467,7 @@ const AdminPTA = () => {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <SideVar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-            {sidebarOpen && <div className="fixed inset-0   bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
+            {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
             <div className="flex-1 md:ml-64 min-h-screen">
                 {/* Mobile topbar */}
@@ -568,7 +568,7 @@ const AdminPTA = () => {
 
             {/* Jitsi Call Modal */}
             {activeCall && (
-                <div className="fixed inset-0   z-50 flex flex-col">
+                <div className="fixed inset-0 bg-black z-50 flex flex-col">
                     <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
                         <div className="flex items-center gap-2">
                             {activeCall.type === 'video'

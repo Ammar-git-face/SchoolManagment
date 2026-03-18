@@ -149,7 +149,7 @@ export default function AdminSubjects() {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-            {sidebarOpen && <div className="fixed inset-0   bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
+            {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
             <div className="flex-1 md:ml-64 min-h-screen">
                 {/* Mobile topbar */}
@@ -257,7 +257,7 @@ export default function AdminSubjects() {
 
             {/* Add Modal */}
             {addModal && (
-                <div className="fixed inset-0   bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl w-full max-w-md p-6">
                         <h3 className="font-semibold text-black mb-4 text-lg">Add Subject</h3>
                         <div className="space-y-3">
@@ -303,7 +303,7 @@ export default function AdminSubjects() {
 
             {/* Edit Modal */}
             {editModal && (
-                <div className="fixed inset-0   bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl w-full max-w-md p-6">
                         <h3 className="font-semibold text-black mb-4 text-lg">Edit Subject</h3>
                         <div className="space-y-3">
@@ -346,7 +346,7 @@ export default function AdminSubjects() {
 
             {/* Bulk Add Modal */}
             {bulkModal && (
-                <div className="fixed inset-0   bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl w-full max-w-md p-6">
                         <h3 className="font-semibold text-black mb-1 text-lg">Bulk Add Subjects</h3>
                         <p className="text-xs text-gray-400 mb-4">Enter one subject per line. All go to the selected class.</p>

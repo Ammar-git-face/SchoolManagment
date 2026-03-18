@@ -92,7 +92,7 @@ export default function OwnerDashboard() {
             {/* Mobile sidebar */}
             {sidebarOpen && (
                 <>
-                    <div className="fixed inset-0   bg-opacity-40 z-20" onClick={() => setSidebarOpen(false)} />
+                    <div className="fixed inset-0 bg-black bg-opacity-40 z-20" onClick={() => setSidebarOpen(false)} />
                     <div className="fixed left-0 top-0 h-full w-64 bg-white z-30 shadow-xl p-6">
                         <div className="flex items-center justify-between mb-8">
                             <div className="font-bold text-xl text-blue-200">{schoolName}</div>

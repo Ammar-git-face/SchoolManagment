@@ -106,7 +106,7 @@ const Hero = () => {
 
             {/* Mobile overlay */}
             {sidebarOpen && (
-                <div className="fixed inset-0  /40 z-20 md:hidden"
+                <div className="fixed inset-0 bg-black/40 z-20 md:hidden"
                     onClick={() => setSidebarOpen(false)} />
             )}
 
