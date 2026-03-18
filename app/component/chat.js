@@ -323,7 +323,7 @@ const Chat = ({ Sidebar }) => {
                         placeholder="Search contacts..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-8 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full pl-8 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
             </div>
@@ -474,7 +474,7 @@ const Chat = ({ Sidebar }) => {
                                 value={text}
                                 onChange={(e) => setText(e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="flex-1 bg-transparent text-sm focus:outline-none text-gray-700 placeholder-gray-400"
+                                className="flex-1 bg-transparent text-sm focus:outline-none text-black placeholder-gray-400"
                             />
                             <button
                                 onClick={sendMessage}

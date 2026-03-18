@@ -40,7 +40,7 @@ const AdminSalaries = () => {
 
     const handlePaySalary = async (teacher) => {
         if (!teacher.accountNumber || !teacher.bankCode) {
-            return setMsg({ type: "error", text: `${teacher.fullname} has no bank details saved` })
+            return setMsg({ type: "error", text: `${teacher.fullname} has no bank details` })
         }
         setPaying(teacher._id)
         setMsg(null)
