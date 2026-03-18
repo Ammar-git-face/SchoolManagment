@@ -81,14 +81,14 @@ const AdminLogin = () => {
                     <div>
                         <label className="text-xs font-semibold text-gray-600 mb-1 block">Email</label>
                         <input type="email" placeholder="admin@school.com"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-200 rounded-xl p-3 text-black text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={email} onChange={(e) => setEmail(e.target.value)} required />
                     </div>
                     <div>
                         <label className="text-xs font-semibold text-gray-600 mb-1 block">Password</label>
                         <div className="relative">
                             <input type={showPassword ? "text" : "password"} placeholder="Enter your password"
-                                className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+                                className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none text-black focus:ring-2 focus:ring-blue-500 pr-10"
                                 value={password} onChange={(e) => setPassword(e.target.value)} required />
                             <button type="button" onClick={() => setShowPassword(!showPassword)}
                                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">

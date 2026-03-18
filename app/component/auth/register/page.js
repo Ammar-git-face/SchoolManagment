@@ -114,7 +114,7 @@ const SchoolRegister = () => {
                     </div>
                     <div>
                         <h1 className="text-lg font-bold text-gray-800">Register Your School</h1>
-                        <p className="text-xs black">Set up your school management system</p>
+                        <p className="text-xs text-black">Set up your school management system</p>
                     </div>
                 </div>
 
@@ -130,43 +130,43 @@ const SchoolRegister = () => {
                     <div className="sm:col-span-2">
                         <label className="text-xs text-black mb-1 block">School Name *</label>
                         <input type="text" placeholder="e.g. Greenfield Academy"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-200 rounded-xl p-3 text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={form.schoolName} onChange={e => set("schoolName", e.target.value)} />
                     </div>
                     <div>
-                        <label className="text-xs black mb-1 block">Phone</label>
+                        <label className="text-xs text-black mb-1 block">Phone</label>
                         <input type="text" placeholder="+234..."
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-200 rounded-xl text-black p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={form.phone} onChange={e => set("phone", e.target.value)} />
                     </div>
                     <div>
-                        <label className="text-xs black mb-1 block">Address</label>
+                        <label className="text-xs text-black mb-1 block">Address</label>
                         <input type="text" placeholder="School address"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-200 rounded-xl text-black p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={form.schoolAddress} onChange={e => set("schoolAddress", e.target.value)} />
                     </div>
                 </div>
 
                 {/* Owner / Admin Account */}
-                <p className="text-xs font-bold black uppercase tracking-widest mb-3">Your Account</p>
-                <p className="text-xs black mb-3 -mt-1">This will be your admin login credentials</p>
+                <p className="text-xs font-bold text-black uppercase tracking-widest mb-3">Your Account</p>
+                <p className="text-xs text-black mb-3 -mt-1">This will be your admin login credentials</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                     <div>
-                        <label className="text-xs black mb-1 block">Full Name *</label>
+                        <label className="text-xs text-black mb-1 block">Full Name *</label>
                         <input type="text" placeholder="Your full name"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-200 rounded-xl text-black p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={form.fullname} onChange={e => set("fullname", e.target.value)} />
                     </div>
                     <div>
-                        <label className="text-xs black mb-1 block">Email *</label>
+                        <label className="text-xs text-black mb-1 block">Email *</label>
                         <input type="email" placeholder="you@email.com"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-200 rounded-xl p-3 text-black text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={form.email} onChange={e => set("email", e.target.value)} />
                     </div>
                     <div className="sm:col-span-2 relative">
-                        <label className="text-xs black mb-1 block">Password * <span className="black">(min 6 characters)</span></label>
+                        <label className="text-xs text-black mb-1 block">Password * <span className="black">(min 6 characters)</span></label>
                         <input type={showPass ? "text" : "password"} placeholder="Create a password"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+                            className="w-full border border-gray-200 rounded-xl text-black p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
                             value={form.password} onChange={e => set("password", e.target.value)} />
                         <button type="button" onClick={() => setShowPass(!showPass)}
                             className="absolute right-3 top-8 black hover:black">
@@ -180,7 +180,7 @@ const SchoolRegister = () => {
                     {loading ? "Registering your school..." : "Register School"}
                 </button>
 
-                <p className="text-xs text-center black mt-4">
+                <p className="text-xs text-center text-black mt-4">
                     Already registered?{" "}
                     <button onClick={() => router.push("/component/auth/admin")}
                         className="text-blue-500 hover:underline font-medium">

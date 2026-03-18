@@ -47,8 +47,8 @@ const ParentRegister = () => {
                         <Users size={24} className="text-white" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-bold text-gray-800">Parent Registration</h1>
-                        <p className="text-xs text-gray-400">You'll need your family code from the school admin</p>
+                        <h1 className="text-xl font-bold text-black">Parent Registration</h1>
+                        <p className="text-xs text-black">You'll need your family code from the school admin</p>
                     </div>
                 </div>
 
@@ -60,27 +60,27 @@ const ParentRegister = () => {
 
                 <div className="flex flex-col gap-3 mb-6">
                     <div>
-                        <label className="text-xs text-gray-500 mb-1 block">Full Name *</label>
+                        <label className="text-xs text-black mb-1 block">Full Name *</label>
                         <input type="text" placeholder="Your full name"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none text-black focus:ring-2 focus:ring-purple-500"
                             value={form.fullname} onChange={e => set("fullname", e.target.value)} />
                     </div>
                     <div>
-                        <label className="text-xs text-gray-500 mb-1 block">Email *</label>
+                        <label className="text-xs text-black mb-1 block">Email *</label>
                         <input type="email" placeholder="your@email.com"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full border border-gray-200 rounded-xl p-3 text-sm text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
                             value={form.email} onChange={e => set("email", e.target.value)} />
                     </div>
                     <div>
-                        <label className="text-xs text-gray-500 mb-1 block">Phone</label>
+                        <label className="text-xs text-black mb-1 block">Phone</label>
                         <input type="text" placeholder="+234..."
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full border border-gray-200 rounded-xl p-3 text-black text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                             value={form.phone} onChange={e => set("phone", e.target.value)} />
                     </div>
                     <div className="relative">
-                        <label className="text-xs text-gray-500 mb-1 block">Password *</label>
+                        <label className="text-xs text-black mb-1 block">Password *</label>
                         <input type={showPass ? "text" : "password"} placeholder="Min 6 characters"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 pr-10"
+                            className="w-full border border-gray-200 rounded-xl p-3 text-sm text-black focus:outline-none focus:ring-2 focus:ring-purple-500 pr-10"
                             value={form.password} onChange={e => set("password", e.target.value)} />
                         <button type="button" onClick={() => setShowPass(!showPass)}
                             className="absolute right-3 top-8 text-gray-400 hover:text-gray-600">
@@ -88,24 +88,24 @@ const ParentRegister = () => {
                         </button>
                     </div>
                     <div>
-                        <label className="text-xs text-gray-500 mb-1 block">
-                            School Code * <span className="text-gray-400">(given to you by the school)</span>
+                        <label className="text-xs text-black mb-1 block">
+                            School Code * <span className="text-black">(given to you by the school)</span>
                         </label>
                         <input type="text" placeholder="e.g. BZNLFHTB"
-                            className="w-full border-2 border-purple-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono uppercase"
+                            className="w-full border-2 border-purple-300 rounded-xl p-3 text-black text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono uppercase"
                             value={form.schoolCode} onChange={e => set("schoolCode", e.target.value.toUpperCase())} />
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-black mt-1">
                             This ensures your account is linked to the correct school.
                         </p>
                     </div>
 
                     {/* ✅ Family Code — not school code */}
                     <div>
-                        <label className="text-xs text-gray-500 mb-1 block">
-                            Family Code * <span className="text-gray-400">(get this from your child's school admin)</span>
+                        <label className="text-xs text-black mb-1 block">
+                            Family Code * <span className="text-black">(get this from your child's school admin)</span>
                         </label>
                         <input type="text" placeholder="e.g. FAM-1234567890-ABC12"
-                            className="w-full border-2 border-purple-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono"
+                            className="w-full border-2 border-purple-300 rounded-xl p-3 text-sm text-black focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono"
                             value={form.familyCode} onChange={e => set("familyCode", e.target.value)} />
                         <p className="text-xs text-gray-400 mt-1">
                             This code links your account to your child. The admin generates it from the Students page.
@@ -118,7 +118,7 @@ const ParentRegister = () => {
                     {loading ? "Creating Account..." : "Create Parent Account"}
                 </button>
 
-                <p className="text-xs text-center text-gray-400 mt-4">
+                <p className="text-xs text-center text-black mt-4">
                     Already have an account?{" "}
                     <button onClick={() => router.push("/component/auth/parentLogin")}
                         className="text-purple-500 hover:underline font-medium">Login</button>
