@@ -15,17 +15,17 @@ const ClassForm = ({ data, setData, onSubmit, onClose, title }) => (
             </div>
             <div className="flex flex-col gap-3">
                 <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Class Name</label>
+                    <label className="text-xs text-black mb-1 block">Class Name</label>
                     <input type="text" placeholder="e.g. JSS 1A, Grade 10, Primary 3"
-                        className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-gray-200 rounded-xl p-2.5 text-xs text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={data.name}
                         onChange={(e) => setData(d => ({ ...d, name: e.target.value }))} />
                 </div>
 
                 <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Grade / Level</label>
+                    <label className="text-xs text-black mb-1 block">Grade / Level</label>
                     <input type="text" placeholder="e.g. Grade 9, JSS 1, SS 2"
-                        className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-gray-200 rounded-xl p-2.5 text-xs text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={data.grade}
                         onChange={(e) => setData(d => ({ ...d, grade: e.target.value }))} />
                 </div>

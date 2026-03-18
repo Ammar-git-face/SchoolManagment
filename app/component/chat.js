@@ -1,5 +1,5 @@
 "use client"
-import { Send, Search, Circle } from "lucide-react"
+import { Send, Search, Circle, ArrowLeft } from "lucide-react"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { io } from "socket.io-client"
 
@@ -37,6 +37,8 @@ const Chat = ({ Sidebar }) => {
     const [onlineUsers, setOnlineUsers] = useState([])
     const [search, setSearch]           = useState("")
     const [loading, setLoading]         = useState(false)
+    // MOBILE ONLY: controls which panel is visible on small screens
+    const [mobileView, setMobileView]   = useState("contacts") // "contacts" | "chat"
     const messagesEndRef                = useRef(null)
     const socketRef                     = useRef(null)
     const activeContactRef              = useRef(null)
@@ -191,6 +193,8 @@ const Chat = ({ Sidebar }) => {
         setActiveContact(contact)
         setMessages([])
         setLoading(true)
+        // MOBILE ONLY: switch to chat panel when a contact is tapped
+        setMobileView("chat")
         try {
             const stored = JSON.parse(localStorage.getItem("user"))
 
@@ -214,6 +218,12 @@ const Chat = ({ Sidebar }) => {
             console.error("openChat error:", err)
         }
         setLoading(false)
+    }
+
+    // MOBILE ONLY: back button returns to contacts list
+    const handleBack = () => {
+        setMobileView("contacts")
+        setActiveContact(null)
     }
 
     const sendMessage = () => {
@@ -293,189 +303,211 @@ const Chat = ({ Sidebar }) => {
         return groups
     }, {})
 
+    // ── Contacts panel JSX (used in both desktop + mobile) ───────────────────
+    const contactsPanel = (
+        <div className="w-80 flex-shrink-0 border-r border-gray-100 bg-white flex flex-col
+                        md:w-80 w-full">
+            <div className="p-4 border-b border-gray-100">
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-sm font-bold text-gray-800">Messages</h2>
+                    {totalUnread > 0 && (
+                        <span className="bg-blue-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                            {totalUnread}
+                        </span>
+                    )}
+                </div>
+                <div className="relative">
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input
+                        type="text"
+                        placeholder="Search contacts..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full pl-8 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto">
+                {filteredContacts.length === 0 ? (
+                    <p className="text-xs text-gray-400 text-center py-8">No contacts found</p>
+                ) : (
+                    filteredContacts.map((contact) => (
+                        <button
+                            key={contact._id}
+                            onClick={() => openChat(contact)}
+                            className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-all border-b border-gray-50
+                                ${activeContact?._id === contact._id ? "bg-blue-50 border-l-2 border-l-blue-500" : ""}`}
+                        >
+                            <div className="relative flex-shrink-0">
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold ${roleColor(contact.role)}`}>
+                                    {getInitials(contact.name)}
+                                </div>
+                                {onlineUsers.includes(String(contact._id)) && (
+                                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-white" />
+                                )}
+                            </div>
+                            <div className="flex-1 min-w-0 text-left">
+                                <div className="flex items-center justify-between">
+                                    <p className="text-xs font-semibold text-gray-700 truncate">{contact.name}</p>
+                                    <p className="text-xs text-gray-400 flex-shrink-0 ml-2">
+                                        {contact.lastMessageTime ? formatDate(contact.lastMessageTime) : ""}
+                                    </p>
+                                </div>
+                                <div className="flex items-center justify-between mt-0.5">
+                                    <p className="text-xs text-gray-400 truncate">
+                                        {contact.lastMessage || <span className="italic">No messages yet</span>}
+                                    </p>
+                                    {contact.unreadCount > 0 && (
+                                        <span className="bg-blue-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full ml-2 flex-shrink-0">
+                                            {contact.unreadCount}
+                                        </span>
+                                    )}
+                                </div>
+                                <span className={`text-xs capitalize px-1.5 py-0.5 rounded-full ${roleColor(contact.role)}`}>
+                                    {contact.role}
+                                </span>
+                            </div>
+                        </button>
+                    ))
+                )}
+            </div>
+        </div>
+    )
+
+    // ── Chat window JSX (used in both desktop + mobile) ──────────────────────
+    const chatWindow = (
+        <div className="flex-1 flex flex-col bg-gray-50">
+            {!activeContact ? (
+                <div className="flex-1 flex flex-col items-center justify-center">
+                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                        <Send size={28} className="text-blue-400" />
+                    </div>
+                    <p className="text-sm font-semibold text-gray-600">Select a conversation</p>
+                    <p className="text-xs text-gray-400 mt-1">Choose a contact to start messaging</p>
+                </div>
+            ) : (
+                <>
+                    {/* Chat Header */}
+                    <div className="bg-white border-b border-gray-100 px-5 py-3 flex items-center gap-3">
+                        {/* MOBILE ONLY: back arrow — hidden on desktop */}
+                        <button
+                            onClick={handleBack}
+                            className="md:hidden p-1.5 rounded-lg hover:bg-gray-100 text-gray-600 flex-shrink-0">
+                            <ArrowLeft size={18} />
+                        </button>
+                        <div className="relative">
+                            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold ${roleColor(activeContact.role)}`}>
+                                {getInitials(activeContact.name)}
+                            </div>
+                            {onlineUsers.includes(String(activeContact._id)) && (
+                                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-white" />
+                            )}
+                        </div>
+                        <div>
+                            <p className="text-sm font-semibold text-gray-800">{activeContact.name}</p>
+                            <p className="text-xs text-gray-400 flex items-center gap-1">
+                                {onlineUsers.includes(String(activeContact._id)) ? (
+                                    <><Circle size={8} className="text-green-400 fill-green-400" /> Online</>
+                                ) : (
+                                    <><Circle size={8} className="text-gray-300 fill-gray-300" /> Offline</>
+                                )}
+                                <span className="capitalize ml-1">· {activeContact.role}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Messages */}
+                    <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-1">
+                        {loading ? (
+                            <p className="text-xs text-gray-400 text-center py-8">Loading messages...</p>
+                        ) : Object.keys(groupedMessages).length === 0 ? (
+                            <p className="text-xs text-gray-400 text-center py-8">No messages yet. Say hello! 👋</p>
+                        ) : (
+                            Object.entries(groupedMessages).map(([date, msgs]) => (
+                                <div key={date}>
+                                    <div className="flex items-center gap-3 my-4">
+                                        <div className="flex-1 h-px bg-gray-200" />
+                                        <span className="text-xs text-gray-400 px-2">{date}</span>
+                                        <div className="flex-1 h-px bg-gray-200" />
+                                    </div>
+                                    {msgs.map((message) => {
+                                        const isMine     = String(message.senderId) === String(user?.id)
+                                        const senderRole = isMine ? user?.role : (message.senderRole || activeContact.role)
+                                        const senderName = isMine ? user?.name : (message.senderName || activeContact.name)
+                                        return (
+                                            <div key={message._id} className={`flex mb-2 ${isMine ? "justify-end" : "justify-start"}`}>
+                                                {!isMine && (
+                                                    <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0 self-end ${roleColor(senderRole)}`}>
+                                                        {getInitials(senderName)}
+                                                    </div>
+                                                )}
+                                                <div className="max-w-xs lg:max-w-md">
+                                                    <div className={`px-4 py-2.5 rounded-2xl text-sm
+                                                        ${isMine
+                                                            ? "bg-blue-500 text-white rounded-br-sm"
+                                                            : "bg-white text-gray-700 shadow-sm rounded-bl-sm border border-gray-100"}`}>
+                                                        {message.message}
+                                                    </div>
+                                                    <p className={`text-xs text-gray-400 mt-1 ${isMine ? "text-right" : "text-left"}`}>
+                                                        {formatTime(message.createdAt)}
+                                                        {isMine && (
+                                                            <span className="ml-1">{message.read ? "✓✓" : "✓"}</span>
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            ))
+                        )}
+                        <div ref={messagesEndRef} />
+                    </div>
+
+                    {/* Input */}
+                    <div className="bg-white border-t border-gray-100 px-5 py-3">
+                        <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-2xl px-4 py-2">
+                            <input
+                                type="text"
+                                placeholder={`Message ${activeContact.name}...`}
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                className="flex-1 bg-transparent text-sm focus:outline-none text-gray-700 placeholder-gray-400"
+                            />
+                            <button
+                                onClick={sendMessage}
+                                disabled={!text.trim()}
+                                className="bg-blue-500 hover:bg-blue-600 disabled:opacity-40 text-white p-2 rounded-xl transition-all"
+                            >
+                                <Send size={16} />
+                            </button>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1 text-center">Press Enter to send</p>
+                    </div>
+                </>
+            )}
+        </div>
+    )
+
     return (
         <div>
             <Sidebar />
             <div className="md:ml-64 h-screen flex flex-col">
-                <div className="flex h-full overflow-hidden">
 
-                    {/* Left Panel - Contacts */}
-                    <div className="w-80 flex-shrink-0 border-r border-gray-100 bg-white flex flex-col">
-                        <div className="p-4 border-b border-gray-100">
-                            <div className="flex items-center justify-between mb-3">
-                                <h2 className="text-sm font-bold text-gray-800">Messages</h2>
-                                {totalUnread > 0 && (
-                                    <span className="bg-blue-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                                        {totalUnread}
-                                    </span>
-                                )}
-                            </div>
-                            <div className="relative">
-                                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                                <input
-                                    type="text"
-                                    placeholder="Search contacts..."
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    className="w-full pl-8 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex-1 overflow-y-auto">
-                            {filteredContacts.length === 0 ? (
-                                <p className="text-xs text-gray-400 text-center py-8">No contacts found</p>
-                            ) : (
-                                filteredContacts.map((contact) => (
-                                    <button
-                                        key={contact._id}
-                                        onClick={() => openChat(contact)}
-                                        className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-all border-b border-gray-50
-                                            ${activeContact?._id === contact._id ? "bg-blue-50 border-l-2 border-l-blue-500" : ""}`}
-                                    >
-                                        <div className="relative flex-shrink-0">
-                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold ${roleColor(contact.role)}`}>
-                                                {getInitials(contact.name)}
-                                            </div>
-                                            {onlineUsers.includes(String(contact._id)) && (
-                                                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-white" />
-                                            )}
-                                        </div>
-                                        <div className="flex-1 min-w-0 text-left">
-                                            <div className="flex items-center justify-between">
-                                                <p className="text-xs font-semibold text-gray-700 truncate">{contact.name}</p>
-                                                <p className="text-xs text-gray-400 flex-shrink-0 ml-2">
-                                                    {contact.lastMessageTime ? formatDate(contact.lastMessageTime) : ""}
-                                                </p>
-                                            </div>
-                                            <div className="flex items-center justify-between mt-0.5">
-                                                <p className="text-xs text-gray-400 truncate">
-                                                    {contact.lastMessage || <span className="italic">No messages yet</span>}
-                                                </p>
-                                                {contact.unreadCount > 0 && (
-                                                    <span className="bg-blue-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full ml-2 flex-shrink-0">
-                                                        {contact.unreadCount}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <span className={`text-xs capitalize px-1.5 py-0.5 rounded-full ${roleColor(contact.role)}`}>
-                                                {contact.role}
-                                            </span>
-                                        </div>
-                                    </button>
-                                ))
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Right Panel - Chat Window */}
-                    <div className="flex-1 flex flex-col bg-gray-50">
-                        {!activeContact ? (
-                            <div className="flex-1 flex flex-col items-center justify-center">
-                                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                                    <Send size={28} className="text-blue-400" />
-                                </div>
-                                <p className="text-sm font-semibold text-gray-600">Select a conversation</p>
-                                <p className="text-xs text-gray-400 mt-1">Choose a contact to start messaging</p>
-                            </div>
-                        ) : (
-                            <>
-                                {/* Chat Header */}
-                                <div className="bg-white border-b border-gray-100 px-5 py-3 flex items-center gap-3">
-                                    <div className="relative">
-                                        <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold ${roleColor(activeContact.role)}`}>
-                                            {getInitials(activeContact.name)}
-                                        </div>
-                                        {onlineUsers.includes(String(activeContact._id)) && (
-                                            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-white" />
-                                        )}
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-semibold text-gray-800">{activeContact.name}</p>
-                                        <p className="text-xs text-gray-400 flex items-center gap-1">
-                                            {onlineUsers.includes(String(activeContact._id)) ? (
-                                                <><Circle size={8} className="text-green-400 fill-green-400" /> Online</>
-                                            ) : (
-                                                <><Circle size={8} className="text-gray-300 fill-gray-300" /> Offline</>
-                                            )}
-                                            <span className="capitalize ml-1">· {activeContact.role}</span>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Messages */}
-                                <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-1">
-                                    {loading ? (
-                                        <p className="text-xs text-gray-400 text-center py-8">Loading messages...</p>
-                                    ) : Object.keys(groupedMessages).length === 0 ? (
-                                        <p className="text-xs text-gray-400 text-center py-8">No messages yet. Say hello! 👋</p>
-                                    ) : (
-                                        Object.entries(groupedMessages).map(([date, msgs]) => (
-                                            <div key={date}>
-                                                <div className="flex items-center gap-3 my-4">
-                                                    <div className="flex-1 h-px bg-gray-200" />
-                                                    <span className="text-xs text-gray-400 px-2">{date}</span>
-                                                    <div className="flex-1 h-px bg-gray-200" />
-                                                </div>
-                                                {msgs.map((message) => {
-                                                    const isMine     = String(message.senderId) === String(user?.id)
-                                                    const senderRole = isMine ? user?.role : (message.senderRole || activeContact.role)
-                                                    const senderName = isMine ? user?.name : (message.senderName || activeContact.name)
-                                                    return (
-                                                        <div key={message._id} className={`flex mb-2 ${isMine ? "justify-end" : "justify-start"}`}>
-                                                            {!isMine && (
-                                                                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0 self-end ${roleColor(senderRole)}`}>
-                                                                    {getInitials(senderName)}
-                                                                </div>
-                                                            )}
-                                                            <div className="max-w-xs lg:max-w-md">
-                                                                <div className={`px-4 py-2.5 rounded-2xl text-sm
-                                                                    ${isMine
-                                                                        ? "bg-blue-500 text-white rounded-br-sm"
-                                                                        : "bg-white text-gray-700 shadow-sm rounded-bl-sm border border-gray-100"}`}>
-                                                                    {message.message}
-                                                                </div>
-                                                                <p className={`text-xs text-gray-400 mt-1 ${isMine ? "text-right" : "text-left"}`}>
-                                                                    {formatTime(message.createdAt)}
-                                                                    {isMine && (
-                                                                        <span className="ml-1">{message.read ? "✓✓" : "✓"}</span>
-                                                                    )}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                })}
-                                            </div>
-                                        ))
-                                    )}
-                                    <div ref={messagesEndRef} />
-                                </div>
-
-                                {/* Input */}
-                                <div className="bg-white border-t border-gray-100 px-5 py-3">
-                                    <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-2xl px-4 py-2">
-                                        <input
-                                            type="text"
-                                            placeholder={`Message ${activeContact.name}...`}
-                                            value={text}
-                                            onChange={(e) => setText(e.target.value)}
-                                            onKeyDown={handleKeyDown}
-                                            className="flex-1 bg-transparent text-sm focus:outline-none text-gray-700 placeholder-gray-400"
-                                        />
-                                        <button
-                                            onClick={sendMessage}
-                                            disabled={!text.trim()}
-                                            className="bg-blue-500 hover:bg-blue-600 disabled:opacity-40 text-white p-2 rounded-xl transition-all"
-                                        >
-                                            <Send size={16} />
-                                        </button>
-                                    </div>
-                                    <p className="text-xs text-gray-400 mt-1 text-center">Press Enter to send</p>
-                                </div>
-                            </>
-                        )}
-                    </div>
+                {/* DESKTOP: original side-by-side layout — completely unchanged */}
+                <div className="hidden md:flex h-full overflow-hidden">
+                    {contactsPanel}
+                    {chatWindow}
                 </div>
+
+                {/* MOBILE ONLY: show contacts OR chat — never both */}
+                <div className="flex md:hidden h-full overflow-hidden">
+                    {mobileView === "contacts" && contactsPanel}
+                    {mobileView === "chat"     && chatWindow}
+                </div>
+
             </div>
         </div>
     )

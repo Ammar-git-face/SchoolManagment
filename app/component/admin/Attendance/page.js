@@ -172,16 +172,16 @@ export default function AdminAttendance() {
                         <>
                             <div className="bg-white rounded-xl shadow p-4 mb-4 flex flex-wrap gap-3">
                                 <div>
-                                    <label className="text-xs text-gray-500 mb-1 block">Filter by Class</label>
+                                    <label className="text-xs text-black mb-1 block">Filter by Class</label>
                                     <input type="text" placeholder="e.g. JSS 1A" value={filterClass}
                                         onChange={e => setFilterClass(e.target.value)}
-                                        className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-36 md:w-auto" />
+                                        className="border rounded-lg px-3 py-2 text-sm focus:outline-none text-black focus:ring-2 focus:ring-blue-500 w-36 md:w-auto" />
                                 </div>
                                 <div>
-                                    <label className="text-xs text-gray-500 mb-1 block">Filter by Date</label>
+                                    <label className="text-xs text-black mb-1 block">Filter by Date</label>
                                     <input type="date" value={filterDate}
                                         onChange={e => setFilterDate(e.target.value)}
-                                        className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        className="border rounded-lg px-3 py-2 text-sm  text-black focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                 </div>
                                 <div className="flex items-end">
                                     <button onClick={() => { setFilterClass(''); setFilterDate('') }}
@@ -215,7 +215,7 @@ export default function AdminAttendance() {
                                                 <tbody className="divide-y divide-gray-100">
                                                     {records.map(r => (
                                                         <tr key={r._id} className="hover:bg-gray-50">
-                                                            <td className="px-5 py-3 font-medium text-gray-800 text-sm">{r.studentName}</td>
+                                                            <td className="px-5 py-3 font-medium text-black text-sm">{r.studentName}</td>
                                                             <td className="px-5 py-3 text-sm text-gray-600">{r.studentClass}</td>
                                                             <td className="px-5 py-3 text-sm text-gray-600">
                                                                 {new Date(r.date).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -239,7 +239,7 @@ export default function AdminAttendance() {
                                                 <div key={r._id} className="px-4 py-3">
                                                     <div className="flex justify-between items-start mb-1">
                                                         <div>
-                                                            <div className="font-medium text-gray-800 text-sm">{r.studentName}</div>
+                                                            <div className="font-medium text-black text-sm">{r.studentName}</div>
                                                             <div className="text-xs text-gray-400">{r.studentClass} · {r.teacherName}</div>
                                                         </div>
                                                         <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${STATUS_BADGE[r.status]}`}>

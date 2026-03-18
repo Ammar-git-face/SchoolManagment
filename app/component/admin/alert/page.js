@@ -113,20 +113,20 @@ const AlertPage = () => {
                         <p className="text-xs text-gray-400 mb-5">Send an announcement to teachers, parents, or both</p>
                         <div className="flex flex-col gap-3">
                             <div>
-                                <label className="text-xs text-gray-500 mb-1 block">Title</label>
+                                <label className="text-xs text-black mb-1 block">Title</label>
                                 <input type="text" placeholder="Announcement title"
-                                    className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-gray-200 rounded-xl p-2.5 text-xs text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     value={title} onChange={(e) => setTitle(e.target.value)} />
                             </div>
                             <div>
-                                <label className="text-xs text-gray-500 mb-1 block">Message</label>
+                                <label className="text-xs text-black mb-1 block">Message</label>
                                 <textarea placeholder="Announcement message"
-                                    className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none"
+                                    className="w-full border border-gray-200 rounded-xl p-2.5 text-xs text-black focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none"
                                     value={message} onChange={(e) => setMessage(e.target.value)} />
                             </div>
                             <div>
-                                <label className="text-xs text-gray-500 mb-1 block">Send To</label>
-                                <select className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                <label className="text-xs text-black0 mb-1 block">Send To</label>
+                                <select className="w-full border border-gray-200 rounded-xl p-2.5 text-black text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     value={to} onChange={(e) => setTo(e.target.value)}>
                                     <option>All</option>
                                     <option>Parent</option>

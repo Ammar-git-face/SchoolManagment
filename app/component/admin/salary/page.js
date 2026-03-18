@@ -1,33 +1,33 @@
 "use client"
-import { DollarSign, Send, X, Loader } from "lucide-react"
+import { DollarSign, Send, X, Loader, Menu } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidevar"
 import { authFetch } from "../utils/api"
 import { API } from "../../../config/api"
+
 const AdminSalaries = () => {
-    const [teachers, setTeachers] = useState([])
-    const [banks, setBanks] = useState([])
-    const [paying, setPaying] = useState(null)
-    const [msg, setMsg] = useState(null)
-    const [confirmTeacher, setConfirmTeacher] = useState(null)
+    const [teachers,        setTeachers]        = useState([])
+    const [banks,           setBanks]           = useState([])
+    const [paying,          setPaying]          = useState(null)
+    const [msg,             setMsg]             = useState(null)
+    const [confirmTeacher,  setConfirmTeacher]  = useState(null)
+    // FIX: added sidebarOpen state — was missing entirely, caused black bg on mobile
+    const [sidebarOpen,     setSidebarOpen]     = useState(false)
 
     const getTeachers = async () => {
         try {
             const token = localStorage.getItem("token")
             const res = await authFetch(`${API}/teacher/getTeachers`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` }
             })
             const data = await res.json()
-            // match whatever key your API returns e.g. data.teachers / data.data
             setTeachers(Array.isArray(data) ? data : data.teachers || [])
         } catch (err) { console.log(err) }
     }
 
     const getBanks = async () => {
         try {
-            const res = await authFetch(`${API}/fees/banks`)
+            const res  = await authFetch(`${API}/fees/banks`)
             const data = await res.json()
             setBanks(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }
@@ -52,12 +52,12 @@ const AdminSalaries = () => {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 },
                 body: JSON.stringify({
-                    teacherId: teacher._id,
-                    teacherName: teacher.fullname,
+                    teacherId:     teacher._id,
+                    teacherName:   teacher.fullname,
                     accountNumber: teacher.accountNumber,
-                    bankCode: teacher.bankCode,
-                    amount: teacher.salary,
-                    narration: `Monthly salary - ${teacher.fullname}`
+                    bankCode:      teacher.bankCode,
+                    amount:        teacher.salary,
+                    narration:     `Monthly salary - ${teacher.fullname}`
                 })
             })
             const data = await res.json()
@@ -78,13 +78,29 @@ const AdminSalaries = () => {
     }
 
     return (
-        <div>
-            <Sidebar />
-            <div className="md:ml-64 px-6 pt-8 pb-10">
-                <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-gray-800">Salary Management</h1>
-                    <p className="text-xs text-gray-400 mt-1">Pay teacher salaries directly via Flutterwave</p>
+        <div className="min-h-screen bg-gray-50">
+            {/* FIX: pass isOpen + onClose so sidebar opens/closes on mobile */}
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+            {/* FIX: mobile overlay */}
+            {sidebarOpen && (
+                <div className="fixed inset-0 bg-black/40 z-20 md:hidden"
+                    onClick={() => setSidebarOpen(false)} />
+            )}
+
+            {/* FIX: mobile header with hamburger — desktop header unchanged */}
+            <div className="fixed top-0 left-0 right-0 md:ml-64 bg-white border-b border-gray-200 px-4 py-3 z-10 shadow-sm flex items-center gap-3">
+                <button onClick={() => setSidebarOpen(true)}
+                    className="md:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600 flex-shrink-0">
+                    <Menu size={20} />
+                </button>
+                <div>
+                    <h1 className="text-sm font-semibold text-gray-800">Salary Management</h1>
+                    <p className="text-xs text-gray-400">Pay teacher salaries via Flutterwave</p>
                 </div>
+            </div>
+
+            <div className="md:ml-64 pt-20 px-4 md:px-6 pb-10">
 
                 {msg && (
                     <div className={`text-xs p-3 rounded-xl mb-5 border ${msg.type === "success"

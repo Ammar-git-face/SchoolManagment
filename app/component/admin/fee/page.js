@@ -1,11 +1,10 @@
 "use client"
-import { DollarSign, Search, Download, Users, BookOpen } from "lucide-react"
+import { DollarSign, Search, Download, Users, BookOpen, Menu } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidevar"
 import { authFetch, API_BASE } from "../utils/api"
 import { API } from "../../../config/api"
 
-// ── Receipt generator ─────────────────────────────────────────────────────────
 const downloadReceipt = (record, type) => {
     const isTeacher = type === "teacher"
     const lines = [
@@ -48,7 +47,6 @@ const downloadReceipt = (record, type) => {
     URL.revokeObjectURL(url)
 }
 
-// ── Status badge ──────────────────────────────────────────────────────────────
 const Badge = ({ status }) => {
     const cfg = {
         paid:    "bg-green-100 text-green-700",
@@ -63,14 +61,15 @@ const Badge = ({ status }) => {
 }
 
 export default function AdminFees() {
-    const [tab,          setTab]          = useState("students")  // "students" | "teachers"
+    const [tab,          setTab]          = useState("students")
     const [fees,         setFees]         = useState([])
     const [payrolls,     setPayrolls]     = useState([])
     const [loading,      setLoading]      = useState(true)
     const [search,       setSearch]       = useState("")
     const [statusFilter, setStatusFilter] = useState("all")
+    // FIX: added sidebarOpen state for mobile hamburger
+    const [sidebarOpen,  setSidebarOpen]  = useState(false)
 
-    // ── Fetch both datasets ───────────────────────────────────────────────────
     useEffect(() => {
         const load = async () => {
             setLoading(true)
@@ -90,7 +89,6 @@ export default function AdminFees() {
         load()
     }, [])
 
-    // ── Summary calculations ──────────────────────────────────────────────────
     const feeCollected = fees.filter(f => f.status === "paid").reduce((s, f) => s + (f.amount || 0), 0)
     const feePending   = fees.filter(f => f.status !== "paid").reduce((s, f) => s + (f.amount || 0), 0)
     const salaryPaid   = payrolls.filter(p => p.status === "paid").reduce((s, p) => s + (p.netPay || 0), 0)
@@ -98,17 +96,16 @@ export default function AdminFees() {
 
     const cards = tab === "students"
         ? [
-            { label: "Total Collected",  amount: feeCollected, color: "bg-green-50", icon: "text-green-500 bg-green-100" },
+            { label: "Total Collected",  amount: feeCollected, color: "bg-green-50",  icon: "text-green-500 bg-green-100" },
             { label: "Pending Payment",  amount: feePending,   color: "bg-yellow-50", icon: "text-yellow-500 bg-yellow-100" },
-            { label: "Total Records",    amount: fees.length,  color: "bg-blue-50",  icon: "text-blue-500 bg-blue-100",  isCount: true },
+            { label: "Total Records",    amount: fees.length,  color: "bg-blue-50",   icon: "text-blue-500 bg-blue-100",  isCount: true },
         ]
         : [
-            { label: "Salary Paid",      amount: salaryPaid,    color: "bg-green-50",  icon: "text-green-500 bg-green-100" },
-            { label: "Salary Pending",   amount: salaryPend,    color: "bg-yellow-50", icon: "text-yellow-500 bg-yellow-100" },
-            { label: "Total Records",    amount: payrolls.length, color: "bg-blue-50", icon: "text-blue-500 bg-blue-100", isCount: true },
+            { label: "Salary Paid",    amount: salaryPaid,       color: "bg-green-50",  icon: "text-green-500 bg-green-100" },
+            { label: "Salary Pending", amount: salaryPend,       color: "bg-yellow-50", icon: "text-yellow-500 bg-yellow-100" },
+            { label: "Total Records",  amount: payrolls.length,  color: "bg-blue-50",   icon: "text-blue-500 bg-blue-100", isCount: true },
         ]
 
-    // ── Filter logic ──────────────────────────────────────────────────────────
     const activeData = tab === "students" ? fees : payrolls
 
     const filtered = activeData.filter(r => {
@@ -118,19 +115,32 @@ export default function AdminFees() {
         return matchS && matchF
     })
 
-    // ── Table columns ─────────────────────────────────────────────────────────
     const headers = tab === "students"
         ? ["Name", "Class", "Amount", "Term", "Session", "Status", "Paid On", "Receipt"]
         : ["Name", "Month", "Year", "Basic Salary", "Net Pay", "Status", "Paid On", "Receipt"]
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Sidebar />
+            {/* FIX: pass isOpen and onClose props so sidebar works on mobile */}
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-            {/* Header */}
-            <div className="fixed top-0 left-0 right-0 md:ml-64 bg-white border-b border-gray-200 px-4 py-3 z-10 shadow-sm">
-                <h1 className="text-sm font-semibold text-gray-800">Finance Overview</h1>
-                <p className="text-xs text-gray-400">Student fees & teacher payroll</p>
+            {/* FIX: mobile overlay */}
+            {sidebarOpen && (
+                <div className="fixed inset-0 bg-black/40 z-20 md:hidden"
+                    onClick={() => setSidebarOpen(false)} />
+            )}
+
+            {/* Header — FIX: added mobile hamburger button */}
+            <div className="fixed top-0 left-0 right-0 md:ml-64 bg-white border-b border-gray-200 px-4 py-3 z-10 shadow-sm flex items-center gap-3">
+                {/* FIX: hamburger only visible on mobile */}
+                <button onClick={() => setSidebarOpen(true)}
+                    className="md:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600 flex-shrink-0">
+                    <Menu size={20} />
+                </button>
+                <div>
+                    <h1 className="text-sm font-semibold text-gray-800">Finance Overview</h1>
+                    <p className="text-xs text-gray-400">Student fees & teacher payroll</p>
+                </div>
             </div>
 
             <div className="md:ml-64 pt-20 px-4 pb-10">
@@ -138,8 +148,8 @@ export default function AdminFees() {
                 {/* Tabs */}
                 <div className="flex gap-2 mb-5">
                     {[
-                        { key: "students", label: "Student Fees",     icon: <Users size={14} /> },
-                        { key: "teachers", label: "Teacher Payroll",  icon: <BookOpen size={14} /> },
+                        { key: "students", label: "Student Fees",    icon: <Users size={14} /> },
+                        { key: "teachers", label: "Teacher Payroll", icon: <BookOpen size={14} /> },
                     ].map(t => (
                         <button key={t.key} onClick={() => { setTab(t.key); setSearch(""); setStatusFilter("all") }}
                             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition
@@ -248,7 +258,6 @@ export default function AdminFees() {
                     </table>
                 </div>
 
-                {/* Row count */}
                 {!loading && (
                     <p className="text-xs text-gray-400 mt-3">
                         Showing {filtered.length} of {activeData.length} records
