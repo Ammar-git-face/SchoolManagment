@@ -34,7 +34,7 @@ const TeacherPTA = () => {
         <div>
             <Sidebar />
 
-            <section className="px-4 md:px-0 md:ml-80 p-6 md:p-10">
+            <section className="px-4 md:px-0 md:ml-80 p-6 md:p-10 ">
                 <h1 className="font-bold text-xl text-black mb-1">PTA Meetings</h1>
                 <p className="text-xs text-black mb-4">View and join scheduled meetings</p>
                 <span className="flex items-center gap-3 mb-6">

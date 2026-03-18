@@ -56,7 +56,7 @@ const Sidebar = () => {
     return (
         <>
             {/* ── Mobile topbar with hamburger ── */}
-            <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 h-14 flex items-center justify-between shadow-sm">
+            <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 h-10 flex items-center justify-between shadow-sm">
                 <button onClick={() => setIsOpen(true)}
                     className="p-2 rounded-xl text-black hover:bg-gray-100 transition">
                     <Menu size={22} />
