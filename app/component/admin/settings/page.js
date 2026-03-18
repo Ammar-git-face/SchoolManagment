@@ -269,7 +269,7 @@ export default function SchoolSettings() {
                 setBankDetails(d => ({ ...d, accountName: data.accountName }))
             } else {
                 setBankDetails(d => ({ ...d, accountName: "" }))
-                flashPayment("error", "Could not verify account number. Check your details.")
+                flashPayment("error", "Could not verify account number. Check the details and try again.")
             }
         } catch { console.log("resolve failed") }
         finally { setResolving(false) }
@@ -325,7 +325,7 @@ export default function SchoolSettings() {
     const handleSavePayment = async () => {
         const { accountNumber, bankCode, accountName } = bankDetails
         if (!accountNumber || !bankCode || !accountName)
-            return flashPayment("error", "Please fill in all fields. Account name must be verified first.")
+            return flashPayment("error", "Please fill in bank and account number — account name will auto-fill")
         if (accountNumber.length !== 10)
             return flashPayment("error", "Account number must be 10 digits")
         if (resolving)
@@ -345,7 +345,7 @@ export default function SchoolSettings() {
 
             setIsConfigured(true)
             setBankDetails({ ...payload, accountName: data.accountName || payload.accountName })
-            flashPayment("success", `Payment account configured for ${data.accountName || accountName}. Fee payments and salary transfers will now use this account.`)
+            flashPayment("success", `Payment account configured for ${data.accountName || accountName}. Fee payments and salary transfers will now use your bank account.`)
         } catch { flashPayment("error", "Something went wrong") }
         finally { setSavingPayment(false) }
     }
@@ -485,8 +485,8 @@ export default function SchoolSettings() {
                             </div>
                         )}
 
-                        {/* 3 fields: bank, account number, account name (auto-filled) */}
                         <div className="flex flex-col gap-4">
+                            {/* Bank selector */}
                             <div>
                                 <label className="text-xs text-black mb-1 block flex items-center gap-1">
                                     <Building2 size={10}/> Bank
@@ -494,9 +494,8 @@ export default function SchoolSettings() {
                                 <select
                                     value={bankDetails.bankCode}
                                     onChange={e => {
-                                        const code = e.target.value
-                                        setBankDetails(d => ({ ...d, bankCode: code }))
-                                        resolveAccountName(bankDetails.accountNumber, code)
+                                        setBankDetails(d => ({ ...d, bankCode: e.target.value }))
+                                        resolveAccountName(bankDetails.accountNumber, e.target.value)
                                     }}
                                     className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
                                     <option value="">— Select your bank —</option>
@@ -506,6 +505,7 @@ export default function SchoolSettings() {
                                 </select>
                             </div>
 
+                            {/* Account number */}
                             <div>
                                 <label className="text-xs text-black mb-1 block">Account Number</label>
                                 <input
@@ -521,6 +521,7 @@ export default function SchoolSettings() {
                                     className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500" />
                             </div>
 
+                            {/* Account name — auto filled */}
                             <div>
                                 <label className="text-xs text-black mb-1 block">Account Name</label>
                                 <div className="relative">
