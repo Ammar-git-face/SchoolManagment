@@ -72,7 +72,7 @@ const Sidebar = () => {
 
             {/* ── Backdrop ── */}
             {isOpen && (
-                <div className="fixed inset-0 bg-black/40 z-40 md:hidden" onClick={() => setIsOpen(false)} />
+                <div className="fixed inset-0  /40 z-40 md:hidden" onClick={() => setIsOpen(false)} />
             )}
 
             {/* ── Sidebar panel ── */}
