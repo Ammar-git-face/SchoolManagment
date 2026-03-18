@@ -83,7 +83,7 @@ const ParentRegister = () => {
                             className="w-full border border-gray-200 rounded-xl p-3 text-sm text-black focus:outline-none focus:ring-2 focus:ring-purple-500 pr-10"
                             value={form.password} onChange={e => set("password", e.target.value)} />
                         <button type="button" onClick={() => setShowPass(!showPass)}
-                            className="absolute right-3 top-8 text-gray-400 hover:text-gray-600">
+                            className="absolute right-3 top-8 text-gray-400 hover:text-black">
                             {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
                     </div>

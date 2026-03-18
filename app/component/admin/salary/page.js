@@ -91,11 +91,11 @@ const AdminSalaries = () => {
             {/* FIX: mobile header with hamburger — desktop header unchanged */}
             <div className="fixed top-0 left-0 right-0 md:ml-64 bg-white border-b border-gray-200 px-4 py-3 z-10 shadow-sm flex items-center gap-3">
                 <button onClick={() => setSidebarOpen(true)}
-                    className="md:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600 flex-shrink-0">
+                    className="md:hidden p-2 rounded-lg hover:bg-gray-100 text-black flex-shrink-0">
                     <Menu size={20} />
                 </button>
                 <div>
-                    <h1 className="text-sm font-semibold text-gray-800">Salary Management</h1>
+                    <h1 className="text-sm font-semibold text-black">Salary Management</h1>
                     <p className="text-xs text-gray-400">Pay teacher salaries via Flutterwave</p>
                 </div>
             </div>
@@ -115,7 +115,7 @@ const AdminSalaries = () => {
                         <thead>
                             <tr className="border-b border-gray-100">
                                 {["Teacher", "Subject", "Bank", "Account No", "Salary", "Status", "Action"].map(h => (
-                                    <th key={h} className="px-4 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                    <th key={h} className="px-4 py-3 text-left text-xs text-black font-medium">{h}</th>
                                 ))}
                             </tr>
                         </thead>
@@ -124,15 +124,15 @@ const AdminSalaries = () => {
                                 <tr><td colSpan={7} className="text-center text-xs text-gray-400 py-8">No teachers found</td></tr>
                             ) : teachers.map(teacher => (
                                 <tr key={teacher._id} className="border-t border-gray-100 hover:bg-gray-50">
-                                    <td className="px-4 py-3 text-xs font-medium text-gray-700">{teacher.fullname}</td>
-                                    <td className="px-4 py-3 text-xs text-gray-500">{teacher.subject}</td>
-                                    <td className="px-4 py-3 text-xs text-gray-500">
+                                    <td className="px-4 py-3 text-xs font-medium text-black">{teacher.fullname}</td>
+                                    <td className="px-4 py-3 text-xs text-black">{teacher.subject}</td>
+                                    <td className="px-4 py-3 text-xs text-black">
                                         {teacher.bankCode ? getBankName(teacher.bankCode) : <span className="text-red-400">No bank</span>}
                                     </td>
-                                    <td className="px-4 py-3 text-xs text-gray-500">
+                                    <td className="px-4 py-3 text-xs text-black">
                                         {teacher.accountNumber || <span className="text-red-400">No account</span>}
                                     </td>
-                                    <td className="px-4 py-3 text-xs font-semibold text-gray-700">
+                                    <td className="px-4 py-3 text-xs font-semibold text-black">
                                         ₦{teacher.salary?.toLocaleString() || "0"}
                                     </td>
                                     <td className="px-4 py-3">
@@ -165,30 +165,30 @@ const AdminSalaries = () => {
                 <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-sm font-bold text-gray-800">Confirm Salary Payment</h2>
+                            <h2 className="text-sm font-bold text-black">Confirm Salary Payment</h2>
                             <button onClick={() => setConfirmTeacher(null)}><X size={16} className="text-gray-400" /></button>
                         </div>
                         <div className="bg-gray-50 rounded-xl p-4 mb-5 space-y-2">
                             <div className="flex justify-between text-xs">
-                                <span className="text-gray-500">Teacher</span>
-                                <span className="font-semibold text-gray-700">{confirmTeacher.fullname}</span>
+                                <span className="text-black">Teacher</span>
+                                <span className="font-semibold text-black">{confirmTeacher.fullname}</span>
                             </div>
                             <div className="flex justify-between text-xs">
-                                <span className="text-gray-500">Bank</span>
-                                <span className="font-semibold text-gray-700">{getBankName(confirmTeacher.bankCode)}</span>
+                                <span className="text-black">Bank</span>
+                                <span className="font-semibold text-black">{getBankName(confirmTeacher.bankCode)}</span>
                             </div>
                             <div className="flex justify-between text-xs">
-                                <span className="text-gray-500">Account</span>
-                                <span className="font-semibold text-gray-700">{confirmTeacher.accountNumber}</span>
+                                <span className="text-black">Account</span>
+                                <span className="font-semibold text-black">{confirmTeacher.accountNumber}</span>
                             </div>
                             <div className="flex justify-between text-xs border-t border-gray-200 pt-2 mt-2">
-                                <span className="text-gray-500">Amount</span>
+                                <span className="text-black">Amount</span>
                                 <span className="font-bold text-green-600 text-sm">₦{confirmTeacher.salary?.toLocaleString()}</span>
                             </div>
                         </div>
                         <div className="flex gap-3">
                             <button onClick={() => setConfirmTeacher(null)}
-                                className="flex-1 text-xs text-gray-500 border border-gray-200 py-2 rounded-xl hover:bg-gray-50">
+                                className="flex-1 text-xs text-black border border-gray-200 py-2 rounded-xl hover:bg-gray-50">
                                 Cancel
                             </button>
                             <button onClick={() => handlePaySalary(confirmTeacher)}

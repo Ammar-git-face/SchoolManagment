@@ -36,16 +36,16 @@ const TeacherPTA = () => {
 
             <section className="px-4 md:px-0 md:ml-80 p-6 md:p-10">
                 <h1 className="font-bold text-xl text-black mb-1">PTA Meetings</h1>
-                <p className="text-xs text-gray-500 mb-4">View and join scheduled meetings</p>
+                <p className="text-xs text-black mb-4">View and join scheduled meetings</p>
                 <span className="flex items-center gap-3 mb-6">
                     <button onClick={() => setActiveContent('upcoming')}
                         className={`rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 transition-all
-                            ${activeContent === 'upcoming' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                            ${activeContent === 'upcoming' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black hover:bg-gray-200'}`}>
                         <Calendar1Icon size={10} /> Upcoming ({upcoming.length})
                     </button>
                     <button onClick={() => setActiveContent('history')}
                         className={`rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 transition-all
-                            ${activeContent === 'history' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                            ${activeContent === 'history' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black hover:bg-gray-200'}`}>
                         <Clock size={10} /> History ({history.length})
                     </button>
                 </span>
@@ -66,21 +66,21 @@ const TeacherPTA = () => {
                                 <nav className="flex justify-between items-center mb-3">
                                     <span className="flex items-center text-sm font-bold gap-1">
                                         {m.type === 'video'
-                                            ? <VideoIcon size={15} className="text-blue-500" />
-                                            : <Mic size={15} className="text-blue-500" />}
+                                            ? <VideoIcon size={15} className="text-blue-200" />
+                                            : <Mic size={15} className="text-blue-200" />}
                                         {m.title}
                                     </span>
                                     <span className={`text-xs px-2 py-0.5 rounded-full
-                                        ${m.status === 'upcoming' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
+                                        ${m.status === 'upcoming' ? 'bg-blue-100 text-blue-200' : 'bg-green-100 text-green-600'}`}>
                                         {m.status}
                                     </span>
                                 </nav>
                                 <p className="text-xs text-gray-400 mb-3">{m.agenda}</p>
                                 <span className="flex flex-wrap gap-3 mb-4">
-                                    <p className="flex items-center gap-1 text-gray-500 text-xs">
+                                    <p className="flex items-center gap-1 text-black text-xs">
                                         <Calendar1Icon size={11} />{m.date}
                                     </p>
-                                    <p className="flex items-center gap-1 text-gray-500 text-xs">
+                                    <p className="flex items-center gap-1 text-black text-xs">
                                         <Clock size={11} />{m.time} ({m.duration})
                                     </p>
                                 </span>

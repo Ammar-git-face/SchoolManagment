@@ -98,12 +98,12 @@ export default function AdminFees() {
         ? [
             { label: "Total Collected",  amount: feeCollected, color: "bg-green-50",  icon: "text-green-500 bg-green-100" },
             { label: "Pending Payment",  amount: feePending,   color: "bg-yellow-50", icon: "text-yellow-500 bg-yellow-100" },
-            { label: "Total Records",    amount: fees.length,  color: "bg-blue-50",   icon: "text-blue-500 bg-blue-100",  isCount: true },
+            { label: "Total Records",    amount: fees.length,  color: "bg-blue-50",   icon: "text-blue-200 bg-blue-100",  isCount: true },
         ]
         : [
             { label: "Salary Paid",    amount: salaryPaid,       color: "bg-green-50",  icon: "text-green-500 bg-green-100" },
             { label: "Salary Pending", amount: salaryPend,       color: "bg-yellow-50", icon: "text-yellow-500 bg-yellow-100" },
-            { label: "Total Records",  amount: payrolls.length,  color: "bg-blue-50",   icon: "text-blue-500 bg-blue-100", isCount: true },
+            { label: "Total Records",  amount: payrolls.length,  color: "bg-blue-50",   icon: "text-blue-200 bg-blue-100", isCount: true },
         ]
 
     const activeData = tab === "students" ? fees : payrolls
@@ -134,11 +134,11 @@ export default function AdminFees() {
             <div className="fixed top-0 left-0 right-0 md:ml-64 bg-white border-b border-gray-200 px-4 py-3 z-10 shadow-sm flex items-center gap-3">
                 {/* FIX: hamburger only visible on mobile */}
                 <button onClick={() => setSidebarOpen(true)}
-                    className="md:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600 flex-shrink-0">
+                    className="md:hidden p-2 rounded-lg hover:bg-gray-100 text-black flex-shrink-0">
                     <Menu size={20} />
                 </button>
                 <div>
-                    <h1 className="text-sm font-semibold text-gray-800">Finance Overview</h1>
+                    <h1 className="text-sm font-semibold text-black">Finance Overview</h1>
                     <p className="text-xs text-gray-400">Student fees & teacher payroll</p>
                 </div>
             </div>
@@ -155,7 +155,7 @@ export default function AdminFees() {
                             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition
                                 ${tab === t.key
                                     ? "bg-blue-200 text-black shadow-sm"
-                                    : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"}`}>
+                                    : "bg-white text-black border border-gray-200 hover:bg-gray-50"}`}>
                             {t.icon}{t.label}
                         </button>
                     ))}
@@ -166,12 +166,12 @@ export default function AdminFees() {
                     {cards.map((c, i) => (
                         <div key={i} className={`rounded-xl p-4 shadow-sm border border-gray-100 ${c.color}`}>
                             <div className="flex items-center justify-between mb-2">
-                                <p className="text-xs text-gray-500 font-medium">{c.label}</p>
+                                <p className="text-xs text-black font-medium">{c.label}</p>
                                 <div className={`p-2 rounded-lg ${c.icon}`}>
                                     <DollarSign size={16} />
                                 </div>
                             </div>
-                            <p className="text-xl font-bold text-gray-800">
+                            <p className="text-xl font-bold text-black">
                                 {c.isCount ? c.amount : `₦${Number(c.amount).toLocaleString()}`}
                             </p>
                         </div>
@@ -200,7 +200,7 @@ export default function AdminFees() {
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-100">
                                 {headers.map(h => (
-                                    <th key={h} className="px-4 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                    <th key={h} className="px-4 py-3 text-left text-xs text-black font-medium">{h}</th>
                                 ))}
                             </tr>
                         </thead>
@@ -212,19 +212,19 @@ export default function AdminFees() {
                             ) : tab === "students" ? (
                                 filtered.map((f, i) => (
                                     <tr key={f._id || i} className="border-t border-gray-100 hover:bg-gray-50 text-xs">
-                                        <td className="px-4 py-3 font-medium text-gray-800">{f.studentName || "—"}</td>
-                                        <td className="px-4 py-3 text-gray-600">{f.studentClass || "—"}</td>
-                                        <td className="px-4 py-3 text-gray-700 font-medium">₦{Number(f.amount || 0).toLocaleString()}</td>
-                                        <td className="px-4 py-3 text-gray-600">{f.term || "—"}</td>
-                                        <td className="px-4 py-3 text-gray-600">{f.session || "—"}</td>
+                                        <td className="px-4 py-3 font-medium text-black">{f.studentName || "—"}</td>
+                                        <td className="px-4 py-3 text-black">{f.studentClass || "—"}</td>
+                                        <td className="px-4 py-3 text-black font-medium">₦{Number(f.amount || 0).toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-black">{f.term || "—"}</td>
+                                        <td className="px-4 py-3 text-black">{f.session || "—"}</td>
                                         <td className="px-4 py-3"><Badge status={f.status} /></td>
-                                        <td className="px-4 py-3 text-gray-500">
+                                        <td className="px-4 py-3 text-black">
                                             {f.paidAt ? new Date(f.paidAt).toLocaleDateString("en-GB") : "—"}
                                         </td>
                                         <td className="px-4 py-3">
                                             <button onClick={() => downloadReceipt(f, "student")}
                                                 disabled={f.status !== "paid"}
-                                                className="flex items-center gap-1 text-blue-600 hover:text-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed transition">
+                                                className="flex items-center gap-1 text-blue-200 hover:text-blue-200 disabled:text-gray-300 disabled:cursor-not-allowed transition">
                                                 <Download size={13} />
                                                 <span>Receipt</span>
                                             </button>
@@ -234,19 +234,19 @@ export default function AdminFees() {
                             ) : (
                                 filtered.map((p, i) => (
                                     <tr key={p._id || i} className="border-t border-gray-100 hover:bg-gray-50 text-xs">
-                                        <td className="px-4 py-3 font-medium text-gray-800">{p.teacherName || "—"}</td>
-                                        <td className="px-4 py-3 text-gray-600">{p.month || "—"}</td>
-                                        <td className="px-4 py-3 text-gray-600">{p.year || "—"}</td>
-                                        <td className="px-4 py-3 text-gray-700">₦{Number(p.basicSalary || 0).toLocaleString()}</td>
-                                        <td className="px-4 py-3 text-gray-700 font-medium">₦{Number(p.netPay || 0).toLocaleString()}</td>
+                                        <td className="px-4 py-3 font-medium text-black">{p.teacherName || "—"}</td>
+                                        <td className="px-4 py-3 text-black">{p.month || "—"}</td>
+                                        <td className="px-4 py-3 text-black">{p.year || "—"}</td>
+                                        <td className="px-4 py-3 text-black">₦{Number(p.basicSalary || 0).toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-black font-medium">₦{Number(p.netPay || 0).toLocaleString()}</td>
                                         <td className="px-4 py-3"><Badge status={p.status} /></td>
-                                        <td className="px-4 py-3 text-gray-500">
+                                        <td className="px-4 py-3 text-black">
                                             {p.paidAt ? new Date(p.paidAt).toLocaleDateString("en-GB") : "—"}
                                         </td>
                                         <td className="px-4 py-3">
                                             <button onClick={() => downloadReceipt(p, "teacher")}
                                                 disabled={p.status !== "paid"}
-                                                className="flex items-center gap-1 text-blue-600 hover:text-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed transition">
+                                                className="flex items-center gap-1 text-blue-200 hover:text-blue-200 disabled:text-gray-300 disabled:cursor-not-allowed transition">
                                                 <Download size={13} />
                                                 <span>Receipt</span>
                                             </button>

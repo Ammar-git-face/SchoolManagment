@@ -63,12 +63,12 @@ const AdminLogin = () => {
                         <GraduationCap size={22} className="text-white" />
                     </div>
                     <div>
-                        <h1 className="text-sm font-bold text-gray-800">EduManage</h1>
+                        <h1 className="text-sm font-bold text-black">EduManage</h1>
                         <p className="text-xs text-gray-400">Admin Portal</p>
                     </div>
                 </div>
 
-                <h2 className="text-2xl font-bold text-gray-800 mb-1">Welcome back</h2>
+                <h2 className="text-2xl font-bold text-black mb-1">Welcome back</h2>
                 <p className="text-xs text-gray-400 mb-8">Sign in to your admin account</p>
 
                 {error && (
@@ -79,13 +79,13 @@ const AdminLogin = () => {
 
                 <form onSubmit={handleLogin} className="flex flex-col gap-4">
                     <div>
-                        <label className="text-xs font-semibold text-gray-600 mb-1 block">Email</label>
+                        <label className="text-xs font-semibold text-black mb-1 block">Email</label>
                         <input type="email" placeholder="admin@school.com"
                             className="w-full border border-gray-200 rounded-xl p-3 text-black text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={email} onChange={(e) => setEmail(e.target.value)} required />
                     </div>
                     <div>
-                        <label className="text-xs font-semibold text-gray-600 mb-1 block">Password</label>
+                        <label className="text-xs font-semibold text-black mb-1 block">Password</label>
                         <div className="relative">
                             <input type={showPassword ? "text" : "password"} placeholder="Enter your password"
                                 className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none text-black focus:ring-2 focus:ring-blue-500 pr-10"

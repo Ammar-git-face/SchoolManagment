@@ -80,7 +80,7 @@ const TeacherDashboard = () => {
             title: "My Classes",
             value: stats.myClasses,
             sub:   "Active classes",
-            icon:  <BookOpen size={34} className="p-1.5 text-blue-500 bg-blue-100 rounded-xl" />,
+            icon:  <BookOpen size={34} className="p-1.5 text-blue-200 bg-blue-100 rounded-xl" />,
             id: 1
         },
         {
@@ -128,7 +128,7 @@ const TeacherDashboard = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     {cards.map((card) => (
                         <div key={card.id} className="p-4 shadow-md rounded-xl bg-gray-100 space-y-1">
-                            <p className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                            <p className="flex items-center justify-between text-xs text-black mb-1">
                                 {card.title}
                                 <span>{card.icon}</span>
                             </p>
@@ -152,7 +152,7 @@ const TeacherDashboard = () => {
                     {/* Upcoming PTA Meetings */}
                     <div className="w-full lg:w-1/2 shadow-md rounded-xl p-4">
                         <h2 className="font-bold text-sm mb-4 flex items-center gap-2">
-                            <Calendar1Icon size={16} className="text-blue-500" /> Upcoming PTA Meetings
+                            <Calendar1Icon size={16} className="text-blue-200" /> Upcoming PTA Meetings
                         </h2>
                         {meetings.length === 0 ? (
                             <p className="text-xs text-gray-400 text-center py-6">No upcoming meetings</p>
@@ -161,7 +161,7 @@ const TeacherDashboard = () => {
                                 {meetings.map((m) => (
                                     <div key={m._id} className="flex items-start justify-between p-3 bg-gray-50 rounded-xl">
                                         <div>
-                                            <p className="text-xs font-semibold text-gray-700">{m.title}</p>
+                                            <p className="text-xs font-semibold text-black">{m.title}</p>
                                             <p className="text-xs text-gray-400">{m.agenda}</p>
                                             <span className="flex items-center gap-3 mt-1">
                                                 <p className="text-xs text-gray-400 flex items-center gap-1">
@@ -172,7 +172,7 @@ const TeacherDashboard = () => {
                                                 </p>
                                             </span>
                                         </div>
-                                        <span className="text-xs bg-blue-100 text-blue-500 px-2 py-0.5 rounded-xl capitalize">
+                                        <span className="text-xs bg-blue-100 text-blue-200 px-2 py-0.5 rounded-xl capitalize">
                                             {m.type}
                                         </span>
                                     </div>
@@ -184,7 +184,7 @@ const TeacherDashboard = () => {
                     {/* Recent Announcements */}
                     <div className="w-full lg:w-1/2 shadow-md rounded-xl p-4">
                         <h2 className="font-bold text-sm mb-4 flex items-center gap-2">
-                            <Bell size={16} className="text-blue-500" /> Recent Announcements
+                            <Bell size={16} className="text-blue-200" /> Recent Announcements
                         </h2>
                         {announcements.length === 0 ? (
                             <p className="text-xs text-gray-400 text-center py-6">No announcements yet</p>
@@ -192,7 +192,7 @@ const TeacherDashboard = () => {
                             <div className="flex flex-col gap-3">
                                 {announcements.slice(0, 4).map((a) => (
                                     <div key={a._id} className="p-3 bg-gray-50 rounded-xl">
-                                        <p className="text-xs font-semibold text-gray-700 mb-1">{a.title}</p>
+                                        <p className="text-xs font-semibold text-black mb-1">{a.title}</p>
                                         <p className="text-xs text-gray-400">{a.message}</p>
                                         <p className="text-xs text-gray-300 mt-1">
                                             {new Date(a.createdAt).toLocaleDateString("en-US", {

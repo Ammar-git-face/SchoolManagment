@@ -77,7 +77,7 @@ const MyClasses = () => {
             <Sidebar />
             <div className="md:ml-64 px-6 pt-8 pb-10">
                 <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-gray-800">My Classes</h1>
+                    <h1 className="text-2xl font-bold text-black">My Classes</h1>
                     <p className="text-xs text-gray-400 mt-1">View your assigned classes and students</p>
                 </div>
 
@@ -99,7 +99,7 @@ const MyClasses = () => {
                                             <BookOpen size={20} className="text-blue-400" />
                                         </div>
                                         <div>
-                                            <h2 className="font-bold text-gray-800 text-sm">{className}</h2>
+                                            <h2 className="font-bold text-black text-sm">{className}</h2>
                                             <p className="text-xs text-gray-400">{subject}</p>
                                         </div>
                                     </div>
@@ -118,12 +118,12 @@ const MyClasses = () => {
                                             return (
                                                 <div key={student._id} className="flex items-center gap-3 bg-gray-50 rounded-xl p-3">
                                                     <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                                        <span className="text-xs font-semibold text-blue-500">
+                                                        <span className="text-xs font-semibold text-blue-200">
                                                             {getInitials(student.fullname)}
                                                         </span>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-semibold text-gray-700">{student.fullname}</p>
+                                                        <p className="text-xs font-semibold text-black">{student.fullname}</p>
                                                         <p className={`text-xs font-medium ${getAvgColor(avg)}`}>
                                                             {getAvgIcon(avg)} Avg: {avg}%
                                                         </p>

@@ -11,7 +11,7 @@ const SESSIONS = ["2024/2025", "2025/2026", "2026/2027"]
 const gradeColor = (g) => {
     if (!g || g === "—") return "text-gray-400"
     if (g === "A") return "text-green-600 font-bold"
-    if (g === "B") return "text-blue-600 font-bold"
+    if (g === "B") return "text-blue-200 font-bold"
     if (g === "C") return "text-yellow-600 font-bold"
     if (g === "D") return "text-orange-500 font-bold"
     return "text-red-600 font-bold"
@@ -130,11 +130,11 @@ const AdminResults = () => {
                 {/* Mobile topbar */}
                 <div className="md:hidden flex items-center justify-between bg-white px-4 py-3 shadow-sm sticky top-0 z-10">
                     <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100">
-                        <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <h1 className="font-semibold text-gray-800 text-sm">Results</h1>
+                    <h1 className="font-semibold text-black text-sm">Results</h1>
                     <div className="w-8" />
                 </div>
 
@@ -142,7 +142,7 @@ const AdminResults = () => {
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Results</h1>
+                            <h1 className="text-2xl font-bold text-black">Results</h1>
                             <p className="text-xs text-gray-400 mt-1">Review teacher submissions · approve for parents to see</p>
                         </div>
                         <div className="flex gap-2">
@@ -152,10 +152,10 @@ const AdminResults = () => {
                             ].map(t => (
                                 <button key={t.key} onClick={() => setTab(t.key)}
                                     className={`flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl border font-medium transition-all
-                                        ${tab === t.key ? "bg-blue-500 text-white border-blue-500" : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"}`}>
+                                        ${tab === t.key ? "bg-blue-500 text-white border-blue-500" : "bg-white text-black border-gray-200 hover:bg-gray-50"}`}>
                                     {t.icon} {t.label}
                                     {t.key === "pending" && pendingGroups.length > 0 && (
-                                        <span className="bg-white text-blue-500 text-xs w-5 h-5 rounded-full flex items-center justify-center ml-1 font-bold">
+                                        <span className="bg-white text-blue-200 text-xs w-5 h-5 rounded-full flex items-center justify-center ml-1 font-bold">
                                             {pendingGroups.length}
                                         </span>
                                     )}
@@ -186,8 +186,8 @@ const AdminResults = () => {
                                 </div>
                             ) : pendingGroups.length === 0 ? (
                                 <div className="bg-white border border-gray-100 rounded-2xl p-12 text-center">
-                                    <CheckCircle size={40} className="mx-auto mb-3 text-gray-200" />
-                                    <p className="text-sm font-medium text-gray-500">No pending submissions</p>
+                                    <CheckCircle size={40} className="mx-auto mb-3 text-black" />
+                                    <p className="text-sm font-medium text-black">No pending submissions</p>
                                     <p className="text-xs text-gray-400 mt-1">Results teachers submit will appear here for approval</p>
                                 </div>
                             ) : (
@@ -200,17 +200,17 @@ const AdminResults = () => {
                                             {/* Group header */}
                                             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
                                                 <div>
-                                                    <h3 className="text-sm font-semibold text-gray-800">{g.subject}</h3>
+                                                    <h3 className="text-sm font-semibold text-black">{g.subject}</h3>
                                                     <p className="text-xs text-gray-400 mt-0.5">
                                                         {g.term} · {g.session} · {g.teacherName || "Teacher"} · {g.records?.length || 0} students
                                                     </p>
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <span className="text-xs text-blue-600 bg-blue-50 border border-blue-200 px-2 py-1 rounded-full">
+                                                    <span className="text-xs text-blue-200 bg-blue-50 border border-blue-200 px-2 py-1 rounded-full">
                                                         Submitted {g.submittedAt ? new Date(g.submittedAt).toLocaleDateString() : ""}
                                                     </span>
                                                     <button onClick={() => setSelectedGroup(isOpen ? null : key)}
-                                                        className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 border border-gray-200 px-3 py-1.5 rounded-xl hover:bg-gray-50">
+                                                        className="flex items-center gap-1 text-xs text-black hover:text-black border border-gray-200 px-3 py-1.5 rounded-xl hover:bg-gray-50">
                                                         <Eye size={12}/> {isOpen ? "Hide" : "Review"}
                                                     </button>
                                                 </div>
@@ -224,26 +224,26 @@ const AdminResults = () => {
                                                         <table className="w-full min-w-[580px]">
                                                             <thead>
                                                                 <tr className="bg-gray-50">
-                                                                    <th className="text-left text-xs text-gray-500 font-medium px-4 py-2.5">#</th>
-                                                                    <th className="text-left text-xs text-gray-500 font-medium px-4 py-2.5">Student</th>
-                                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-2.5">Test/20</th>
-                                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-2.5">Note/20</th>
-                                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-2.5">Assign/10</th>
-                                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-2.5">Exam/50</th>
-                                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-2.5">Total</th>
-                                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-2.5">Grade</th>
+                                                                    <th className="text-left text-xs text-black font-medium px-4 py-2.5">#</th>
+                                                                    <th className="text-left text-xs text-black font-medium px-4 py-2.5">Student</th>
+                                                                    <th className="text-center text-xs text-black font-medium px-2 py-2.5">Test/20</th>
+                                                                    <th className="text-center text-xs text-black font-medium px-2 py-2.5">Note/20</th>
+                                                                    <th className="text-center text-xs text-black font-medium px-2 py-2.5">Assign/10</th>
+                                                                    <th className="text-center text-xs text-black font-medium px-2 py-2.5">Exam/50</th>
+                                                                    <th className="text-center text-xs text-black font-medium px-2 py-2.5">Total</th>
+                                                                    <th className="text-center text-xs text-black font-medium px-2 py-2.5">Grade</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 {(g.records || []).map((r, ri) => (
                                                                     <tr key={r._id} className="border-t border-gray-100 hover:bg-gray-50">
                                                                         <td className="px-4 py-2.5 text-xs text-gray-400">{ri + 1}</td>
-                                                                        <td className="px-4 py-2.5 text-sm font-medium text-gray-700">{r.studentName}</td>
-                                                                        <td className="px-2 py-2.5 text-center text-sm text-blue-600">{r.test ?? "—"}</td>
-                                                                        <td className="px-2 py-2.5 text-center text-sm text-blue-600">{r.note ?? "—"}</td>
+                                                                        <td className="px-4 py-2.5 text-sm font-medium text-black">{r.studentName}</td>
+                                                                        <td className="px-2 py-2.5 text-center text-sm text-blue-200">{r.test ?? "—"}</td>
+                                                                        <td className="px-2 py-2.5 text-center text-sm text-blue-200">{r.note ?? "—"}</td>
                                                                         <td className="px-2 py-2.5 text-center text-sm text-purple-500">{r.assignment ?? "—"}</td>
                                                                         <td className="px-2 py-2.5 text-center text-sm text-orange-500">{r.exam ?? "—"}</td>
-                                                                        <td className="px-2 py-2.5 text-center text-sm font-bold text-gray-800">{r.total ?? "—"}</td>
+                                                                        <td className="px-2 py-2.5 text-center text-sm font-bold text-black">{r.total ?? "—"}</td>
                                                                         <td className={`px-2 py-2.5 text-center text-sm ${gradeColor(r.grade)}`}>{r.grade || "—"}</td>
                                                                     </tr>
                                                                 ))}
@@ -254,13 +254,13 @@ const AdminResults = () => {
                                                     {/* Remarks */}
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                                                         <div>
-                                                            <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Class Teacher's Remark</label>
+                                                            <label className="text-xs font-semibold text-black mb-1.5 block">Class Teacher's Remark</label>
                                                             <textarea rows={3} placeholder="Enter class teacher remark..."
                                                                 className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
                                                                 value={teacherRemark} onChange={e => setTeacherRemark(e.target.value)} />
                                                         </div>
                                                         <div>
-                                                            <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Principal's Remark</label>
+                                                            <label className="text-xs font-semibold text-black mb-1.5 block">Principal's Remark</label>
                                                             <textarea rows={3} placeholder="Enter principal remark..."
                                                                 className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
                                                                 value={principalRemark} onChange={e => setPrincipalRemark(e.target.value)} />
@@ -277,7 +277,7 @@ const AdminResults = () => {
                                                             {isApproving ? "Approving..." : `Approve ${g.records?.length || 0} Results`}
                                                         </button>
                                                         <button onClick={() => setSelectedGroup(null)}
-                                                            className="text-sm text-gray-500 px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50">
+                                                            className="text-sm text-black px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50">
                                                             Cancel
                                                         </button>
                                                     </div>
@@ -301,7 +301,7 @@ const AdminResults = () => {
                                         <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                                         <input type="text" placeholder="Search students..."
                                             value={search} onChange={e => setSearch(e.target.value)}
-                                            className="w-full pl-8 pr-4 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                                            className="w-full pl-8 pr-4 py-2 border border-gray-200 rounded-xl text-xs text-black focus:outline-none focus:ring-2 focus:ring-blue-400" />
                                     </div>
 
                                     {/* Student list */}
@@ -313,7 +313,7 @@ const AdminResults = () => {
                                                 onClick={() => { setSelectedStudent(s); setMsg(null) }}
                                                 className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-all border-b border-gray-50 last:border-0
                                                     ${selectedStudent?._id === s._id ? "bg-blue-50 border-l-2 border-l-blue-500" : ""}`}>
-                                                <p className="text-sm font-semibold text-gray-700">{s.fullname}</p>
+                                                <p className="text-sm font-semibold text-black">{s.fullname}</p>
                                                 <p className="text-xs text-gray-400">{s.studentClass}</p>
                                             </button>
                                         ))}
@@ -322,7 +322,7 @@ const AdminResults = () => {
                                     {/* Term + Session */}
                                     <div className="space-y-3">
                                         <div>
-                                            <label className="text-xs font-semibold text-gray-600 mb-1 block">Term</label>
+                                            <label className="text-xs font-semibold text-black mb-1 block">Term</label>
                                             <div className="relative">
                                                 <select className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-400 pr-8"
                                                     value={term} onChange={e => setTerm(e.target.value)}>
@@ -332,7 +332,7 @@ const AdminResults = () => {
                                             </div>
                                         </div>
                                         <div>
-                                            <label className="text-xs font-semibold text-gray-600 mb-1 block">Session</label>
+                                            <label className="text-xs font-semibold text-black mb-1 block">Session</label>
                                             <div className="relative">
                                                 <select className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-400 pr-8"
                                                     value={session} onChange={e => setSession(e.target.value)}>
@@ -362,7 +362,7 @@ const AdminResults = () => {
                                             ].map(s => (
                                                 <div key={s.label} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm text-center">
                                                     <p className="text-xs text-gray-400 mb-1">{s.label}</p>
-                                                    <p className={`text-2xl font-bold ${s.color || "text-gray-800"}`}>{s.value}</p>
+                                                    <p className={`text-2xl font-bold ${s.color || "text-black"}`}>{s.value}</p>
                                                 </div>
                                             ))}
                                         </div>
@@ -370,7 +370,7 @@ const AdminResults = () => {
                                         {/* Results table */}
                                         <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto mb-5">
                                             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                                                <p className="text-sm font-semibold text-gray-700">
+                                                <p className="text-sm font-semibold text-black">
                                                     {selectedStudent.fullname} — {term} {session}
                                                 </p>
                                                 {studentResults.length === 0 ? (
@@ -390,7 +390,7 @@ const AdminResults = () => {
                                                 <thead>
                                                     <tr className="bg-gray-50 border-b border-gray-100">
                                                         {["Subject", "Test/20", "Note/20", "Assign/10", "Exam/50", "Total", "Grade", "Status"].map(h => (
-                                                            <th key={h} className="px-4 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                                            <th key={h} className="px-4 py-3 text-left text-xs text-black font-medium">{h}</th>
                                                         ))}
                                                     </tr>
                                                 </thead>
@@ -403,12 +403,12 @@ const AdminResults = () => {
                                                         </tr>
                                                     ) : studentResults.map(r => (
                                                         <tr key={r._id} className="border-t border-gray-100 hover:bg-gray-50">
-                                                            <td className="px-4 py-3 text-sm font-medium text-gray-700">{r.subject}</td>
-                                                            <td className="px-4 py-3 text-sm text-blue-600">{r.test ?? "—"}</td>
-                                                            <td className="px-4 py-3 text-sm text-blue-600">{r.note ?? "—"}</td>
+                                                            <td className="px-4 py-3 text-sm font-medium text-black">{r.subject}</td>
+                                                            <td className="px-4 py-3 text-sm text-blue-200">{r.test ?? "—"}</td>
+                                                            <td className="px-4 py-3 text-sm text-blue-200">{r.note ?? "—"}</td>
                                                             <td className="px-4 py-3 text-sm text-purple-500">{r.assignment ?? "—"}</td>
                                                             <td className="px-4 py-3 text-sm text-orange-500">{r.exam ?? "—"}</td>
-                                                            <td className="px-4 py-3 text-sm font-bold text-gray-800">{r.total ?? "—"}</td>
+                                                            <td className="px-4 py-3 text-sm font-bold text-black">{r.total ?? "—"}</td>
                                                             <td className={`px-4 py-3 text-sm ${gradeColor(r.grade)}`}>{r.grade || "—"}</td>
                                                             <td className="px-4 py-3"><Badge status={r.status} /></td>
                                                         </tr>

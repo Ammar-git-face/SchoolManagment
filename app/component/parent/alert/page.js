@@ -38,10 +38,10 @@ const ParentAnnouncements = () => {
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-800">Announcements</h1>
+                        <h1 className="text-2xl font-bold text-black">Announcements</h1>
                         <p className="text-xs text-gray-400 mt-1">Stay updated with the latest school announcements</p>
                     </div>
-                    <span className="bg-blue-100 text-blue-500 text-xs font-semibold px-3 py-1 rounded-full">
+                    <span className="bg-blue-100 text-blue-200 text-xs font-semibold px-3 py-1 rounded-full">
                         {announcements.length} Total
                     </span>
                 </div>
@@ -69,13 +69,13 @@ const ParentAnnouncements = () => {
                                 <div className="flex items-start justify-between gap-4 mb-3">
                                     <div className="flex items-center gap-3">
                                         <div className="bg-blue-100 p-2 rounded-xl">
-                                            <Bell size={16} className="text-blue-500" />
+                                            <Bell size={16} className="text-blue-200" />
                                         </div>
-                                        <h2 className="text-sm font-bold text-gray-800">{a.title}</h2>
+                                        <h2 className="text-sm font-bold text-black">{a.title}</h2>
                                     </div>
                                     <div className="flex items-center gap-2 flex-shrink-0">
                                         <span className={`text-xs px-2 py-0.5 rounded-full border
-                                            ${a.to === "All" ? "bg-purple-50 text-purple-500 border-purple-200" : "bg-blue-50 text-blue-500 border-blue-200"}`}>
+                                            ${a.to === "All" ? "bg-purple-50 text-purple-500 border-purple-200" : "bg-blue-50 text-blue-200 border-blue-200"}`}>
                                             {a.to}
                                         </span>
                                         <p className="text-xs text-gray-400 flex items-center gap-1">
@@ -84,7 +84,7 @@ const ParentAnnouncements = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <p className="text-sm text-gray-500 leading-relaxed">{a.message}</p>
+                                <p className="text-sm text-black leading-relaxed">{a.message}</p>
                                 <p className="text-xs text-gray-300 mt-3">— School Headmaster</p>
                             </div>
                         ))}

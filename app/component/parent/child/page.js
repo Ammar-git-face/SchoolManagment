@@ -42,7 +42,7 @@ const MyChildren = () => {
             <Sidebar />
             <div className="md:ml-64 px-6 pt-8 pb-10">
                 <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-gray-800">My Children</h1>
+                    <h1 className="text-2xl font-bold text-black">My Children</h1>
                     <p className="text-xs text-gray-400 mt-1">View detailed information about your children</p>
                 </div>
 
@@ -62,12 +62,12 @@ const MyChildren = () => {
                                 <div key={child._id} className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
                                     <div className="flex items-center gap-4 mb-5">
                                         <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                            <span className="text-sm font-bold text-blue-500">{getInitials(child.fullname)}</span>
+                                            <span className="text-sm font-bold text-blue-200">{getInitials(child.fullname)}</span>
                                         </div>
                                         <div>
-                                            <h2 className="font-bold text-gray-800 text-base">{child.fullname}</h2>
+                                            <h2 className="font-bold text-black text-base">{child.fullname}</h2>
                                             <div className="flex items-center gap-2 mt-1 flex-wrap">
-                                                <span className="flex items-center gap-1 text-xs text-blue-500 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
+                                                <span className="flex items-center gap-1 text-xs text-blue-200 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
                                                     <GraduationCap size={10} /> {child.studentClass}
                                                 </span>
                                                 <span className={`flex items-center gap-1 text-xs border px-2 py-0.5 rounded-full ${getAvgColor(avg)}`}>
@@ -82,17 +82,17 @@ const MyChildren = () => {
                                             <p className="text-xs font-semibold text-green-600 flex items-center gap-1 mb-2">
                                                 <CheckCircle size={13} /> Strengths
                                             </p>
-                                            <p className="text-xs text-gray-500 leading-relaxed">{getStrengths(child._id)}</p>
+                                            <p className="text-xs text-black leading-relaxed">{getStrengths(child._id)}</p>
                                         </div>
                                         <div className="bg-orange-50 border border-orange-100 rounded-xl p-4">
                                             <p className="text-xs font-semibold text-orange-500 flex items-center gap-1 mb-2">
                                                 <AlertTriangle size={13} /> Areas to Improve
                                             </p>
-                                            <p className="text-xs text-gray-500 leading-relaxed">{getAreasToImprove(child._id)}</p>
+                                            <p className="text-xs text-black leading-relaxed">{getAreasToImprove(child._id)}</p>
                                         </div>
                                     </div>
 
-                                    <p className="text-sm font-semibold text-gray-700 mb-3">Recent Results</p>
+                                    <p className="text-sm font-semibold text-black mb-3">Recent Results</p>
                                     {childResults.length === 0 ? (
                                         <p className="text-xs text-gray-400">No results yet</p>
                                     ) : (
@@ -107,8 +107,8 @@ const MyChildren = () => {
                                             <tbody>
                                                 {childResults.map(r => (
                                                     <tr key={r._id} className="border-t border-gray-50 hover:bg-gray-50">
-                                                        <td className="py-3 text-sm text-gray-600">{r.subject}</td>
-                                                        <td className="py-3 text-sm text-gray-500">{r.grade}</td>
+                                                        <td className="py-3 text-sm text-black">{r.subject}</td>
+                                                        <td className="py-3 text-sm text-black">{r.grade}</td>
                                                         <td className={`py-3 text-sm font-semibold ${getScoreColor(r.total)}`}>{r.total}/100</td>
                                                         <td className="py-3 text-sm text-gray-400">{r.term}</td>
                                                     </tr>

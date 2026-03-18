@@ -57,18 +57,18 @@ const AlertPage = () => {
                 {/* Mobile topbar */}
                 <div className="md:hidden flex items-center justify-between bg-white px-4 py-3 shadow-sm sticky top-0 z-10">
                     <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100">
-                        <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <h1 className="font-semibold text-gray-800">Announcements</h1>
+                    <h1 className="font-semibold text-black">Announcements</h1>
                     <div className="w-8" />
                 </div>
 
                 <div className="px-4 md:px-6 pt-8 pb-10">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Announcements</h1>
+                            <h1 className="text-2xl font-bold text-black">Announcements</h1>
                             <p className="text-xs text-gray-400 mt-1">Send announcements to teachers and parents</p>
                         </div>
                         <button onClick={() => setCreate(true)}
@@ -83,7 +83,7 @@ const AlertPage = () => {
                         ) : display.map((list) => (
                             <div key={list._id} className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
                                 <div className="flex items-start justify-between mb-2">
-                                    <h2 className="font-bold text-gray-800 text-sm">{list.title}</h2>
+                                    <h2 className="font-bold text-black text-sm">{list.title}</h2>
                                     <button className="text-red-400 hover:text-red-600 ml-3 flex-shrink-0"
                                         onClick={() => handleDelete(list._id)}>
                                         <Trash2 size={15} />
@@ -95,9 +95,9 @@ const AlertPage = () => {
                                         year: "numeric", month: "short", day: "numeric"
                                     })}</span>
                                     <User2 size={13} />
-                                    <span className="bg-blue-100 text-blue-500 px-2 py-0.5 rounded-full">{list.to}</span>
+                                    <span className="bg-blue-100 text-blue-200 px-2 py-0.5 rounded-full">{list.to}</span>
                                 </div>
-                                <p className="text-xs text-gray-500 mb-3">{list.message}</p>
+                                <p className="text-xs text-black mb-3">{list.message}</p>
                                 <p className="text-xs text-gray-400 italic">— School Headmaster</p>
                             </div>
                         ))}
@@ -109,7 +109,7 @@ const AlertPage = () => {
             {create && (
                 <div className="fixed inset-0 w-full bg-black/60 z-50 flex items-start justify-center px-4">
                     <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md mt-20">
-                        <h2 className="font-bold text-gray-800 mb-1">Create Announcement</h2>
+                        <h2 className="font-bold text-black mb-1">Create Announcement</h2>
                         <p className="text-xs text-gray-400 mb-5">Send an announcement to teachers, parents, or both</p>
                         <div className="flex flex-col gap-3">
                             <div>
@@ -136,7 +136,7 @@ const AlertPage = () => {
                         </div>
                         <div className="flex gap-3 mt-5">
                             <button onClick={() => setCreate(false)}
-                                className="flex-1 text-xs text-gray-500 border border-gray-200 py-2 rounded-xl hover:bg-gray-50">Cancel</button>
+                                className="flex-1 text-xs text-black border border-gray-200 py-2 rounded-xl hover:bg-gray-50">Cancel</button>
                             <button onClick={Send}
                                 className="flex-1 text-xs bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600">Send</button>
                         </div>

@@ -41,7 +41,7 @@ const LoginPage = ({ onLogin }) => {
                     <div className="bg-blue-600 p-3 rounded-2xl mb-4">
                         <Shield size={28} className="text-white" />
                     </div>
-                    <h1 className="text-xl font-bold text-gray-800">Super Admin</h1>
+                    <h1 className="text-xl font-bold text-black">Super Admin</h1>
                     <p className="text-xs text-gray-400 mt-1">Platform Management Console</p>
                 </div>
 
@@ -52,13 +52,13 @@ const LoginPage = ({ onLogin }) => {
                 )}
 
                 <div className="mb-4">
-                    <label className="text-xs font-semibold text-gray-600 mb-1 block">Email</label>
+                    <label className="text-xs font-semibold text-black mb-1 block">Email</label>
                     <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                         placeholder="superadmin@platform.com"
                         className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
                 <div className="mb-6">
-                    <label className="text-xs font-semibold text-gray-600 mb-1 block">Password</label>
+                    <label className="text-xs font-semibold text-black mb-1 block">Password</label>
                     <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                         placeholder="Enter password"
                         className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -78,8 +78,8 @@ const LoginPage = ({ onLogin }) => {
 // ─── PLAN BADGE ───────────────────────────────────────────────
 const PlanBadge = ({ plan }) => {
     const styles = {
-        free:    "bg-gray-100 text-gray-600 border-gray-200",
-        basic:   "bg-blue-50 text-blue-600 border-blue-200",
+        free:    "bg-gray-100 text-black border-gray-200",
+        basic:   "bg-blue-50 text-blue-200 border-blue-200",
         premium: "bg-yellow-50 text-yellow-600 border-yellow-200"
     }
     return (
@@ -197,9 +197,9 @@ const SuperAdminDashboard = () => {
     })
 
     const statCards = stats ? [
-        { label: "Total Schools",   value: stats.totalSchools,   icon: <School size={20} />,     color: "bg-blue-50 border-blue-100",   icon2: "bg-blue-100 text-blue-500" },
+        { label: "Total Schools",   value: stats.totalSchools,   icon: <School size={20} />,     color: "bg-blue-50 border-blue-100",   icon2: "bg-blue-100 text-blue-200" },
         { label: "Active Schools",  value: stats.activeSchools,  icon: <CheckCircle size={20} />, color: "bg-green-50 border-green-100", icon2: "bg-green-100 text-green-500" },
-        { label: "Free Plan",       value: stats.freeSchools,    icon: <Users size={20} />,      color: "bg-gray-50 border-gray-100",   icon2: "bg-gray-100 text-gray-500" },
+        { label: "Free Plan",       value: stats.freeSchools,    icon: <Users size={20} />,      color: "bg-gray-50 border-gray-100",   icon2: "bg-gray-100 text-black" },
         { label: "Basic Plan",      value: stats.basicSchools,   icon: <BarChart2 size={20} />,  color: "bg-indigo-50 border-indigo-100",icon2: "bg-indigo-100 text-indigo-500" },
         { label: "Premium Schools", value: stats.premiumSchools, icon: <Crown size={20} />,      color: "bg-yellow-50 border-yellow-100",icon2: "bg-yellow-100 text-yellow-500" },
     ] : []
@@ -213,21 +213,21 @@ const SuperAdminDashboard = () => {
                         <Shield size={18} className="text-white" />
                     </div>
                     <div>
-                        <h1 className="text-sm font-bold text-gray-800">Super Admin Console</h1>
+                        <h1 className="text-sm font-bold text-black">Super Admin Console</h1>
                         <p className="text-xs text-gray-400">Platform Management</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
                     {newCount > 0 && (
                         <div className="relative">
-                            <Bell size={18} className="text-gray-500" />
+                            <Bell size={18} className="text-black" />
                             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">
                                 {newCount}
                             </span>
                         </div>
                     )}
                     <button onClick={() => { fetchStats(); fetchSchools() }}
-                        className="p-2 rounded-xl hover:bg-gray-100 text-gray-500">
+                        className="p-2 rounded-xl hover:bg-gray-100 text-black">
                         <RefreshCw size={15} />
                     </button>
                     <button onClick={handleLogout}
@@ -253,7 +253,7 @@ const SuperAdminDashboard = () => {
                     {["dashboard", "schools"].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)}
                             className={`text-xs px-4 py-2 rounded-xl capitalize font-medium transition-all
-                                ${activeTab === tab ? "bg-blue-600 text-white" : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"}`}>
+                                ${activeTab === tab ? "bg-blue-600 text-white" : "bg-white border border-gray-200 text-black hover:bg-gray-50"}`}>
                             {tab}
                         </button>
                     ))}
@@ -267,8 +267,8 @@ const SuperAdminDashboard = () => {
                             {statCards.map((card, i) => (
                                 <div key={i} className={`border rounded-2xl p-4 flex items-center justify-between ${card.color}`}>
                                     <div>
-                                        <p className="text-xs text-gray-500 mb-1">{card.label}</p>
-                                        <h2 className="text-2xl font-bold text-gray-800">{card.value}</h2>
+                                        <p className="text-xs text-black mb-1">{card.label}</p>
+                                        <h2 className="text-2xl font-bold text-black">{card.value}</h2>
                                     </div>
                                     <div className={`p-2.5 rounded-xl ${card.icon2}`}>{card.icon}</div>
                                 </div>
@@ -278,8 +278,8 @@ const SuperAdminDashboard = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                             {/* Monthly growth chart */}
                             <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
-                                <h2 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                    <TrendingUp size={15} className="text-blue-500" /> Monthly School Registrations
+                                <h2 className="text-sm font-bold text-black mb-4 flex items-center gap-2">
+                                    <TrendingUp size={15} className="text-blue-200" /> Monthly School Registrations
                                 </h2>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <BarChart data={stats.monthlyData}>
@@ -297,7 +297,7 @@ const SuperAdminDashboard = () => {
 
                             {/* Plan distribution */}
                             <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
-                                <h2 className="text-sm font-bold text-gray-800 mb-4">Plan Distribution</h2>
+                                <h2 className="text-sm font-bold text-black mb-4">Plan Distribution</h2>
                                 <div className="flex flex-col gap-3">
                                     {[
                                         { label: "Free", count: stats.freeSchools, total: stats.totalSchools, color: "bg-gray-400" },
@@ -307,7 +307,7 @@ const SuperAdminDashboard = () => {
                                         const pct = stats.totalSchools > 0 ? Math.round(item.count / stats.totalSchools * 100) : 0
                                         return (
                                             <div key={item.label}>
-                                                <div className="flex justify-between text-xs text-gray-600 mb-1">
+                                                <div className="flex justify-between text-xs text-black mb-1">
                                                     <span className="font-medium">{item.label}</span>
                                                     <span>{item.count} schools ({pct}%)</span>
                                                 </div>
@@ -324,8 +324,8 @@ const SuperAdminDashboard = () => {
                         {/* Recent registrations */}
                         <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto">
                             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                                <h2 className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                                    <Bell size={14} className="text-blue-500" />
+                                <h2 className="text-sm font-bold text-black flex items-center gap-2">
+                                    <Bell size={14} className="text-blue-200" />
                                     Recent Registrations
                                     {newCount > 0 && (
                                         <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{newCount} new</span>
@@ -336,15 +336,15 @@ const SuperAdminDashboard = () => {
                                 <thead>
                                     <tr className="border-b border-gray-100">
                                         {["School", "Owner", "Email", "Plan", "Status", "Date"].map(h => (
-                                            <th key={h} className="px-5 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                            <th key={h} className="px-5 py-3 text-left text-xs text-black font-medium">{h}</th>
                                         ))}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {(stats.recentRegistrations || []).map(s => (
                                         <tr key={s._id} className="border-t border-gray-50 hover:bg-gray-50">
-                                            <td className="px-5 py-3 text-sm font-semibold text-gray-800">{s.schoolName}</td>
-                                            <td className="px-5 py-3 text-sm text-gray-600">{s.ownerName}</td>
+                                            <td className="px-5 py-3 text-sm font-semibold text-black">{s.schoolName}</td>
+                                            <td className="px-5 py-3 text-sm text-black">{s.ownerName}</td>
                                             <td className="px-5 py-3 text-xs text-gray-400">{s.email}</td>
                                             <td className="px-5 py-3"><PlanBadge plan={s.plan} /></td>
                                             <td className="px-5 py-3">
@@ -391,7 +391,7 @@ const SuperAdminDashboard = () => {
                                 <thead>
                                     <tr className="border-b border-gray-100">
                                         {["School", "Owner", "Email", "School Code", "Plan", "Status", "Actions"].map(h => (
-                                            <th key={h} className="px-4 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                            <th key={h} className="px-4 py-3 text-left text-xs text-black font-medium">{h}</th>
                                         ))}
                                     </tr>
                                 </thead>
@@ -402,8 +402,8 @@ const SuperAdminDashboard = () => {
                                         <tr><td colSpan={7} className="text-center text-xs text-gray-400 py-10">No schools found</td></tr>
                                     ) : filtered.map(s => (
                                         <tr key={s._id} className="border-t border-gray-50 hover:bg-gray-50">
-                                            <td className="px-4 py-3 text-sm font-semibold text-gray-800">{s.schoolName}</td>
-                                            <td className="px-4 py-3 text-sm text-gray-600">{s.fullname}</td>
+                                            <td className="px-4 py-3 text-sm font-semibold text-black">{s.schoolName}</td>
+                                            <td className="px-4 py-3 text-sm text-black">{s.fullname}</td>
                                             <td className="px-4 py-3 text-xs text-gray-400">{s.email}</td>
                                             <td className="px-4 py-3 text-xs font-mono text-purple-600">{s.schoolCode}</td>
                                             <td className="px-4 py-3">

@@ -30,7 +30,7 @@ const ParentPTA = () => {
             <Sidebar />
             <section className="px-4 md:px-0 md:ml-64 p-6 md:p-10">
                 <h1 className="font-bold text-xl text-black mb-1">PTA Meetings</h1>
-                <p className="text-xs text-gray-500 mb-4">View and join parent-teacher meetings</p>
+                <p className="text-xs text-black mb-4">View and join parent-teacher meetings</p>
                 <span className="flex items-center gap-3 mb-6">
                     {[
                         { key: 'upcoming', label: 'Upcoming', count: upcoming.length, icon: <Calendar1Icon size={10} /> },
@@ -38,7 +38,7 @@ const ParentPTA = () => {
                     ].map(tab => (
                         <button key={tab.key} onClick={() => setActiveContent(tab.key)}
                             className={`rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 transition-all
-                                ${activeContent === tab.key ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                                ${activeContent === tab.key ? 'bg-orange-500 text-white' : 'bg-gray-100 text-black hover:bg-gray-200'}`}>
                             {tab.icon} {tab.label} ({tab.count})
                         </button>
                     ))}
@@ -68,8 +68,8 @@ const ParentPTA = () => {
                                 </nav>
                                 <p className="text-xs text-gray-400 mb-3">{m.agenda}</p>
                                 <div className="flex flex-wrap gap-3 mb-4">
-                                    <p className="flex items-center gap-1 text-gray-500 text-xs"><Calendar1Icon size={11} />{m.date}</p>
-                                    <p className="flex items-center gap-1 text-gray-500 text-xs"><Clock size={11} />{m.time} ({m.duration})</p>
+                                    <p className="flex items-center gap-1 text-black text-xs"><Calendar1Icon size={11} />{m.date}</p>
+                                    <p className="flex items-center gap-1 text-black text-xs"><Clock size={11} />{m.time} ({m.duration})</p>
                                 </div>
                                 {m.status === 'upcoming' && (
                                     <button onClick={() => setActiveCall(m)}

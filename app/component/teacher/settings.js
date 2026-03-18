@@ -76,8 +76,8 @@ const Settings = ({ onClose, role }) => {
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
                 {/* Header */}
                 <div className="flex items-center justify-between p-5 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-800 text-sm">Settings</h2>
-                    <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500">
+                    <h2 className="font-semibold text-black text-sm">Settings</h2>
+                    <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-black">
                         <X size={16} />
                     </button>
                 </div>
@@ -88,8 +88,8 @@ const Settings = ({ onClose, role }) => {
                         <button key={tab} onClick={() => setActiveTab(tab)}
                             className={`flex-1 py-3 text-xs font-medium capitalize transition-colors
                                 ${activeTab === tab
-                                    ? "text-blue-600 border-b-2 border-blue-600"
-                                    : "text-gray-500 hover:text-gray-700"}`}>
+                                    ? "text-blue-200 border-b-2 border-blue-600"
+                                    : "text-black hover:text-black"}`}>
                             {tab}
                         </button>
                     ))}
@@ -108,15 +108,15 @@ const Settings = ({ onClose, role }) => {
                                 </div>
                             )}
                             <div className="flex items-center gap-4 mb-5">
-                                <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-lg font-bold">
+                                <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-200 text-lg font-bold">
                                     {name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
                                 </div>
                                 <div>
-                                    <p className="text-sm font-semibold text-gray-700">{name || "—"}</p>
+                                    <p className="text-sm font-semibold text-black">{name || "—"}</p>
                                     <p className="text-xs text-gray-400 capitalize">{role}</p>
                                 </div>
                             </div>
-                            <p className="text-xs font-semibold text-gray-600 mb-1">Full Name</p>
+                            <p className="text-xs font-semibold text-black mb-1">Full Name</p>
                             <input type="text" value={name} onChange={(e) => setName(e.target.value)}
                                 className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-5" />
                             <div className="flex justify-end">
@@ -145,7 +145,7 @@ const Settings = ({ onClose, role }) => {
                                 { label: "Confirm Password", val: confirmPassword, set: setConfirmPassword, show: showConfirm, toggle: () => setShowConfirm(!showConfirm), ph: "Confirm new password" },
                             ].map(({ label, val, set, show, toggle, ph }) => (
                                 <div key={label} className="mb-4">
-                                    <p className="text-xs font-semibold text-gray-600 mb-1">{label}</p>
+                                    <p className="text-xs font-semibold text-black mb-1">{label}</p>
                                     <div className="relative">
                                         <input type={show ? "text" : "password"} value={val}
                                             onChange={(e) => set(e.target.value)} placeholder={ph}

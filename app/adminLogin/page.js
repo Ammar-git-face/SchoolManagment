@@ -54,7 +54,7 @@ const SchoolLogoUpload = () => {
 
     return (
         <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-            <p className="text-sm font-semibold text-gray-700 mb-4">School Logo</p>
+            <p className="text-sm font-semibold text-black mb-4">School Logo</p>
 
             {msg && (
                 <div className={`text-xs p-3 rounded-xl mb-4 ${msg.type === "success"
@@ -74,13 +74,13 @@ const SchoolLogoUpload = () => {
                     )}
                 </div>
                 <div className="flex-1">
-                    <p className="text-xs text-gray-500 mb-2">
+                    <p className="text-xs text-black mb-2">
                         Upload your school logo. It will appear in all sidebars and on report cards.
                         Max 500KB, PNG or JPG.
                     </p>
                     <div className="flex gap-2">
                         <button onClick={() => fileRef.current.click()}
-                            className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-xl text-xs text-gray-600 hover:bg-gray-50 transition">
+                            className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-xl text-xs text-black hover:bg-gray-50 transition">
                             <Upload size={13} /> Choose File
                         </button>
                         {preview && (

@@ -66,20 +66,20 @@ export default function TeacherSalary() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <h1 className="font-semibold text-gray-800 text-sm">My Salary</h1>
+                    <h1 className="font-semibold text-black text-sm">My Salary</h1>
                 </div>
 
                 <div className="p-4 md:p-8 max-w-4xl mx-auto">
-                    <h1 className="hidden md:block text-2xl font-bold text-gray-800 mb-6">My Salary</h1>
+                    <h1 className="hidden md:block text-2xl font-bold text-black mb-6">My Salary</h1>
 
                     {/* Salary summary cards */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
                             <div className="flex items-center justify-between mb-2">
-                                <p className="text-xs text-gray-500 font-medium">Monthly Salary</p>
-                                <DollarSign size={18} className="text-blue-500" />
+                                <p className="text-xs text-black font-medium">Monthly Salary</p>
+                                <DollarSign size={18} className="text-blue-200" />
                             </div>
-                            <p className="text-xl font-bold text-gray-800">
+                            <p className="text-xl font-bold text-black">
                                 {loading ? '...' : `₦${Number(teacher?.salary || 0).toLocaleString()}`}
                             </p>
                             <p className="text-xs text-gray-400 mt-1">Base pay</p>
@@ -87,7 +87,7 @@ export default function TeacherSalary() {
 
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
                             <div className="flex items-center justify-between mb-2">
-                                <p className="text-xs text-gray-500 font-medium">Current Status</p>
+                                <p className="text-xs text-black font-medium">Current Status</p>
                                 {teacher?.paid === 'paid'
                                     ? <CheckCircle size={18} className="text-green-500" />
                                     : <Clock size={18} className="text-yellow-500" />
@@ -101,10 +101,10 @@ export default function TeacherSalary() {
 
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
                             <div className="flex items-center justify-between mb-2">
-                                <p className="text-xs text-gray-500 font-medium">Last Paid</p>
+                                <p className="text-xs text-black font-medium">Last Paid</p>
                                 <Calendar size={18} className="text-purple-500" />
                             </div>
-                            <p className="text-sm font-bold text-gray-800">
+                            <p className="text-sm font-bold text-black">
                                 {loading ? '...' : teacher?.lastPaidAt
                                     ? new Date(teacher.lastPaidAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                                     : 'Never'
@@ -119,13 +119,13 @@ export default function TeacherSalary() {
                     {/* Salary history */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100">
                         <div className="p-4 border-b border-gray-100">
-                            <h2 className="font-semibold text-sm text-gray-800">Payment History</h2>
+                            <h2 className="font-semibold text-sm text-black">Payment History</h2>
                         </div>
                         {loading ? (
                             <div className="text-center py-12 text-xs text-gray-400">Loading...</div>
                         ) : history.length === 0 ? (
                             <div className="text-center py-12">
-                                <DollarSign size={28} className="text-gray-200 mx-auto mb-2" />
+                                <DollarSign size={28} className="text-black mx-auto mb-2" />
                                 <p className="text-xs text-gray-400">No payment history yet.</p>
                             </div>
                         ) : (
@@ -133,17 +133,17 @@ export default function TeacherSalary() {
                                 <table className="w-full">
                                     <thead>
                                         <tr className="bg-gray-50 text-left">
-                                            <th className="px-4 py-3 text-xs text-gray-500 font-medium">Month</th>
-                                            <th className="px-4 py-3 text-xs text-gray-500 font-medium">Amount</th>
-                                            <th className="px-4 py-3 text-xs text-gray-500 font-medium">Status</th>
-                                            <th className="px-4 py-3 text-xs text-gray-500 font-medium">Date Paid</th>
+                                            <th className="px-4 py-3 text-xs text-black font-medium">Month</th>
+                                            <th className="px-4 py-3 text-xs text-black font-medium">Amount</th>
+                                            <th className="px-4 py-3 text-xs text-black font-medium">Status</th>
+                                            <th className="px-4 py-3 text-xs text-black font-medium">Date Paid</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-100">
                                         {history.map((h) => (
                                             <tr key={h._id} className="hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-sm text-gray-700">{h.month}</td>
-                                                <td className="px-4 py-3 text-sm font-medium text-gray-800">
+                                                <td className="px-4 py-3 text-sm text-black">{h.month}</td>
+                                                <td className="px-4 py-3 text-sm font-medium text-black">
                                                     ₦{Number(h.amount || 0).toLocaleString()}
                                                 </td>
                                                 <td className="px-4 py-3">
@@ -151,7 +151,7 @@ export default function TeacherSalary() {
                                                         {h.status}
                                                     </span>
                                                 </td>
-                                                <td className="px-4 py-3 text-xs text-gray-500">
+                                                <td className="px-4 py-3 text-xs text-black">
                                                     {h.paidDate
                                                         ? new Date(h.paidDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                                                         : '—'

@@ -46,7 +46,7 @@ export default function OwnerLogin() {
                     <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <span className=" text-2xl">🏫</span>
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-800">School Owner Portal</h1>
+                    <h1 className="text-2xl font-bold text-black">School Owner Portal</h1>
                     <p className="text-gray-400 text-sm mt-1">Sign in to manage your school</p>
                 </div>
 
@@ -56,22 +56,22 @@ export default function OwnerLogin() {
 
                 <div className="space-y-4">
                     <div>
-                        <label className="text-sm text-gray-600 mb-1 block font-medium">Email Address</label>
+                        <label className="text-sm text-black mb-1 block font-medium">Email Address</label>
                         <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                             placeholder="owner@school.com"
-                            className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none text-black focus:ring-2 focus:ring-blue-500" />
                     </div>
                     <div>
-                        <label className="text-sm text-gray-600 mb-1 block font-medium">Password</label>
+                        <label className="text-sm text-black mb-1 block font-medium">Password</label>
                         <div className="relative">
                             <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                                 placeholder="Enter your password"
                                 onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                                className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-12" />
+                                className="w-full border rounded-xl px-4 py-3 text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 pr-12" />
                         </div>
                     </div>
                     <button onClick={handleLogin} disabled={loading}
-                        className="w-full text-blue-500 bg-blue-200 h-8 hover:bg-blue-50 rounded-xl font-semibold border mt-2">
+                        className="w-full text-blue-200 bg-blue-200 h-8 hover:bg-blue-50 rounded-xl font-semibold border mt-2">
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
                 </div>

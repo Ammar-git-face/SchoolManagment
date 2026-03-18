@@ -63,23 +63,23 @@ const SchoolRegister = () => {
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <CheckCircle size={32} className="text-green-500" />
                 </div>
-                <h1 className="text-2xl font-bold text-gray-800 mb-1">School Registered!</h1>
+                <h1 className="text-2xl font-bold text-black mb-1">School Registered!</h1>
                 <p className="text-sm black mb-6">
                     <span className="font-semibold black">{result.schoolName}</span> is now live on the platform.
                 </p>
 
                 <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-5 mb-4">
-                    <p className="text-xs font-bold text-blue-600 mb-2 uppercase tracking-widest">Your School Code</p>
+                    <p className="text-xs font-bold text-blue-200 mb-2 uppercase tracking-widest">Your School Code</p>
                     <div className="flex items-center justify-center gap-3">
                         <span className="text-3xl font-black text-blue-700 tracking-widest font-mono">
                             {result.schoolCode}
                         </span>
                         <button onClick={copyCode}
-                            className="p-2 rounded-xl bg-blue-100 hover:bg-blue-200 text-blue-600 transition-all">
+                            className="p-2 rounded-xl bg-blue-100 hover:bg-blue-200 text-blue-200 transition-all">
                             {copied ? <Check size={18} /> : <Copy size={18} />}
                         </button>
                     </div>
-                    <p className="text-xs text-blue-500 mt-3 leading-relaxed">
+                    <p className="text-xs text-blue-200 mt-3 leading-relaxed">
                         Share this code with your teachers and parents.<br />
                         They need it to create their accounts.
                     </p>
@@ -113,7 +113,7 @@ const SchoolRegister = () => {
                         <School size={20} className="text-white" />
                     </div>
                     <div>
-                        <h1 className="text-lg font-bold text-gray-800">Register Your School</h1>
+                        <h1 className="text-lg font-bold text-black">Register Your School</h1>
                         <p className="text-xs text-black">Set up your school management system</p>
                     </div>
                 </div>
@@ -183,7 +183,7 @@ const SchoolRegister = () => {
                 <p className="text-xs text-center text-black mt-4">
                     Already registered?{" "}
                     <button onClick={() => router.push("/component/auth/admin")}
-                        className="text-blue-500 hover:underline font-medium">
+                        className="text-blue-200 hover:underline font-medium">
                         Admin Login
                     </button>
                 </p>

@@ -17,7 +17,7 @@ const getGradeLabel = (avg) => {
 
 const gradeColor = (g) => {
     if (g?.startsWith("A")) return "text-green-500 bg-green-100"
-    if (g?.startsWith("B")) return "text-blue-500 bg-blue-100"
+    if (g?.startsWith("B")) return "text-blue-200 bg-blue-100"
     if (g?.startsWith("C")) return "text-yellow-500 bg-yellow-100"
     return "text-red-500 bg-red-100"
 }
@@ -25,7 +25,7 @@ const gradeColor = (g) => {
 const scoreColor = (val, max) => {
     const pct = (val / max) * 100
     if (pct >= 80) return "text-green-500"
-    if (pct >= 60) return "text-blue-500"
+    if (pct >= 60) return "text-blue-200"
     if (pct >= 40) return "text-yellow-500"
     return "text-red-500"
 }
@@ -87,11 +87,11 @@ const Performance = () => {
             <Sidebar />
             <div className="md:ml-64 px-6 pt-8 pb-10">
                 <div className="mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">Performance Analytics</h1>
+                    <h1 className="text-2xl font-bold text-black">Performance Analytics</h1>
                     <p className="text-xs text-gray-400 mt-1">Track your child academic progress</p>
                 </div>
 
-                <select className="border border-gray-200 rounded-xl px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
+                <select className="border border-gray-200 rounded-xl px-4 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
                     value={selectedChild?._id || ""}
                     onChange={(e) => setSelectedChild(children.find(c => c._id === e.target.value))}>
                     {children.map(c => <option key={c._id} value={c._id}>{c.fullname}</option>)}
@@ -108,7 +108,7 @@ const Performance = () => {
                             ].map((card, i) => (
                                 <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
                                     <p className="text-xs text-gray-400 mb-2">{card.label}</p>
-                                    <h2 className="text-2xl font-bold text-gray-800">{card.value}</h2>
+                                    <h2 className="text-2xl font-bold text-black">{card.value}</h2>
                                     <p className="text-xs text-gray-400 mt-1">{card.sub}</p>
                                 </div>
                             ))}
@@ -116,8 +116,8 @@ const Performance = () => {
 
                         <div className="flex flex-col lg:flex-row gap-6 mb-8">
                             <div className="w-full lg:w-1/2 bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
-                                <h2 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                    <TrendingUp size={16} className="text-blue-500" /> Score Trend
+                                <h2 className="text-sm font-bold text-black mb-4 flex items-center gap-2">
+                                    <TrendingUp size={16} className="text-blue-200" /> Score Trend
                                 </h2>
                                 {trendData.length === 0 ? <p className="text-xs text-gray-400 text-center py-10">No data yet</p> : (
                                     <ResponsiveContainer width="100%" height={220}>
@@ -131,7 +131,7 @@ const Performance = () => {
                                 )}
                             </div>
                             <div className="w-full lg:w-1/2 bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
-                                <h2 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                <h2 className="text-sm font-bold text-black mb-4 flex items-center gap-2">
                                     <BookOpen size={16} className="text-green-500" /> Score Breakdown by Subject
                                 </h2>
                                 {barData.length === 0 ? <p className="text-xs text-gray-400 text-center py-10">No data yet</p> : (
@@ -159,7 +159,7 @@ const Performance = () => {
                                 <thead>
                                     <tr className="border-b border-gray-100">
                                         {["Subject","Term","Test/20","Note/20","Assign/10","Exam/50","Total/100","Grade","GPA","Strengths","Weakness"].map(h => (
-                                            <th key={h} className="px-6 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                            <th key={h} className="px-6 py-3 text-left text-xs text-black font-medium">{h}</th>
                                         ))}
                                     </tr>
                                 </thead>
@@ -168,8 +168,8 @@ const Performance = () => {
                                         <tr><td colSpan={11} className="text-center text-xs text-gray-400 py-8">No results found</td></tr>
                                     ) : childResults.map((r) => (
                                         <tr key={r._id} className="border-t border-gray-100 hover:bg-gray-50">
-                                            <td className="px-6 py-4 text-sm font-semibold text-gray-700">{r.subject}</td>
-                                            <td className="px-6 py-4 text-sm text-gray-500">{r.term}</td>
+                                            <td className="px-6 py-4 text-sm font-semibold text-black">{r.subject}</td>
+                                            <td className="px-6 py-4 text-sm text-black">{r.term}</td>
                                             <td className={`px-6 py-4 text-sm font-medium ${scoreColor(r.test, 20)}`}>{r.test}</td>
                                             <td className={`px-6 py-4 text-sm font-medium ${scoreColor(r.note, 20)}`}>{r.note}</td>
                                             <td className={`px-6 py-4 text-sm font-medium ${scoreColor(r.assignment, 10)}`}>{r.assignment}</td>
@@ -178,9 +178,9 @@ const Performance = () => {
                                             <td className="px-6 py-4">
                                                 <span className={`text-xs font-semibold px-2 py-1 rounded-full ${gradeColor(r.grade)}`}>{r.grade}</span>
                                             </td>
-                                            <td className="px-6 py-4 text-sm text-gray-500">{r.gpa?.toFixed(1)}</td>
-                                            <td className="px-6 py-4 text-xs text-gray-500 max-w-[120px] truncate">{r.strengths || "—"}</td>
-                                            <td className="px-6 py-4 text-xs text-gray-500 max-w-[120px] truncate">{r.areasToImprove || "None"}</td>
+                                            <td className="px-6 py-4 text-sm text-black">{r.gpa?.toFixed(1)}</td>
+                                            <td className="px-6 py-4 text-xs text-black max-w-[120px] truncate">{r.strengths || "—"}</td>
+                                            <td className="px-6 py-4 text-xs text-black max-w-[120px] truncate">{r.areasToImprove || "None"}</td>
                                         </tr>
                                     ))}
                                 </tbody>

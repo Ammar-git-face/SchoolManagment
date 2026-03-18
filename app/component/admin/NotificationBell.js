@@ -33,7 +33,7 @@ export default function NotificationBell() {
                 title={subscribed ? "Disable push notifications" : "Enable push notifications"}
                 className={`p-2 rounded-xl transition-all ${
                     subscribed
-                        ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
+                        ? "bg-blue-100 text-blue-200 hover:bg-blue-200"
                         : "bg-gray-100 text-gray-400 hover:bg-gray-200"
                 } ${loading ? "opacity-50 cursor-wait" : ""}`}>
                 {subscribed ? <Bell size={18} /> : <BellOff size={18} />}

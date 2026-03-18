@@ -123,11 +123,11 @@ const Sidebar = ({ isOpen, onClose }) => {
                         </div>
                     )}
                     <div className="overflow-hidden">
-                        <h1 className="text-sm font-bold text-gray-800 truncate">{schoolName}</h1>
+                        <h1 className="text-sm font-bold text-black truncate">{schoolName}</h1>
                         <p className="text-[10px] text-gray-400">Admin Portal</p>
                     </div>
                 </div>
-                <button onClick={onClose} className="md:hidden text-gray-400 hover:text-gray-600 flex-shrink-0">
+                <button onClick={onClose} className="md:hidden text-gray-400 hover:text-black flex-shrink-0">
                     <X size={18} />
                 </button>
             </div>
@@ -140,7 +140,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     return (
                         <Link key={item.url} href={item.url} onClick={onClose}
                             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all
-                                ${active ? "bg-blue-200 text-black" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"}`}>
+                                ${active ? "bg-blue-200 text-black" : "text-black hover:bg-gray-100 hover:text-gray-900"}`}>
                             <span>{item.icon}</span>
                             <span className="flex-1">{item.title}</span>
                             {showBadge && (
@@ -157,11 +157,11 @@ const Sidebar = ({ isOpen, onClose }) => {
             <div className="px-4 py-4 border-t border-gray-100 shrink-0">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs flex-shrink-0">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-200 font-bold text-xs flex-shrink-0">
                             {adminName.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
-                            <p className="text-xs font-semibold text-gray-800 truncate max-w-[110px]">{adminName}</p>
+                            <p className="text-xs font-semibold text-black truncate max-w-[110px]">{adminName}</p>
                             <p className="text-[10px] text-gray-400">Administrator</p>
                         </div>
                     </div>

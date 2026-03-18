@@ -77,7 +77,7 @@ const Hero = () => {
             title: "Total Students",
             heading: loading ? "..." : stats.totalStudents,
             content: "Live from database",
-            icon: <GraduationCap size={35} className="p-1.5 text-blue-500 bg-blue-200 rounded-xl" />
+            icon: <GraduationCap size={35} className="p-1.5 text-blue-200 bg-blue-200 rounded-xl" />
         },
         {
             title: "Total Teachers",
@@ -95,7 +95,7 @@ const Hero = () => {
             title: "Fees Collected",
             heading: loading ? "..." : `₦${stats.feesCollected.toLocaleString()}`,
             content: `₦${stats.feesPending.toLocaleString()} pending`,
-            icon: <DollarSignIcon size={35} className="p-1.5 text-gray-500 bg-gray-200 rounded-xl" />
+            icon: <DollarSignIcon size={35} className="p-1.5 text-black bg-gray-200 rounded-xl" />
         }
     ]
 
@@ -114,12 +114,12 @@ const Hero = () => {
             <div className="fixed top-0 left-0 right-0 md:ml-64 bg-white border-b border-gray-200 px-4 py-3 z-10 flex items-center justify-between shadow-sm">
                 {/* Mobile hamburger */}
                 <button onClick={() => setSidebarOpen(true)}
-                    className="md:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600 mr-3">
+                    className="md:hidden p-2 rounded-lg hover:bg-gray-100 text-black mr-3">
                     <Menu size={20} />
                 </button>
                 <div className="min-w-0">
                     {/* ✅ Dynamic name from localStorage — same as sidebar */}
-                    <h1 className="text-gray-800 font-semibold text-sm truncate">
+                    <h1 className="text-black font-semibold text-sm truncate">
                         Welcome back, {adminName} 👋
                     </h1>
                     <p className="text-xs text-gray-400 hidden sm:block">
@@ -128,7 +128,7 @@ const Hero = () => {
                 </div>
                 <div className="flex items-center gap-2 ml-auto">
                     {/* Avatar — matches sidebar initials */}
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs flex-shrink-0">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-200 font-bold text-xs flex-shrink-0">
                         {adminName.charAt(0).toUpperCase()}
                     </div>
                 </div>
@@ -138,10 +138,10 @@ const Hero = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-4 md:ml-64 pt-20 pb-6">
                 {cards.map((card, i) => (
                     <div key={i} className="p-4 shadow-sm rounded-xl bg-white border border-gray-100">
-                        <p className="flex items-center justify-between text-xs text-gray-500 mb-2">
+                        <p className="flex items-center justify-between text-xs text-black mb-2">
                             {card.title} <span>{card.icon}</span>
                         </p>
-                        <h1 className="text-xl font-bold text-gray-800 mb-1">{card.heading}</h1>
+                        <h1 className="text-xl font-bold text-black mb-1">{card.heading}</h1>
                         <p className="text-xs text-gray-400">{card.content}</p>
                     </div>
                 ))}
@@ -155,7 +155,7 @@ const Hero = () => {
                     {/* Bar Chart */}
                     <section className="shadow-sm border border-gray-100 w-full lg:w-1/2 rounded-xl bg-white">
                         <div className="p-4">
-                            <p className="text-sm font-semibold text-gray-700 mb-1">Students per Class</p>
+                            <p className="text-sm font-semibold text-black mb-1">Students per Class</p>
                             <p className="text-xs text-gray-400 mb-3">Live distribution across all classes</p>
                             <div className="h-64 w-full">
                                 {loading ? (
@@ -178,7 +178,7 @@ const Hero = () => {
 
                     {/* Pie Chart */}
                     <section className="shadow-sm border border-gray-100 w-full lg:w-1/2 rounded-xl bg-white flex flex-col p-4">
-                        <p className="text-sm font-semibold text-gray-700 mb-1">Fee Payment Status</p>
+                        <p className="text-sm font-semibold text-black mb-1">Fee Payment Status</p>
                         <p className="text-xs text-gray-400 mb-3">pending vs paid breakdown</p>
                         {loading ? (
                             <div className="h-48 flex items-center justify-center text-xs text-gray-400">Loading...</div>
@@ -203,7 +203,7 @@ const Hero = () => {
                                         <div key={i} className="flex items-center gap-1">
                                             <span className="w-3 h-3 rounded-full inline-block"
                                                 style={{ backgroundColor: COLORS[i % COLORS.length] }} />
-                                            <span className="text-xs text-gray-600">{item.name}: {item.value}</span>
+                                            <span className="text-xs text-black">{item.name}: {item.value}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -217,12 +217,12 @@ const Hero = () => {
 
                     {/* Recent Fee Payments */}
                     <div className="w-full lg:w-1/2 rounded-xl shadow-sm border border-gray-100 bg-white overflow-x-auto">
-                        <h1 className="p-4 font-bold text-sm text-gray-800 border-b border-gray-100">Recent Fee Payments</h1>
+                        <h1 className="p-4 font-bold text-sm text-black border-b border-gray-100">Recent Fee Payments</h1>
                         <table className="w-full min-w-[400px]">
                             <thead>
                                 <tr className="bg-gray-50">
                                     {["Student", "Amount", "Term", "Description", "Status"].map(h => (
-                                        <th key={h} className="px-4 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                        <th key={h} className="px-4 py-3 text-left text-xs text-black font-medium">{h}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -233,10 +233,10 @@ const Hero = () => {
                                     <tr><td colSpan={5} className="text-center text-xs text-gray-400 py-6">No payments yet</td></tr>
                                 ) : stats.recentPayments.map((payment) => (
                                     <tr key={payment._id} className="border-t border-gray-100 text-xs hover:bg-gray-50">
-                                        <td className="px-4 py-3 font-medium text-gray-700">{payment.studentName}</td>
-                                        <td className="px-4 py-3 text-gray-700">₦{(payment.amount || 0).toLocaleString()}</td>
-                                        <td className="px-4 py-3 text-gray-500">{payment.term}</td>
-                                        <td className="px-4 py-3 text-gray-500">{payment.description}</td>
+                                        <td className="px-4 py-3 font-medium text-black">{payment.studentName}</td>
+                                        <td className="px-4 py-3 text-black">₦{(payment.amount || 0).toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-black">{payment.term}</td>
+                                        <td className="px-4 py-3 text-black">{payment.description}</td>
                                         <td className="px-4 py-3">
                                             <span className="bg-green-100 text-green-600 text-xs px-2 py-0.5 rounded-full">Paid</span>
                                         </td>
@@ -248,7 +248,7 @@ const Hero = () => {
 
                     {/* Quick Stats */}
                     <div className="shadow-sm border border-gray-100 w-full lg:w-1/2 rounded-xl bg-white p-5">
-                        <h1 className="font-bold text-sm text-gray-800 mb-4">Quick Stats</h1>
+                        <h1 className="font-bold text-sm text-black mb-4">Quick Stats</h1>
                         {loading ? (
                             <p className="text-xs text-gray-400">Loading...</p>
                         ) : (
@@ -261,7 +261,7 @@ const Hero = () => {
                                     { label: "Total Classes",         value: stats.totalClasses,                          color: "bg-orange-100 text-orange-700" },
                                 ].map((item, i) => (
                                     <div key={i} className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
-                                        <span className="text-xs text-gray-600">{item.label}</span>
+                                        <span className="text-xs text-black">{item.label}</span>
                                         <span className={`text-xs font-bold px-3 py-1 rounded-full ${item.color}`}>{item.value}</span>
                                     </div>
                                 ))}

@@ -60,19 +60,19 @@ export default function OwnerDashboard() {
                 <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="md:hidden p-2 rounded-lg hover:bg-gray-100">
-                            <Menu className="w-5 h-5 text-gray-700" />
+                            <Menu className="w-5 h-5 text-black" />
                         </button>
                         <div className="flex items-center gap-2">
-                            <School className="w-6 h-6 text-blue-600" />
+                            <School className="w-6 h-6 text-blue-200" />
                             <div>
-                                <div className="font-bold text-gray-800 text-lg">{schoolName}</div>
+                                <div className="font-bold text-black text-lg">{schoolName}</div>
                                 <div className="text-xs text-gray-400">Owner Dashboard</div>
                             </div>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="text-right hidden md:block">
-                            <div className="text-sm font-medium text-gray-700">{ownerName}</div>
+                            <div className="text-sm font-medium text-black">{ownerName}</div>
                             <div className="text-xs text-gray-400">School Owner</div>
                         </div>
                         <div className="w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
@@ -95,7 +95,7 @@ export default function OwnerDashboard() {
                     <div className="fixed inset-0 bg-black bg-opacity-40 z-20" onClick={() => setSidebarOpen(false)} />
                     <div className="fixed left-0 top-0 h-full w-64 bg-white z-30 shadow-xl p-6">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="font-bold text-xl text-blue-600">{schoolName}</div>
+                            <div className="font-bold text-xl text-blue-200">{schoolName}</div>
                             <button onClick={() => setSidebarOpen(false)}>
                                 <X className="w-5 h-5 text-gray-400" />
                             </button>
@@ -104,7 +104,7 @@ export default function OwnerDashboard() {
                             <button key={item} onClick={() => {
                                 if (item === 'Logout') { localStorage.clear(); window.location.href = '/owner/login' }
                                 setSidebarOpen(false)
-                            }} className="w-full text-left py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 mb-1 text-sm">
+                            }} className="w-full text-left py-3 px-4 rounded-lg hover:bg-gray-100 text-black mb-1 text-sm">
                                 {item}
                             </button>
                         ))}
@@ -114,7 +114,7 @@ export default function OwnerDashboard() {
 
             <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
                 <div className="mb-6">
-                    <h1 className="text-xl md:text-2xl font-bold text-gray-800">
+                    <h1 className="text-xl md:text-2xl font-bold text-black">
                         Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, {ownerName}
                     </h1>
                     <p className="text-gray-400 text-sm mt-1">Here's what's happening at {schoolName} — {stats?.currentMonth} {stats?.currentYear}</p>
@@ -123,7 +123,7 @@ export default function OwnerDashboard() {
                 {/* Top stat cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
                     {[
-                        { label: 'Total Students', value: stats?.totalStudents || 0, icon: <GraduationCap className="w-5 h-5" />, color: 'bg-blue-50 text-blue-600' },
+                        { label: 'Total Students', value: stats?.totalStudents || 0, icon: <GraduationCap className="w-5 h-5" />, color: 'bg-blue-50 text-blue-200' },
                         { label: 'Total Teachers', value: stats?.totalTeachers || 0, icon: <BookOpen className="w-5 h-5" />, color: 'bg-purple-50 text-purple-600' },
                         { label: 'Total Parents', value: stats?.totalParents || 0, icon: <Users className="w-5 h-5" />, color: 'bg-green-50 text-green-600' },
                         { label: 'Attendance Rate', value: `${stats?.overallAttendanceRate || 0}%`, icon: <BarChart2 className="w-5 h-5" />, color: 'bg-yellow-50 text-yellow-600' },
@@ -132,7 +132,7 @@ export default function OwnerDashboard() {
                             <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${card.color}`}>
                                 {card.icon}
                             </div>
-                            <div className="text-2xl font-bold text-gray-800">{card.value}</div>
+                            <div className="text-2xl font-bold text-black">{card.value}</div>
                             <div className="text-xs text-gray-400 mt-0.5">{card.label}</div>
                         </div>
                     ))}
@@ -143,7 +143,7 @@ export default function OwnerDashboard() {
                     {[
                         { label: 'Fees Collected', value: formatNaira(stats?.totalFeesCollected), color: 'text-green-600' },
                         { label: 'Fees Outstanding', value: formatNaira(stats?.totalFeesPending), color: 'text-red-500' },
-                        { label: 'Payroll Paid', value: formatNaira(stats?.totalPayrollPaid), color: 'text-blue-600' },
+                        { label: 'Payroll Paid', value: formatNaira(stats?.totalPayrollPaid), color: 'text-blue-200' },
                         { label: 'Payroll Pending', value: formatNaira(stats?.totalPayrollPending), color: 'text-yellow-600' },
                     ].map(card => (
                         <div key={card.label} className="bg-white rounded-xl shadow p-4">
@@ -156,7 +156,7 @@ export default function OwnerDashboard() {
                 {/* Fee collection rate bar */}
                 <div className="bg-white rounded-xl shadow p-5 mb-6">
                     <div className="flex justify-between items-center mb-3">
-                        <h2 className="font-semibold text-gray-700">Fee Collection Rate</h2>
+                        <h2 className="font-semibold text-black">Fee Collection Rate</h2>
                         <span className={`font-bold text-lg ${(stats?.feeCollectionRate || 0) >= 70 ? 'text-green-600' : 'text-red-500'}`}>
                             {stats?.feeCollectionRate || 0}%
                         </span>
@@ -176,7 +176,7 @@ export default function OwnerDashboard() {
                 {/* Charts */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                     <div className="bg-white rounded-xl shadow p-5">
-                        <h2 className="font-semibold text-gray-700 mb-4">Monthly Fee Revenue</h2>
+                        <h2 className="font-semibold text-black mb-4">Monthly Fee Revenue</h2>
                         {stats?.monthlyRevenue?.length > 0 ? (
                             <ResponsiveContainer width="100%" height={200}>
                                 <BarChart data={stats.monthlyRevenue}>
@@ -193,7 +193,7 @@ export default function OwnerDashboard() {
                     </div>
 
                     <div className="bg-white rounded-xl shadow p-5">
-                        <h2 className="font-semibold text-gray-700 mb-4">Fee Status Breakdown</h2>
+                        <h2 className="font-semibold text-black mb-4">Fee Status Breakdown</h2>
                         {(stats?.totalFeesCollected || 0) + (stats?.totalFeesPending || 0) > 0 ? (
                             <ResponsiveContainer width="100%" height={200}>
                                 <PieChart>
@@ -214,7 +214,7 @@ export default function OwnerDashboard() {
                 {/* Recent payments */}
                 <div className="bg-white rounded-xl shadow overflow-hidden">
                     <div className="px-5 py-4 border-b flex justify-between items-center">
-                        <h2 className="font-semibold text-gray-700">Recent Fee Payments</h2>
+                        <h2 className="font-semibold text-black">Recent Fee Payments</h2>
                         <span className="text-xs text-gray-400">Last 5 payments</span>
                     </div>
                     {!stats?.recentPayments?.length ? (
@@ -224,7 +224,7 @@ export default function OwnerDashboard() {
                             {stats.recentPayments.map(p => (
                                 <div key={p._id} className="px-5 py-3 flex items-center justify-between">
                                     <div>
-                                        <div className="font-medium text-gray-800 text-sm">{p.parentName}</div>
+                                        <div className="font-medium text-black text-sm">{p.parentName}</div>
                                         <div className="text-xs text-gray-400">{p.studentName} · {p.term}</div>
                                     </div>
                                     <div className="text-right">

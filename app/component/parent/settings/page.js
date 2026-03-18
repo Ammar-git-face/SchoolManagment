@@ -69,7 +69,7 @@ const Settings = ({ onClose, role }) => {
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-sm font-bold text-gray-800">Settings</h2>
+                    <h2 className="text-sm font-bold text-black">Settings</h2>
                     <button onClick={onClose}><X size={16} className="text-gray-400" /></button>
                 </div>
 
@@ -77,12 +77,12 @@ const Settings = ({ onClose, role }) => {
                 <div className="flex gap-2 mb-6">
                     <button onClick={() => setActiveTab("profile")}
                         className={`flex items-center gap-2 text-xs px-4 py-2 rounded-xl border transition-all
-                            ${activeTab === "profile" ? "bg-blue-500 text-white border-blue-500" : "text-gray-600 border-gray-200 hover:bg-gray-50"}`}>
+                            ${activeTab === "profile" ? "bg-blue-500 text-white border-blue-500" : "text-black border-gray-200 hover:bg-gray-50"}`}>
                         <User size={13} /> Profile
                     </button>
                     <button onClick={() => setActiveTab("password")}
                         className={`flex items-center gap-2 text-xs px-4 py-2 rounded-xl border transition-all
-                            ${activeTab === "password" ? "bg-blue-500 text-white border-blue-500" : "text-gray-600 border-gray-200 hover:bg-gray-50"}`}>
+                            ${activeTab === "password" ? "bg-blue-500 text-white border-blue-500" : "text-black border-gray-200 hover:bg-gray-50"}`}>
                         <Lock size={13} /> Change Password
                     </button>
                 </div>
@@ -97,15 +97,15 @@ const Settings = ({ onClose, role }) => {
                             </div>
                         )}
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 text-lg font-bold">
+                            <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-200 text-lg font-bold">
                                 {name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()}
                             </div>
                             <div>
-                                <p className="text-sm font-semibold text-gray-700">{name}</p>
+                                <p className="text-sm font-semibold text-black">{name}</p>
                                 <p className="text-xs text-gray-400 capitalize">{role}</p>
                             </div>
                         </div>
-                        <p className="text-xs font-semibold text-gray-600 mb-1">Full Name</p>
+                        <p className="text-xs font-semibold text-black mb-1">Full Name</p>
                         <input type="text" value={name} onChange={(e) => setName(e.target.value)}
                             className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-5" />
                         <div className="flex justify-end">
@@ -126,7 +126,7 @@ const Settings = ({ onClose, role }) => {
                                 {passwordMsg.text}
                             </div>
                         )}
-                        <p className="text-xs font-semibold text-gray-600 mb-1">Current Password</p>
+                        <p className="text-xs font-semibold text-black mb-1">Current Password</p>
                         <div className="relative mb-4">
                             <input type={showOld ? "text" : "password"} value={oldPassword}
                                 onChange={(e) => setOldPassword(e.target.value)} placeholder="Enter current password"
@@ -136,7 +136,7 @@ const Settings = ({ onClose, role }) => {
                                 {showOld ? <EyeOff size={15} /> : <Eye size={15} />}
                             </button>
                         </div>
-                        <p className="text-xs font-semibold text-gray-600 mb-1">New Password</p>
+                        <p className="text-xs font-semibold text-black mb-1">New Password</p>
                         <div className="relative mb-4">
                             <input type={showNew ? "text" : "password"} value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)} placeholder="Enter new password"
@@ -146,7 +146,7 @@ const Settings = ({ onClose, role }) => {
                                 {showNew ? <EyeOff size={15} /> : <Eye size={15} />}
                             </button>
                         </div>
-                        <p className="text-xs font-semibold text-gray-600 mb-1">Confirm New Password</p>
+                        <p className="text-xs font-semibold text-black mb-1">Confirm New Password</p>
                         <div className="relative mb-5">
                             <input type={showConfirm ? "text" : "password"} value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm new password"

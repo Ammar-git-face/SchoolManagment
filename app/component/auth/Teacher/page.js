@@ -57,7 +57,7 @@ const TeacherLogin = () => {
                         <GraduationCap size={24} className="text-white" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-bold text-gray-800">Teacher Login</h1>
+                        <h1 className="text-xl font-bold text-black">Teacher Login</h1>
                         <p className="text-xs text-gray-400">Welcome back — sign in to continue</p>
                     </div>
                 </div>
@@ -66,18 +66,18 @@ const TeacherLogin = () => {
                 )}
                 <div className="flex flex-col gap-3 mb-6">
                     <div>
-                        <label className="text-xs text-gray-500 mb-1 block">Email</label>
+                        <label className="text-xs text-black mb-1 block">Email</label>
                         <input type="email" placeholder="your@email.com"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none text-black focus:ring-2 focus:ring-green-500"
                             value={form.email} onChange={e => set("email", e.target.value)} onKeyDown={handleKeyDown} />
                     </div>
                     <div className="relative">
-                        <label className="text-xs text-gray-500 mb-1 block">Password</label>
+                        <label className="text-xs text-black mb-1 block">Password</label>
                         <input type={showPass ? "text" : "password"} placeholder="Your password"
-                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 pr-10"
+                            className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none text-black focus:ring-2 focus:ring-green-500 pr-10"
                             value={form.password} onChange={e => set("password", e.target.value)} onKeyDown={handleKeyDown} />
                         <button type="button" onClick={() => setShowPass(!showPass)}
-                            className="absolute right-3 top-8 text-gray-400 hover:text-gray-600">
+                            className="absolute right-3 top-8 text-gray-400 hover:text-black">
                             {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
                     </div>

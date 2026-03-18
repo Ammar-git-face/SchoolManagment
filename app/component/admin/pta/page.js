@@ -92,7 +92,7 @@
 //             <section className="px-4 md:px-0 md:ml-80 p-6 md:p-10">
 //                 <h1 className="font-bold text-xl text-black mb-1">PTA Meetings</h1>
 //                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-4">
-//                     <p className="text-xs text-gray-500">Schedule and manage Parent-Teacher meetings</p>
+//                     <p className="text-xs text-black">Schedule and manage Parent-Teacher meetings</p>
 //                     <button onClick={() => setCall(true)}
 //                         className="bg-blue-500 px-4 sm:ml-auto w-full sm:w-auto rounded-xl text-white text-xs h-8">
 //                         + Schedule Meeting
@@ -102,13 +102,13 @@
 //                     <button
 //                         onClick={() => setActiveContent('upcoming')}
 //                         className={`rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 transition-all
-//                             ${activeContent === 'upcoming' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+//                             ${activeContent === 'upcoming' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black hover:bg-gray-200'}`}>
 //                         <Calendar1Icon size={10} /> Upcoming ({upcoming.length})
 //                     </button>
 //                     <button
 //                         onClick={() => setActiveContent('history')}
 //                         className={`rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 transition-all
-//                             ${activeContent === 'history' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+//                             ${activeContent === 'history' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black hover:bg-gray-200'}`}>
 //                         <Clock size={10} /> History ({history.length})
 //                     </button>
 //                 </span>
@@ -129,21 +129,21 @@
 //                                 <nav className="flex justify-between items-center mb-3">
 //                                     <span className="flex items-center text-sm font-bold gap-1">
 //                                         {m.type === 'video'
-//                                             ? <VideoIcon size={15} className="text-blue-500" />
-//                                             : <Mic size={15} className="text-blue-500" />}
+//                                             ? <VideoIcon size={15} className="text-blue-200" />
+//                                             : <Mic size={15} className="text-blue-200" />}
 //                                         {m.title}
 //                                     </span>
 //                                     <span className={`text-xs px-2 py-0.5 rounded-full
-//                                         ${m.status === 'upcoming' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
+//                                         ${m.status === 'upcoming' ? 'bg-blue-100 text-blue-200' : 'bg-green-100 text-green-600'}`}>
 //                                         {m.status}
 //                                     </span>
 //                                 </nav>
 //                                 <p className="text-xs text-gray-400 mb-3">{m.agenda}</p>
 //                                 <span className="flex flex-wrap gap-3 mb-4">
-//                                     <p className="flex items-center gap-1 text-gray-500 text-xs">
+//                                     <p className="flex items-center gap-1 text-black text-xs">
 //                                         <Calendar1Icon size={11} />{m.date}
 //                                     </p>
-//                                     <p className="flex items-center gap-1 text-gray-500 text-xs">
+//                                     <p className="flex items-center gap-1 text-black text-xs">
 //                                         <Clock size={11} />{m.time} ({m.duration})
 //                                     </p>
 //                                 </span>
@@ -279,7 +279,7 @@
 //                         </div>
 
 //                         <span className="flex items-center justify-end gap-4">
-//                             <button className="text-xs text-gray-500" onClick={() => setCall(false)}>Cancel</button>
+//                             <button className="text-xs text-black" onClick={() => setCall(false)}>Cancel</button>
 //                             <button onClick={scheduleMeeting} disabled={loading}
 //                                 className="bg-blue-500 px-4 py-2 rounded-xl text-white text-xs disabled:opacity-50">
 //                                 {loading ? 'Scheduling...' : 'Schedule Meeting'}
@@ -328,47 +328,47 @@ const ScheduleModal = ({ onClose, onSubmit, stats, loading, msg }) => {
                     </div>
                 )}
 
-                <label className="block text-xs font-semibold mb-1 text-gray-600">Meeting Title *</label>
+                <label className="block text-xs font-semibold mb-1 text-black">Meeting Title *</label>
                 <input type="text" placeholder="e.g 1st Parent Teacher Conference"
-                    className="w-full border border-gray-200 p-2.5 rounded-xl mb-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-200 p-2.5 rounded-xl mb-3 text-xs focus:outline-none text-black focus:ring-2 focus:ring-blue-500"
                     value={title} onChange={e => setTitle(e.target.value)} />
 
-                <label className="block text-xs font-semibold mb-1 text-gray-600">Agenda</label>
+                <label className="block text-xs font-semibold mb-1 text-black">Agenda</label>
                 <textarea placeholder="Meeting topics and discussion points..."
-                    className="w-full border border-gray-200 p-2.5 text-xs rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none h-20"
+                    className="w-full border border-gray-200 p-2.5 text-xs rounded-xl mb-4 focus:outline-none focus:ring-2 text-black focus:ring-blue-500 resize-none h-20"
                     value={agenda} onChange={e => setAgenda(e.target.value)} />
 
-                <label className="block text-xs font-semibold mb-2 text-gray-600">Meeting Type *</label>
+                <label className="block text-xs font-semibold mb-2 text-black">Meeting Type *</label>
                 <div className="flex gap-2 mb-4">
                     <button onClick={() => setType("video")}
                         className={`flex justify-center items-center gap-2 p-2 w-1/2 rounded-xl text-sm transition-all
-                            ${type === "video" ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+                            ${type === "video" ? "bg-blue-500 text-white" : "bg-gray-100 text-black hover:bg-gray-200"}`}>
                         <VideoIcon size={14} /> Video Call
                     </button>
                     <button onClick={() => setType("audio")}
                         className={`flex justify-center items-center gap-2 p-2 w-1/2 rounded-xl text-sm transition-all
-                            ${type === "audio" ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+                            ${type === "audio" ? "bg-blue-500 text-white" : "bg-gray-100 text-black hover:bg-gray-200"}`}>
                         <Mic size={14} /> Audio Call
                     </button>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 mb-4">
                     <div className="flex-1">
-                        <label className="block text-xs font-semibold mb-1 text-gray-600">Time *</label>
+                        <label className="block text-xs font-semibold mb-1 text-black">Time *</label>
                         <input type="time"
-                            className="w-full border border-gray-200 p-2.5 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-200 p-2.5 rounded-xl text-xs focus:outline-none text-black focus:ring-2 focus:ring-blue-500"
                             value={time} onChange={e => setTime(e.target.value)} />
                     </div>
                     <div className="flex-1">
-                        <label className="block text-xs font-semibold mb-1 text-gray-600">Date *</label>
+                        <label className="block text-xs font-semibold mb-1 text-black">Date *</label>
                         <input type="date"
-                            className="w-full border border-gray-200 p-2.5 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-200 p-2.5 rounded-xl text-xs focus:outline-none focus:ring-2 text-black focus:ring-blue-500"
                             value={date} onChange={e => setDate(e.target.value)} />
                     </div>
                 </div>
 
-                <label className="block text-xs font-semibold mb-1 text-gray-600">Duration</label>
-                <select className="w-full border border-gray-200 p-2.5 text-xs rounded-xl mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                <label className="block text-xs font-semibold mb-1 text-black">Duration</label>
+                <select className="w-full border border-gray-200 p-2.5 text-xs rounded-xl mb-5 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={duration} onChange={e => setDuration(e.target.value)}>
                     {["15 minutes", "30 minutes", "45 minutes", "1 hour", "2 hours"].map(d =>
                         <option key={d}>{d}</option>
@@ -376,18 +376,18 @@ const ScheduleModal = ({ onClose, onSubmit, stats, loading, msg }) => {
                 </select>
 
                 <div className="flex flex-col gap-3 mb-6">
-                    <label className="flex items-center gap-2 text-xs font-semibold bg-gray-50 border border-gray-100 rounded-xl p-3 cursor-pointer">
+                    <label className="flex items-center gap-2 text-xs font-semibold bg-gray-50 border text-black border-gray-100 rounded-xl p-3 cursor-pointer">
                         <input type="checkbox" checked={allTeachers} onChange={e => setAllTeachers(e.target.checked)} />
                         Invite All Teachers ({stats.teachers?.length || 0})
                     </label>
-                    <label className="flex items-center gap-2 text-xs font-semibold bg-gray-50 border border-gray-100 rounded-xl p-3 cursor-pointer">
+                    <label className="flex items-center gap-2 text-xs font-semibold bg-gray-50 border text-black border-gray-100 rounded-xl p-3 cursor-pointer">
                         <input type="checkbox" checked={allParents} onChange={e => setAllParents(e.target.checked)} />
                         Invite All Parents ({stats.parents?.length || 0})
                     </label>
                 </div>
 
                 <div className="flex items-center justify-end gap-3">
-                    <button className="text-xs text-gray-500" onClick={onClose}>Cancel</button>
+                    <button className="text-xs text-black" onClick={onClose}>Cancel</button>
                     <button onClick={() => onSubmit({ title, agenda, type, time, date, duration, allTeachers, allParents })}
                         disabled={loading}
                         className="bg-blue-500 px-4 py-2 rounded-xl text-white text-xs disabled:opacity-50 hover:bg-blue-600">
@@ -411,7 +411,7 @@ const AdminPTA = () => {
 
     const getMeetings = async () => {
         try {
-            const res = await authFetch('${API}/pta/get')
+            const res = await authFetch(`${API}/pta/get`)
             const data = await res.json()
             setMeetings(Array.isArray(data) ? data : [])
         } catch (err) { console.log(err) }
@@ -419,7 +419,7 @@ const AdminPTA = () => {
 
     const getStats = async () => {
         try {
-            const res = await authFetch('${API}/pta/stats')
+            const res = await authFetch(`${API}/pta/stats`)
             const data = await res.json()
             setStats(data)
         } catch (err) { console.log(err) }
@@ -432,7 +432,7 @@ const AdminPTA = () => {
             return setMsg({ type: 'error', text: 'Title, date and time are required' })
         setLoading(true); setMsg(null)
         try {
-            const res = await authFetch('${API}/pta', {
+            const res = await authFetch(`${API}/pta`, {
                 method: 'POST',
                 body: JSON.stringify(formData),
             })
@@ -477,14 +477,14 @@ const AdminPTA = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <h1 className="font-semibold text-gray-800">PTA Meetings</h1>
+                    <h1 className="font-semibold text-black">PTA Meetings</h1>
                     <div className="w-8" />
                 </div>
 
                 <div className="px-4 md:px-6 pt-8 pb-10">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-800">PTA Meetings</h1>
+                            <h1 className="text-2xl font-bold text-black">PTA Meetings</h1>
                             <p className="text-xs text-gray-400 mt-1">Schedule and manage Parent-Teacher meetings</p>
                         </div>
                         <button onClick={() => { setMsg(null); setShowModal(true) }}
@@ -501,7 +501,7 @@ const AdminPTA = () => {
                         ].map(tab => (
                             <button key={tab.key} onClick={() => setActiveContent(tab.key)}
                                 className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs transition-all
-                                    ${activeContent === tab.key ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                                    ${activeContent === tab.key ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black hover:bg-gray-200'}`}>
                                 {tab.icon} {tab.label} ({tab.count})
                             </button>
                         ))}
@@ -510,7 +510,7 @@ const AdminPTA = () => {
                     {/* Meetings grid */}
                     {displayed.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-40 bg-white border border-gray-100 rounded-2xl">
-                            <File size={36} className="mb-3 text-gray-200" />
+                            <File size={36} className="mb-3 text-black" />
                             <p className="text-xs text-gray-400">
                                 {activeContent === 'upcoming' ? 'No upcoming meetings' : 'No past meetings found'}
                             </p>
@@ -520,23 +520,23 @@ const AdminPTA = () => {
                             {displayed.map(m => (
                                 <div key={m._id} className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5 hover:shadow-md transition-shadow">
                                     <div className="flex justify-between items-start mb-2">
-                                        <span className="flex items-center gap-1.5 font-bold text-sm text-gray-800">
+                                        <span className="flex items-center gap-1.5 font-bold text-sm text-black">
                                             {m.type === 'video'
-                                                ? <VideoIcon size={14} className="text-blue-500" />
-                                                : <Mic size={14} className="text-blue-500" />}
+                                                ? <VideoIcon size={14} className="text-blue-200" />
+                                                : <Mic size={14} className="text-blue-200" />}
                                             {m.title}
                                         </span>
                                         <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ml-2
-                                            ${m.status === 'upcoming' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
+                                            ${m.status === 'upcoming' ? 'bg-blue-100 text-blue-200' : 'bg-green-100 text-green-600'}`}>
                                             {m.status}
                                         </span>
                                     </div>
                                     <p className="text-xs text-gray-400 mb-3">{m.agenda}</p>
                                     <div className="flex flex-wrap gap-3 mb-4">
-                                        <p className="flex items-center gap-1 text-gray-500 text-xs">
+                                        <p className="flex items-center gap-1 text-black text-xs">
                                             <Calendar1Icon size={11} />{m.date}
                                         </p>
-                                        <p className="flex items-center gap-1 text-gray-500 text-xs">
+                                        <p className="flex items-center gap-1 text-black text-xs">
                                             <Clock size={11} />{m.time} ({m.duration})
                                         </p>
                                     </div>

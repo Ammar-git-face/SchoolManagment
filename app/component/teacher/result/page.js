@@ -12,7 +12,7 @@ const SESSIONS = ["2024/2025", "2025/2026", "2026/2027"]
 // ── Status badge ──────────────────────────────────────────────────────────────
 const Badge = ({ status }) => {
     const cfg = {
-        not_started: { label: "Not Started", cls: "bg-gray-100 text-gray-500" },
+        not_started: { label: "Not Started", cls: "bg-gray-100 text-black" },
         draft:       { label: "Draft Saved", cls: "bg-amber-100 text-amber-700" },
         submitted:   { label: "Submitted",   cls: "bg-blue-100 text-blue-700"  },
         approved:    { label: "Approved",     cls: "bg-green-100 text-green-700"},
@@ -222,7 +222,7 @@ export default function TeacherResults() {
         return { total: null, grade: s.grade || null }
     }
 
-    const gradeClr = { A: "text-green-600 font-bold", B: "text-blue-600 font-bold", C: "text-yellow-600 font-bold", D: "text-orange-500 font-bold", F: "text-red-600 font-bold" }
+    const gradeClr = { A: "text-green-600 font-bold", B: "text-blue-200 font-bold", C: "text-yellow-600 font-bold", D: "text-orange-500 font-bold", F: "text-red-600 font-bold" }
 
     return (
         <div className="flex min-h-screen bg-gray-50">
@@ -233,14 +233,14 @@ export default function TeacherResults() {
                     {/* ── Header ─────────────────────────────────────────── */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Result Entry</h1>
+                            <h1 className="text-2xl font-bold text-black">Result Entry</h1>
                             <p className="text-xs text-gray-400 mt-0.5">Save CA scores now · add exam scores later · submit when complete</p>
                         </div>
                         <div className="flex gap-2">
                             {[{ key: "entry", label: "Score Entry" }, { key: "overview", label: "My Submissions" }].map(t => (
                                 <button key={t.key} onClick={() => setTab(t.key)}
                                     className={`text-xs px-4 py-2 rounded-xl border font-medium transition-all
-                                        ${tab === t.key ? "bg-blue-500 text-white border-blue-500" : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"}`}>
+                                        ${tab === t.key ? "bg-blue-500 text-white border-blue-500" : "bg-white text-black border-gray-200 hover:bg-gray-50"}`}>
                                     {t.label}
                                 </button>
                             ))}
@@ -269,7 +269,7 @@ export default function TeacherResults() {
                                         { label: "Session", val: selSession, set: setSelSession, opts: SESSIONS.map(s => ({ v: s, l: s })) },
                                     ].map(f => (
                                         <div key={f.label}>
-                                            <label className="text-xs text-gray-500 font-medium mb-1 block">{f.label}</label>
+                                            <label className="text-xs text-black font-medium mb-1 block">{f.label}</label>
                                             <div className="relative">
                                                 <select value={f.val} onChange={e => f.set(e.target.value)}
                                                     className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-300 pr-8 bg-white">
@@ -314,7 +314,7 @@ export default function TeacherResults() {
                                                 </button>
                                             )}
                                             {anySubmitted && !allApproved && (
-                                                <span className="text-xs text-blue-600 bg-blue-50 border border-blue-200 px-3 py-2 rounded-xl flex items-center gap-1">
+                                                <span className="text-xs text-blue-200 bg-blue-50 border border-blue-200 px-3 py-2 rounded-xl flex items-center gap-1">
                                                     <Clock size={11} /> Awaiting admin approval
                                                 </span>
                                             )}
@@ -334,13 +334,13 @@ export default function TeacherResults() {
                                     <div className="py-16 text-center text-sm text-gray-400">Loading score sheet...</div>
                                 ) : !selSubject ? (
                                     <div className="py-16 text-center">
-                                        <BookOpen size={40} className="mx-auto mb-3 text-gray-200" />
+                                        <BookOpen size={40} className="mx-auto mb-3 text-black" />
                                         <p className="text-sm text-gray-400">No subject selected</p>
                                         <p className="text-xs text-gray-300 mt-1">Add subjects to this class on the Subjects page first</p>
                                     </div>
                                 ) : sheet.length === 0 ? (
                                     <div className="py-16 text-center">
-                                        <BookOpen size={40} className="mx-auto mb-3 text-gray-200" />
+                                        <BookOpen size={40} className="mx-auto mb-3 text-black" />
                                         <p className="text-sm text-gray-400">No students in this class</p>
                                     </div>
                                 ) : (
@@ -348,15 +348,15 @@ export default function TeacherResults() {
                                         <table className="w-full min-w-[780px]">
                                             <thead>
                                                 <tr className="bg-gray-50 border-b border-gray-100">
-                                                    <th className="text-left text-xs text-gray-500 font-medium px-5 py-3">#</th>
-                                                    <th className="text-left text-xs text-gray-500 font-medium px-5 py-3">Student</th>
-                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-3">Test<br/><span className="text-gray-400 font-normal">/20</span></th>
-                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-3">Note/CA<br/><span className="text-gray-400 font-normal">/20</span></th>
-                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-3">Assignment<br/><span className="text-gray-400 font-normal">/10</span></th>
-                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-3">Exam<br/><span className="text-gray-400 font-normal">/50</span></th>
-                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-3">Total<br/><span className="text-gray-400 font-normal">/100</span></th>
-                                                    <th className="text-center text-xs text-gray-500 font-medium px-2 py-3">Grade</th>
-                                                    <th className="text-left text-xs text-gray-500 font-medium px-3 py-3">Status</th>
+                                                    <th className="text-left text-xs text-black font-medium px-5 py-3">#</th>
+                                                    <th className="text-left text-xs text-black font-medium px-5 py-3">Student</th>
+                                                    <th className="text-center text-xs text-black font-medium px-2 py-3">Test<br/><span className="text-gray-400 font-normal">/20</span></th>
+                                                    <th className="text-center text-xs text-black font-medium px-2 py-3">Note/CA<br/><span className="text-gray-400 font-normal">/20</span></th>
+                                                    <th className="text-center text-xs text-black font-medium px-2 py-3">Assignment<br/><span className="text-gray-400 font-normal">/10</span></th>
+                                                    <th className="text-center text-xs text-black font-medium px-2 py-3">Exam<br/><span className="text-gray-400 font-normal">/50</span></th>
+                                                    <th className="text-center text-xs text-black font-medium px-2 py-3">Total<br/><span className="text-gray-400 font-normal">/100</span></th>
+                                                    <th className="text-center text-xs text-black font-medium px-2 py-3">Grade</th>
+                                                    <th className="text-left text-xs text-black font-medium px-3 py-3">Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -368,7 +368,7 @@ export default function TeacherResults() {
                                                         <tr key={String(s.studentId)} className={`border-t border-gray-50 ${locked ? "bg-gray-50/50" : "hover:bg-blue-50/20"} transition-colors`}>
                                                             <td className="px-5 py-3 text-xs text-gray-400">{i + 1}</td>
                                                             <td className="px-5 py-3">
-                                                                <p className="text-sm font-medium text-gray-800">{s.studentName}</p>
+                                                                <p className="text-sm font-medium text-black">{s.studentName}</p>
                                                                 {s.lastSavedAt && (
                                                                     <p className="text-xs text-gray-400">saved {new Date(s.lastSavedAt).toLocaleDateString()}</p>
                                                                 )}
@@ -386,7 +386,7 @@ export default function TeacherResults() {
                                                                 <NumCell value={s.exam} max={50} locked={locked} hint={examMissing} onChange={v => updateScore(s.studentId, "exam", v)} />
                                                             </td>
                                                             <td className="px-2 py-3 text-center">
-                                                                <span className={`text-sm ${total !== null ? "text-gray-800 font-semibold" : "text-gray-300"}`}>
+                                                                <span className={`text-sm ${total !== null ? "text-black font-semibold" : "text-gray-300"}`}>
                                                                     {total !== null ? total : "—"}
                                                                 </span>
                                                             </td>
@@ -421,7 +421,7 @@ export default function TeacherResults() {
                         <div className="space-y-3">
                             {overview.length === 0 ? (
                                 <div className="bg-white border border-gray-100 rounded-2xl p-12 text-center">
-                                    <Eye size={36} className="mx-auto mb-3 text-gray-200" />
+                                    <Eye size={36} className="mx-auto mb-3 text-black" />
                                     <p className="text-sm text-gray-400">No submissions yet</p>
                                     <p className="text-xs text-gray-300 mt-1">Go to Score Entry to start adding results</p>
                                 </div>
@@ -429,7 +429,7 @@ export default function TeacherResults() {
                                 <div key={i} className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
                                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                                         <div>
-                                            <h3 className="text-sm font-semibold text-gray-800">{g.subject}</h3>
+                                            <h3 className="text-sm font-semibold text-black">{g.subject}</h3>
                                             <p className="text-xs text-gray-400 mt-0.5">{g.term} · {g.session}</p>
                                         </div>
                                         <div className="flex items-center gap-2 flex-wrap">
@@ -458,7 +458,7 @@ export default function TeacherResults() {
                                         </div>
                                     )}
                                     {g.submitted > 0 && g.approved < g.total && !g.canSubmit && (
-                                        <p className="mt-2 text-xs text-blue-500 flex items-center gap-1">
+                                        <p className="mt-2 text-xs text-blue-200 flex items-center gap-1">
                                             <Clock size={11} /> Waiting for admin approval
                                         </p>
                                     )}

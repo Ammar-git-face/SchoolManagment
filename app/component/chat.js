@@ -23,7 +23,7 @@ const getInitials = (name = "") =>
     name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
 
 const roleColor = (role) => {
-    if (role === "admin")   return "bg-blue-100 text-blue-500"
+    if (role === "admin")   return "bg-blue-100 text-blue-200"
     if (role === "teacher") return "bg-green-100 text-green-500"
     return "bg-orange-100 text-orange-500"
 }
@@ -309,7 +309,7 @@ const Chat = ({ Sidebar }) => {
                         md:w-80 w-full">
             <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-sm font-bold text-gray-800">Messages</h2>
+                    <h2 className="text-sm font-bold text-black">Messages</h2>
                     {totalUnread > 0 && (
                         <span className="bg-blue-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                             {totalUnread}
@@ -349,7 +349,7 @@ const Chat = ({ Sidebar }) => {
                             </div>
                             <div className="flex-1 min-w-0 text-left">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-xs font-semibold text-gray-700 truncate">{contact.name}</p>
+                                    <p className="text-xs font-semibold text-black truncate">{contact.name}</p>
                                     <p className="text-xs text-gray-400 flex-shrink-0 ml-2">
                                         {contact.lastMessageTime ? formatDate(contact.lastMessageTime) : ""}
                                     </p>
@@ -383,7 +383,7 @@ const Chat = ({ Sidebar }) => {
                     <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                         <Send size={28} className="text-blue-400" />
                     </div>
-                    <p className="text-sm font-semibold text-gray-600">Select a conversation</p>
+                    <p className="text-sm font-semibold text-black">Select a conversation</p>
                     <p className="text-xs text-gray-400 mt-1">Choose a contact to start messaging</p>
                 </div>
             ) : (
@@ -393,7 +393,7 @@ const Chat = ({ Sidebar }) => {
                         {/* MOBILE ONLY: back arrow — hidden on desktop */}
                         <button
                             onClick={handleBack}
-                            className="md:hidden p-1.5 rounded-lg hover:bg-gray-100 text-gray-600 flex-shrink-0">
+                            className="md:hidden p-1.5 rounded-lg hover:bg-gray-100 text-black flex-shrink-0">
                             <ArrowLeft size={18} />
                         </button>
                         <div className="relative">
@@ -405,7 +405,7 @@ const Chat = ({ Sidebar }) => {
                             )}
                         </div>
                         <div>
-                            <p className="text-sm font-semibold text-gray-800">{activeContact.name}</p>
+                            <p className="text-sm font-semibold text-black">{activeContact.name}</p>
                             <p className="text-xs text-gray-400 flex items-center gap-1">
                                 {onlineUsers.includes(String(activeContact._id)) ? (
                                     <><Circle size={8} className="text-green-400 fill-green-400" /> Online</>
@@ -446,7 +446,7 @@ const Chat = ({ Sidebar }) => {
                                                     <div className={`px-4 py-2.5 rounded-2xl text-sm
                                                         ${isMine
                                                             ? "bg-blue-500 text-white rounded-br-sm"
-                                                            : "bg-white text-gray-700 shadow-sm rounded-bl-sm border border-gray-100"}`}>
+                                                            : "bg-white text-black shadow-sm rounded-bl-sm border border-gray-100"}`}>
                                                         {message.message}
                                                     </div>
                                                     <p className={`text-xs text-gray-400 mt-1 ${isMine ? "text-right" : "text-left"}`}>

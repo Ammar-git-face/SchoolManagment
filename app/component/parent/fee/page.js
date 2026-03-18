@@ -113,7 +113,7 @@ const ParentFeePayments = () => {
                 <div className="md:ml-64 pt-14 md:pt-0 px-6 pt-8 pb-10">
                     <div className="flex items-center justify-between mb-8">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Fee Payments</h1>
+                            <h1 className="text-2xl font-bold text-black">Fee Payments</h1>
                             <p className="text-xs text-gray-400 mt-1">View and pay your children's school fees</p>
                         </div>
                         <button onClick={() => setShowModal(true)}
@@ -136,8 +136,8 @@ const ParentFeePayments = () => {
                             { label: "Outstanding", value: outstanding, bg: "bg-yellow-50 border-yellow-100" }
                         ].map(s => (
                             <div key={s.label} className={`${s.bg} border rounded-2xl p-5`}>
-                                <p className="text-xs text-gray-500 mb-1">{s.label}</p>
-                                <p className="text-2xl font-bold text-gray-800">₦{s.value.toLocaleString()}</p>
+                                <p className="text-xs text-black mb-1">{s.label}</p>
+                                <p className="text-2xl font-bold text-black">₦{s.value.toLocaleString()}</p>
                             </div>
                         ))}
                     </div>
@@ -146,13 +146,13 @@ const ParentFeePayments = () => {
                     <div className="flex gap-2 mb-5 flex-wrap">
                         <button onClick={() => setSelectedChild("all")}
                             className={`text-xs px-4 py-2 rounded-xl border transition-all
-                                ${selectedChild === "all" ? "bg-blue-500 text-white border-blue-500" : "text-gray-600 border-gray-200 hover:bg-gray-50"}`}>
+                                ${selectedChild === "all" ? "bg-blue-500 text-white border-blue-500" : "text-black border-gray-200 hover:bg-gray-50"}`}>
                             All Children
                         </button>
                         {children.map(c => (
                             <button key={c._id} onClick={() => setSelectedChild(c._id)}
                                 className={`text-xs px-4 py-2 rounded-xl border transition-all
-                                    ${selectedChild === c._id ? "bg-blue-500 text-white border-blue-500" : "text-gray-600 border-gray-200 hover:bg-gray-50"}`}>
+                                    ${selectedChild === c._id ? "bg-blue-500 text-white border-blue-500" : "text-black border-gray-200 hover:bg-gray-50"}`}>
                                 {c.fullname}
                             </button>
                         ))}
@@ -164,7 +164,7 @@ const ParentFeePayments = () => {
                             <thead>
                                 <tr className="border-b border-gray-100">
                                     {["Child","Class","Term","Description","Amount","Status","Date","Receipt"].map(h =>
-                                        <th key={h} className="px-4 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                        <th key={h} className="px-4 py-3 text-left text-xs text-black font-medium">{h}</th>
                                     )}
                                 </tr>
                             </thead>
@@ -173,11 +173,11 @@ const ParentFeePayments = () => {
                                     <tr><td colSpan={8} className="text-center text-xs text-gray-400 py-8">No fee records found</td></tr>
                                 ) : filteredFees.map(fee => (
                                     <tr key={fee._id} className="border-t border-gray-100 hover:bg-gray-50">
-                                        <td className="px-4 py-3 text-xs font-medium text-gray-700">{fee.studentName}</td>
-                                        <td className="px-4 py-3 text-xs text-gray-500">{fee.studentClass}</td>
-                                        <td className="px-4 py-3 text-xs text-gray-500">{fee.term}</td>
-                                        <td className="px-4 py-3 text-xs text-gray-500">{fee.description}</td>
-                                        <td className="px-4 py-3 text-xs font-semibold text-gray-700">₦{fee.amount?.toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-xs font-medium text-black">{fee.studentName}</td>
+                                        <td className="px-4 py-3 text-xs text-black">{fee.studentClass}</td>
+                                        <td className="px-4 py-3 text-xs text-black">{fee.term}</td>
+                                        <td className="px-4 py-3 text-xs text-black">{fee.description}</td>
+                                        <td className="px-4 py-3 text-xs font-semibold text-black">₦{fee.amount?.toLocaleString()}</td>
                                         <td className="px-4 py-3">
                                             <span className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full w-fit
                                                 ${fee.status === "paid"
@@ -192,7 +192,7 @@ const ParentFeePayments = () => {
                                         </td>
                                         <td className="px-4 py-3">
                                             {fee.status === "paid" && (
-                                                <button onClick={() => handleDownloadReceipt(fee)} className="text-blue-500 hover:text-blue-600">
+                                                <button onClick={() => handleDownloadReceipt(fee)} className="text-blue-200 hover:text-blue-200">
                                                     <Download size={15} />
                                                 </button>
                                             )}
@@ -209,12 +209,12 @@ const ParentFeePayments = () => {
                 <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
                         <div className="flex justify-between items-center mb-5">
-                            <h2 className="text-sm font-bold text-gray-800">Make Fee Payment</h2>
+                            <h2 className="text-sm font-bold text-black">Make Fee Payment</h2>
                             <button onClick={() => setShowModal(false)}><X size={16} className="text-gray-400" /></button>
                         </div>
                         <div className="flex flex-col gap-4">
                             <div>
-                                <p className="text-xs font-semibold text-gray-600 mb-1">Select Child</p>
+                                <p className="text-xs font-semibold text-black mb-1">Select Child</p>
                                 <select className="w-full border border-gray-200 rounded-xl p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     value={form.childId}
                                     onChange={e => {
@@ -227,27 +227,27 @@ const ParentFeePayments = () => {
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <p className="text-xs font-semibold text-gray-600 mb-1">Term</p>
+                                    <p className="text-xs font-semibold text-black mb-1">Term</p>
                                     <select className="w-full border border-gray-200 rounded-xl p-2.5 text-sm"
                                         value={form.term} onChange={e => setForm({ ...form, term: e.target.value })}>
                                         <option>Term 1</option><option>Term 2</option><option>Term 3</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <p className="text-xs font-semibold text-gray-600 mb-1">Session</p>
+                                    <p className="text-xs font-semibold text-black mb-1">Session</p>
                                     <input type="text" placeholder="e.g 2024/2025"
                                         className="w-full border border-gray-200 rounded-xl p-2.5 text-sm"
                                         value={form.session} onChange={e => setForm({ ...form, session: e.target.value })} />
                                 </div>
                             </div>
                             <div>
-                                <p className="text-xs font-semibold text-gray-600 mb-1">Description</p>
+                                <p className="text-xs font-semibold text-black mb-1">Description</p>
                                 <input type="text" placeholder="e.g School fees, Uniform, Books"
                                     className="w-full border border-gray-200 rounded-xl p-2.5 text-sm"
                                     value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
                             </div>
                             <div>
-                                <p className="text-xs font-semibold text-gray-600 mb-1">Amount (₦)</p>
+                                <p className="text-xs font-semibold text-black mb-1">Amount (₦)</p>
                                 <input type="number" placeholder="e.g 50000"
                                     className="w-full border border-gray-200 rounded-xl p-2.5 text-sm"
                                     value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} />

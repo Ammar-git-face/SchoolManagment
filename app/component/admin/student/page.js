@@ -10,19 +10,19 @@ const StudentForm = ({ title, data, setData, classes, onSubmit, onClose, showFam
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
         <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
             <div className="flex items-center justify-between mb-4">
-                <h2 className="font-bold text-gray-800">{title}</h2>
+                <h2 className="font-bold text-black">{title}</h2>
                 <button onClick={onClose}><X size={16} className="text-gray-400" /></button>
             </div>
             <div className="flex flex-col gap-3">
                 <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Full Name</label>
+                    <label className="text-xs text-black mb-1 block">Full Name</label>
                     <input type="text" placeholder="Student full name"
-                        className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-gray-200 rounded-xl p-2.5 text-xs text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={data.fullname}
                         onChange={(e) => setData(d => ({ ...d, fullname: e.target.value }))} />
                 </div>
                 <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Class</label>
+                    <label className="text-xs text-black mb-1 block">Class</label>
                     {/* ✅ Dropdown of classes added by admin */}
                     <select
                         className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -35,17 +35,17 @@ const StudentForm = ({ title, data, setData, classes, onSubmit, onClose, showFam
                     </select>
                 </div>
                 <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Parent Name</label>
+                    <label className="text-xs text-black mb-1 block">Parent Name</label>
                     <input type="text" placeholder="Parent name"
-                        className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none text-black focus:ring-2 focus:ring-blue-500"
                         value={data.parent}
                         onChange={(e) => setData(d => ({ ...d, parent: e.target.value }))} />
                 </div>
                 {showFamilyCode && (
                     <div>
-                        <label className="text-xs text-gray-500 mb-1 block">Family Code</label>
+                        <label className="text-xs text-black mb-1 block">Family Code</label>
                         <input type="text" placeholder="e.g FAM-2024-ABC123"
-                            className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none text-black focus:ring-2 focus:ring-blue-500"
                             value={familyCode}
                             onChange={(e) => setFamilyCode(e.target.value)} />
                         <p className="text-xs text-gray-400 mt-1">Share this code with the parent to link their account</p>
@@ -53,7 +53,7 @@ const StudentForm = ({ title, data, setData, classes, onSubmit, onClose, showFam
                 )}
             </div>
             <div className="flex gap-3 mt-5">
-                <button onClick={onClose} className="flex-1 text-xs text-gray-500 border border-gray-200 py-2 rounded-xl hover:bg-gray-50">Cancel</button>
+                <button onClick={onClose} className="flex-1 text-xs text-black border border-gray-200 py-2 rounded-xl hover:bg-gray-50">Cancel</button>
                 <button onClick={onSubmit} className="flex-1 text-xs bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600">Save</button>
             </div>
         </div>
@@ -144,14 +144,14 @@ const Student = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <h1 className="font-semibold text-gray-800">Students</h1>
+                    <h1 className="font-semibold text-black">Students</h1>
                     <div className="w-8" />
                 </div>
 
                 <div className="px-4 md:px-6 pt-8 pb-10">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Students</h1>
+                            <h1 className="text-2xl font-bold text-black">Students</h1>
                             <p className="text-xs text-gray-400 mt-1">Manage all students</p>
                         </div>
                         <button onClick={() => { setErr(""); setShowAdd(true) }}
@@ -162,7 +162,7 @@ const Student = () => {
                         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input type="text" placeholder="Search students..." value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-xs text-black focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
 
                     {err && <div className="bg-red-50 border border-red-200 text-red-600 text-xs p-3 rounded-xl mb-4">{err}</div>}
@@ -172,7 +172,7 @@ const Student = () => {
                             <thead>
                                 <tr className="border-b border-gray-100">
                                     {["Student", "Class", "Parent", "Family Code", "Action"].map(h => (
-                                        <th key={h} className="px-5 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                        <th key={h} className="px-5 py-3 text-left text-xs text-black font-medium">{h}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -183,12 +183,12 @@ const Student = () => {
                                     <tr><td colSpan={5} className="text-center text-xs text-gray-400 py-8">No students found</td></tr>
                                 ) : filtered.map((student) => (
                                     <tr key={student._id} className="border-t border-gray-100 hover:bg-gray-50 text-xs">
-                                        <td className="px-5 py-3 font-medium text-gray-700">{student.fullname}</td>
-                                        <td className="px-5 py-3 text-gray-500">{student.studentClass}</td>
-                                        <td className="px-5 py-3 text-gray-500">{student.parent || "—"}</td>
+                                        <td className="px-5 py-3 font-medium text-black">{student.fullname}</td>
+                                        <td className="px-5 py-3 text-black">{student.studentClass}</td>
+                                        <td className="px-5 py-3 text-black">{student.parent || "—"}</td>
                                         <td className="px-5 py-3 text-gray-400 font-mono text-xs">{student.familyCode || "—"}</td>
                                         <td className="px-5 py-3 flex items-center gap-3">
-                                            <button className="text-blue-400 hover:text-blue-600" onClick={() => {
+                                            <button className="text-blue-400 hover:text-blue-200" onClick={() => {
                                                 setEditId(student._id)
                                                 setEditData({ fullname: student.fullname, studentClass: student.studentClass, parent: student.parent || "" })
                                                 setShowEdit(true)

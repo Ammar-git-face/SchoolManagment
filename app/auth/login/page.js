@@ -69,8 +69,8 @@ export default function SimpleLogin() {
         <div className="p-4 flex justify-center items-center bg-gray-100 min-h-screen">
           <div className="w-1/3 p-4 bg-white shadow-2xl rounded-2xl h-160 text-center mb-19">
             <h1 className="font-bold text-2xl mb-6">Sign In</h1>
-            <p className="text-gray-500 mb-6">Choose your role and sign in to continue</p>
-            <div className='flex gap-12 justify-center items-center mb-4 bg-gray-200 rounded-xl h-12 text-gray-500 font-extralight focus focus:font-black focus:bg-white '>
+            <p className="text-black mb-6">Choose your role and sign in to continue</p>
+            <div className='flex gap-12 justify-center items-center mb-4 bg-gray-200 rounded-xl h-12 text-black font-extralight focus focus:font-black focus:bg-white '>
               <button
                 onClick={() => setActive("Parent")}
                 className={active === "Parent" ? "bg-white p-2 rounded-xl" : "p-2"}
@@ -93,8 +93,8 @@ export default function SimpleLogin() {
 
             {/* PARENT LOGIN */}
             <div className='bg-orange-100 rounded-2xl text-left pl-6 p-2 mb-10' >
-              <h1 className='font-semibold text-gray-600 flex gap-2 items-center'> <Users size={25} className="text-orange-400" />Parent login</h1>
-              <p className='text-md text-gray-600 ml-6'>view your child progress, pay fees and alot more</p>
+              <h1 className='font-semibold text-black flex gap-2 items-center'> <Users size={25} className="text-orange-400" />Parent login</h1>
+              <p className='text-md text-black ml-6'>view your child progress, pay fees and alot more</p>
             </div>
             <p className="text-left -mb-2 font-semibold">email</p><br></br>
             <input
@@ -132,8 +132,8 @@ export default function SimpleLogin() {
         <div className="p-4 flex justify-center items-center bg-gray-100 min-h-screen">
           <div className="w-1/3 p-4 bg-white shadow-2xl rounded-2xl h-160 text-center mb-19">
             <h1 className="font-bold text-2xl mb-6">Sign In</h1>
-            <p className="text-gray-500 mb-6">Choose your role and sign in to continue</p>
-            <div className='flex gap-12 justify-center items-center mb-4 bg-gray-200 rounded-xl h-12 text-gray-500 font-extralight focus focus:font-black focus:bg-white '>
+            <p className="text-black mb-6">Choose your role and sign in to continue</p>
+            <div className='flex gap-12 justify-center items-center mb-4 bg-gray-200 rounded-xl h-12 text-black font-extralight focus focus:font-black focus:bg-white '>
               <button
                 onClick={() => setActive("Parent")}
                 className={active === "Parent" ? "bg-white p-2 rounded-xl" : "p-2"}
@@ -156,8 +156,8 @@ export default function SimpleLogin() {
 
             {/* PARENT LOGIN */}
             <div className='bg-green-100 rounded-2xl text-left pl-6 p-2 mb-10' >
-              <h1 className='font-semibold text-gray-600 flex gap-2 items-center'> <Users size={25} className="text-green-400" />Teachers login</h1>
-              <p className='text-md text-gray-600 ml-6'>Access your classes and manage student results</p>
+              <h1 className='font-semibold text-black flex gap-2 items-center'> <Users size={25} className="text-green-400" />Teachers login</h1>
+              <p className='text-md text-black ml-6'>Access your classes and manage student results</p>
             </div>
             <p className="text-left -mb-2 font-semibold">email</p><br></br>
             <input
@@ -192,8 +192,8 @@ export default function SimpleLogin() {
         <div className="p-4 flex justify-center items-center bg-gray-100 min-h-screen">
           <div className="w-1/3 p-4 bg-white shadow-2xl rounded-2xl h-160 text-center mb-19">
             <h1 className="font-bold text-2xl mb-6">Sign In</h1>
-            <p className="text-gray-500 mb-6">Choose your role and sign in to continue</p>
-            <div className='flex gap-12 justify-center items-center mb-4 bg-gray-200 rounded-xl h-12 text-gray-500 font-extralight focus focus:font-black focus:bg-white '>
+            <p className="text-black mb-6">Choose your role and sign in to continue</p>
+            <div className='flex gap-12 justify-center items-center mb-4 bg-gray-200 rounded-xl h-12 text-black font-extralight focus focus:font-black focus:bg-white '>
               <button
                 onClick={() => setActive("Parent")}
                 className={active === "Parent" ? "bg-white p-2 rounded-xl" : "p-2"}
@@ -216,8 +216,8 @@ export default function SimpleLogin() {
 
             {/* PARENT LOGIN */}
             <div className='bg-blue-100 rounded-2xl text-left pl-6 p-2 mb-10' >
-              <h1 className='font-semibold text-gray-600 flex gap-2 items-center'> <Users size={25} className="text-blue-400" />Admin login</h1>
-              <p className='text-md text-gray-600 ml-6'>view your child progress, pay fees and alot more</p>
+              <h1 className='font-semibold text-black flex gap-2 items-center'> <Users size={25} className="text-blue-400" />Admin login</h1>
+              <p className='text-md text-black ml-6'>view your child progress, pay fees and alot more</p>
             </div>
             <p className="text-left -mb-2 font-semibold">email</p><br></br>
             <input

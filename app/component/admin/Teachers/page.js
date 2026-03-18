@@ -21,14 +21,14 @@ const AddEditModal = ({ title, data, setData, banks, onSubmit, onClose }) => (
                 { label: "Account Number", key: "accountNumber", type: "text", ph: "10-digit account number" },
             ].map(f => (
                 <div key={f.key}>
-                    <p className="mb-1 text-xs font-semibold text-gray-600">{f.label}</p>
+                    <p className="mb-1 text-xs font-semibold text-black">{f.label}</p>
                     <input type={f.type} placeholder={f.ph}
                         className="w-full p-2.5 mb-3 text-xs rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={data[f.key] || ""}
                         onChange={e => setData(d => ({ ...d, [f.key]: e.target.value }))} />
                 </div>
             ))}
-            <p className="text-xs font-semibold mb-1 text-gray-600">Bank</p>
+            <p className="text-xs font-semibold mb-1 text-black">Bank</p>
             <select
                 className="w-full p-2.5 mb-5 text-xs rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={data.bankCode || ""}
@@ -37,7 +37,7 @@ const AddEditModal = ({ title, data, setData, banks, onSubmit, onClose }) => (
                 {banks.map(b => <option key={b.code} value={b.code}>{b.name}</option>)}
             </select>
             <div className="flex justify-end gap-3">
-                <button className="text-xs text-gray-500" onClick={onClose}>Cancel</button>
+                <button className="text-xs text-black" onClick={onClose}>Cancel</button>
                 <button onClick={onSubmit} className="text-xs bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600">{title.includes("Edit") ? "Update" : "Add Teacher"}</button>
             </div>
         </div>
@@ -199,14 +199,14 @@ const Teachers = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <h1 className="font-semibold text-gray-800">Teachers</h1>
+                    <h1 className="font-semibold text-black">Teachers</h1>
                     <div className="w-8" />
                 </div>
 
                 <div className="px-4 md:px-6 pt-8 pb-10">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Teachers</h1>
+                            <h1 className="text-2xl font-bold text-black">Teachers</h1>
                             <p className="text-xs text-gray-400 mt-1">Manage all teachers</p>
                         </div>
                         <button onClick={() => { setErr(""); setAddModal(true) }}
@@ -227,7 +227,7 @@ const Teachers = () => {
                             <thead>
                                 <tr className="border-b border-gray-100">
                                     {["Teacher", "Subject", "Salary", "Bank", "Account No", "Status", "Assigned Classes", "Account", "Action"].map(h => (
-                                        <th key={h} className="px-4 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                        <th key={h} className="px-4 py-3 text-left text-xs text-black font-medium">{h}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -240,21 +240,21 @@ const Teachers = () => {
                                     <tr key={t._id} className="border-t border-gray-100 hover:bg-gray-50 text-xs">
                                         <td className="px-4 py-4">
                                             <div className="flex items-center gap-2">
-                                                <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 text-xs font-bold flex-shrink-0">
+                                                <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-blue-200 text-xs font-bold flex-shrink-0">
                                                     {getInitials(t.fullname)}
                                                 </div>
                                                 <div>
-                                                    <p className="font-medium text-gray-700">{t.fullname}</p>
+                                                    <p className="font-medium text-black">{t.fullname}</p>
                                                     <p className="text-gray-400 text-xs">{t.email}</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-4 py-4"><span className="bg-gray-100 rounded-xl text-xs px-2 py-1">{t.subject || "—"}</span></td>
-                                        <td className="px-4 py-4 font-medium text-gray-700">₦{(t.salary || 0).toLocaleString()}</td>
-                                        <td className="px-4 py-4 text-gray-500">
+                                        <td className="px-4 py-4 font-medium text-black">₦{(t.salary || 0).toLocaleString()}</td>
+                                        <td className="px-4 py-4 text-black">
                                             {t.bankCode ? getBankName(t.bankCode) : <span className="text-red-400">No bank</span>}
                                         </td>
-                                        <td className="px-4 py-4 text-gray-500">
+                                        <td className="px-4 py-4 text-black">
                                             {t.accountNumber || <span className="text-red-400">No account</span>}
                                         </td>
                                         <td className="px-4 py-4">
@@ -267,7 +267,7 @@ const Teachers = () => {
                                             {t.assignedClasses?.length > 0 ? (
                                                 <div className="flex flex-wrap gap-1">
                                                     {t.assignedClasses.map(ac => (
-                                                        <span key={ac._id || ac.className} className="bg-blue-100 text-blue-500 text-xs px-2 py-0.5 rounded-full">
+                                                        <span key={ac._id || ac.className} className="bg-blue-100 text-blue-200 text-xs px-2 py-0.5 rounded-full">
                                                             {ac.className}
                                                         </span>
                                                     ))}
@@ -293,7 +293,7 @@ const Teachers = () => {
                                                     <BookPlus size={15} />
                                                 </button>
                                                 {/* Edit */}
-                                                <button className="text-blue-400 hover:text-blue-600" onClick={() => {
+                                                <button className="text-blue-400 hover:text-blue-200" onClick={() => {
                                                     setEditId(t._id)
                                                     setEditData({ fullname: t.fullname, email: t.email, salary: t.salary, subject: t.subject, accountNumber: t.accountNumber || "", bankCode: t.bankCode || "" })
                                                     setEditModal(true)
@@ -327,10 +327,10 @@ const Teachers = () => {
                             <button onClick={() => setAssignModal(false)}><X size={16} className="text-gray-400" /></button>
                         </div>
                         <p className="text-xs text-gray-400 mb-4">
-                            Assign a class to <span className="font-semibold text-gray-700">{assignTeacher.fullname}</span>
+                            Assign a class to <span className="font-semibold text-black">{assignTeacher.fullname}</span>
                         </p>
 
-                        <p className="text-xs font-semibold mb-1 text-gray-600">Select Class</p>
+                        <p className="text-xs font-semibold mb-1 text-black">Select Class</p>
                         {/* ✅ Dropdown populated from DB classes */}
                         <select className="w-full border border-gray-200 rounded-xl p-2.5 text-xs mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={assignClass} onChange={e => setAssignClass(e.target.value)}>
@@ -341,7 +341,7 @@ const Teachers = () => {
                             }
                         </select>
 
-                        <p className="text-xs font-semibold mb-1 text-gray-600">Subject to Teach</p>
+                        <p className="text-xs font-semibold mb-1 text-black">Subject to Teach</p>
                         <input type="text" placeholder="e.g Mathematics"
                             className="w-full border border-gray-200 rounded-xl p-2.5 text-xs mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={assignSubject} onChange={e => setAssignSubject(e.target.value)} />
@@ -354,12 +354,12 @@ const Teachers = () => {
 
                         {assignTeacher.assignedClasses?.length > 0 && (
                             <div className="mb-4">
-                                <p className="text-xs font-semibold text-gray-600 mb-2">Currently Assigned:</p>
+                                <p className="text-xs font-semibold text-black mb-2">Currently Assigned:</p>
                                 <div className="flex flex-col gap-2">
                                     {assignTeacher.assignedClasses.map(ac => (
                                         <div key={ac._id || ac.className} className="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-xl px-3 py-2">
-                                            <span className="text-xs text-gray-600">
-                                                {ac.className} — <span className="text-blue-500">{ac.subject}</span>
+                                            <span className="text-xs text-black">
+                                                {ac.className} — <span className="text-blue-200">{ac.subject}</span>
                                             </span>
                                             <button onClick={() => handleRemoveClass(assignTeacher._id, ac._id)} className="text-red-400 hover:text-red-600">
                                                 <Trash size={13} />
@@ -371,7 +371,7 @@ const Teachers = () => {
                         )}
 
                         <div className="flex justify-end gap-3 mt-2">
-                            <button className="text-xs text-gray-500" onClick={() => setAssignModal(false)}>Cancel</button>
+                            <button className="text-xs text-black" onClick={() => setAssignModal(false)}>Cancel</button>
                             <button onClick={handleAssign} className="text-xs bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600">
                                 Assign Class
                             </button>
@@ -391,7 +391,7 @@ const Teachers = () => {
                             </button>
                         </div>
                         <p className="text-xs text-gray-400 mb-4">
-                            Set a login password for <span className="font-semibold text-gray-700">{accountTeacher.fullname}</span>
+                            Set a login password for <span className="font-semibold text-black">{accountTeacher.fullname}</span>
                         </p>
                         {accountMsg && (
                             <div className={`text-xs p-3 rounded-xl mb-4 border ${accountMsg.type === "success"
@@ -401,15 +401,15 @@ const Teachers = () => {
                             </div>
                         )}
                         <div className="bg-gray-50 rounded-xl p-3 mb-4 border border-gray-100">
-                            <p className="text-xs text-gray-500">Login Email</p>
-                            <p className="text-sm font-semibold text-gray-700">{accountTeacher.email}</p>
+                            <p className="text-xs text-black">Login Email</p>
+                            <p className="text-sm font-semibold text-black">{accountTeacher.email}</p>
                         </div>
-                        <p className="text-xs font-semibold mb-1 text-gray-600">Set Password</p>
+                        <p className="text-xs font-semibold mb-1 text-black">Set Password</p>
                         <input type="text" placeholder="Enter a password for this teacher"
                             className="w-full border border-gray-200 rounded-xl p-2.5 text-xs mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={newPassword} onChange={e => setNewPassword(e.target.value)} />
                         <div className="flex justify-end gap-3">
-                            <button className="text-xs text-gray-500"
+                            <button className="text-xs text-black"
                                 onClick={() => { setAccountModal(false); setAccountMsg(null); setNewPassword("") }}>Cancel</button>
                             <button onClick={handleCreateAccount} disabled={accountLoading}
                                 className="text-xs bg-blue-500 text-white px-4 py-2 rounded-xl disabled:opacity-50 hover:bg-blue-600">

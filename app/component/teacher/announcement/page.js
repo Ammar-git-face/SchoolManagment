@@ -30,7 +30,7 @@ const TeacherAnnouncements = () => {
 
     const getBadgeStyle = (to) => {
         if (to === 'All') return 'bg-blue-50 text-blue-400 border border-blue-100'
-        if (to === 'Teachers') return 'bg-gray-100 text-gray-500 border border-gray-200'
+        if (to === 'Teachers') return 'bg-gray-100 text-black border border-gray-200'
         return 'bg-gray-100 text-gray-400'
     }
 
@@ -46,7 +46,7 @@ const TeacherAnnouncements = () => {
             <div className="md:ml-64 px-6 pt-8 pb-10">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-gray-800">Announcements</h1>
+                    <h1 className="text-2xl font-bold text-black">Announcements</h1>
                     <p className="text-xs text-gray-400 mt-1">View school announcements</p>
                 </div>
 
@@ -62,7 +62,7 @@ const TeacherAnnouncements = () => {
                         {announcements.map((a) => (
                             <div key={a._id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
                                 <div className="flex items-start justify-between mb-2">
-                                    <h2 className="font-bold text-gray-800 text-sm">{a.title}</h2>
+                                    <h2 className="font-bold text-black text-sm">{a.title}</h2>
                                     <span className={`text-xs px-3 py-1 rounded-full ${getBadgeStyle(a.to)}`}>
                                         {getBadgeLabel(a.to)}
                                     </span>
@@ -71,7 +71,7 @@ const TeacherAnnouncements = () => {
                                     <Calendar size={12} />
                                     {new Date(a.createdAt).toLocaleDateString('en-CA')}
                                 </p>
-                                <p className="text-sm text-gray-600 mb-4">{a.message}</p>
+                                <p className="text-sm text-black mb-4">{a.message}</p>
                                 <p className="text-xs text-gray-400">— School Headmaster</p>
                             </div>
                         ))}

@@ -58,7 +58,7 @@ const Sidebar = () => {
             {/* ── Mobile topbar with hamburger ── */}
             <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 h-14 flex items-center justify-between shadow-sm">
                 <button onClick={() => setIsOpen(true)}
-                    className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition">
+                    className="p-2 rounded-xl text-black hover:bg-gray-100 transition">
                     <Menu size={22} />
                 </button>
                 <div className="flex items-center gap-2">
@@ -66,7 +66,7 @@ const Sidebar = () => {
                         ? <img src={schoolLogo} alt="Logo" className="w-7 h-7 rounded-lg object-cover border border-gray-200" />
                         : <div className="bg-blue-500 p-1 rounded-lg"><School size={16} className="text-white" /></div>
                     }
-                    <span className="text-sm font-bold text-gray-800 truncate max-w-[160px]">{schoolName}</span>
+                    <span className="text-sm font-bold text-black truncate max-w-[160px]">{schoolName}</span>
                 </div>
                 <div className="w-9" />
             </div>
@@ -91,12 +91,12 @@ const Sidebar = () => {
                             </div>
                         )}
                         <div className="overflow-hidden">
-                            <h1 className="text-sm font-bold text-gray-800 truncate">{schoolName}</h1>
+                            <h1 className="text-sm font-bold text-black truncate">{schoolName}</h1>
                             <p className="text-xs text-gray-400">Parent Portal</p>
                         </div>
                     </div>
                     <button onClick={() => setIsOpen(false)}
-                        className="md:hidden p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition flex-shrink-0">
+                        className="md:hidden p-1.5 rounded-lg text-gray-400 hover:text-black hover:bg-gray-100 transition flex-shrink-0">
                         <X size={18} />
                     </button>
                 </div>
@@ -106,7 +106,7 @@ const Sidebar = () => {
                     {links.map((link) => (
                         <Link key={link.href} href={link.href}
                             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
-                                ${pathname === link.href ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
+                                ${pathname === link.href ? "bg-blue-500 text-white" : "text-black hover:bg-gray-100"}`}>
                             {link.icon}{link.label}
                         </Link>
                     ))}
@@ -122,7 +122,7 @@ const Sidebar = () => {
                                     {initials}
                                 </div>
                                 <div className="overflow-hidden">
-                                    <p className="text-xs font-semibold text-gray-700 truncate">{name}</p>
+                                    <p className="text-xs font-semibold text-black truncate">{name}</p>
                                     <p className="text-xs text-gray-400">Parent</p>
                                 </div>
                             </div>

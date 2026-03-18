@@ -102,7 +102,7 @@ const ParentDashboard = () => {
             <Sidebar />
             <div className="md:ml-64 px-6 pt-8 pb-10">
                 <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-gray-800">
+                    <h1 className="text-2xl font-bold text-black">
                         Welcome, {user?.name?.split(" ")[0] || "Parent"}
                     </h1>
                     <p className="text-xs text-gray-400 mt-1">View your children's progress and manage payments</p>
@@ -113,8 +113,8 @@ const ParentDashboard = () => {
                     {cards.map((card) => (
                         <div key={card.id} className={`border rounded-2xl p-5 flex items-center justify-between ${card.bg}`}>
                             <div>
-                                <p className="text-xs text-gray-500 mb-2">{card.title}</p>
-                                <h2 className="text-2xl font-bold text-gray-800">{card.value}</h2>
+                                <p className="text-xs text-black mb-2">{card.title}</p>
+                                <h2 className="text-2xl font-bold text-black">{card.value}</h2>
                             </div>
                             <div className={`p-3 rounded-xl ${card.iconBg}`}>{card.icon}</div>
                         </div>
@@ -125,7 +125,7 @@ const ParentDashboard = () => {
                     {/* Children list */}
                     <div className="w-full lg:w-1/2 bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
                         <h2 className="font-bold text-sm mb-4 flex items-center gap-2">
-                            <GraduationCap size={16} className="text-blue-500" /> My Children
+                            <GraduationCap size={16} className="text-blue-200" /> My Children
                         </h2>
                         {safeChildren.length === 0 ? (
                             <p className="text-xs text-gray-400 text-center py-6">No children linked to your account</p>
@@ -138,10 +138,10 @@ const ParentDashboard = () => {
                                         <div key={child._id} className="flex items-center justify-between bg-gray-50 rounded-xl p-3">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
-                                                    <span className="text-xs font-semibold text-blue-500">{getInitials(child.fullname)}</span>
+                                                    <span className="text-xs font-semibold text-blue-200">{getInitials(child.fullname)}</span>
                                                 </div>
                                                 <div>
-                                                    <p className="text-xs font-semibold text-gray-700">{child.fullname}</p>
+                                                    <p className="text-xs font-semibold text-black">{child.fullname}</p>
                                                     <p className="text-xs text-gray-400">{child.studentClass}</p>
                                                 </div>
                                             </div>
@@ -170,7 +170,7 @@ const ParentDashboard = () => {
                                 {announcements.slice(0, 3).map((a) => (
                                     <div key={a._id} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
                                         <div className="flex items-center justify-between mb-1">
-                                            <p className="text-xs font-semibold text-gray-700">{a.title}</p>
+                                            <p className="text-xs font-semibold text-black">{a.title}</p>
                                             <p className="text-xs text-gray-400 flex items-center gap-1">
                                                 <Calendar size={10} />{new Date(a.createdAt).toLocaleDateString("en-CA")}
                                             </p>
@@ -192,7 +192,7 @@ const ParentDashboard = () => {
                         <thead>
                             <tr className="border-b border-gray-100">
                                 {["Child", "Term", "Amount", "Status", "Due Date"].map(h => (
-                                    <th key={h} className="px-6 py-3 text-left text-xs text-gray-500 font-medium">{h}</th>
+                                    <th key={h} className="px-6 py-3 text-left text-xs text-black font-medium">{h}</th>
                                 ))}
                             </tr>
                         </thead>
@@ -203,9 +203,9 @@ const ParentDashboard = () => {
                                 const child = safeChildren.find(c => c._id === fee.studentId)
                                 return (
                                     <tr key={fee._id} className="border-t border-gray-100 hover:bg-gray-50">
-                                        <td className="px-6 py-4 text-sm text-gray-700">{child?.fullname || fee.studentName || "—"}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-500">{fee.term}</td>
-                                        <td className="px-6 py-4 text-sm font-medium text-gray-700">₦{Number(fee.amount).toLocaleString()}</td>
+                                        <td className="px-6 py-4 text-sm text-black">{child?.fullname || fee.studentName || "—"}</td>
+                                        <td className="px-6 py-4 text-sm text-black">{fee.term}</td>
+                                        <td className="px-6 py-4 text-sm font-medium text-black">₦{Number(fee.amount).toLocaleString()}</td>
                                         <td className="px-6 py-4">
                                             <span className={`text-xs font-medium px-3 py-1 rounded-full border ${fee.status === "paid"
                                                 ? "text-green-600 bg-green-50 border-green-200"
