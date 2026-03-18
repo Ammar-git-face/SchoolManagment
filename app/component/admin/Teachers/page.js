@@ -222,7 +222,7 @@ const Teachers = () => {
 
                     {err && <div className="bg-red-50 border border-red-200 text-red-600 text-xs p-3 rounded-xl mb-4">{err}</div>}
 
-                    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto">
+                    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto w-full max-w-full">
                         <table className="w-full min-w-[950px]">
                             <thead>
                                 <tr className="border-b border-gray-100">

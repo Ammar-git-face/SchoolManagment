@@ -110,7 +110,7 @@ const AdminSalaries = () => {
                     </div>
                 )}
 
-                <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto">
+                <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto w-full max-w-full">
                     <table className="w-full min-w-[700px]">
                         <thead>
                             <tr className="border-b border-gray-100">
