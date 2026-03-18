@@ -53,20 +53,17 @@ const Teachers = () => {
     const [loading, setLoading] = useState(true)
     const [err, setErr] = useState("")
 
-    // Add/Edit
     const [addModal, setAddModal] = useState(false)
     const [editModal, setEditModal] = useState(false)
     const [addData, setAddData] = useState({ fullname: "", email: "", salary: "", subject: "", accountNumber: "", bankCode: "" })
     const [editData, setEditData] = useState({ fullname: "", email: "", salary: "", subject: "", accountNumber: "", bankCode: "" })
     const [editId, setEditId] = useState(null)
 
-    // Assign class
     const [assignModal, setAssignModal] = useState(false)
     const [assignTeacher, setAssignTeacher] = useState(null)
     const [assignClass, setAssignClass] = useState("")
     const [assignSubject, setAssignSubject] = useState("")
 
-    // Create account
     const [accountModal, setAccountModal] = useState(false)
     const [accountTeacher, setAccountTeacher] = useState(null)
     const [newPassword, setNewPassword] = useState("")
@@ -101,7 +98,6 @@ const Teachers = () => {
 
     useEffect(() => { getTeachers(); getBanks(); fetchClasses() }, [])
 
-    // ── Add Teacher ──────────────────────────────────────
     const handleAdd = async () => {
         if (!addData.fullname || !addData.email) return setErr("Name and email required")
         try {
@@ -120,7 +116,6 @@ const Teachers = () => {
         } catch { setErr("Failed to add teacher") }
     }
 
-    // ── Edit Teacher ─────────────────────────────────────
     const handleEdit = async () => {
         try {
             const res = await authFetch(`${API}/teacher/${editId}`, {
@@ -135,14 +130,12 @@ const Teachers = () => {
         } catch { console.log("edit failed") }
     }
 
-    // ── Delete Teacher ───────────────────────────────────
     const handleDelete = async (id) => {
         if (!confirm("Delete this teacher?")) return
         const res = await authFetch(`${API}/teacher/${id}`, { method: "DELETE" })
         if (res.ok) getTeachers()
     }
 
-    // ── Assign Class ─────────────────────────────────────
     const handleAssign = async () => {
         if (!assignClass || !assignSubject) return alert("Please fill in both class and subject")
         try {
@@ -164,7 +157,6 @@ const Teachers = () => {
         } catch { console.log("remove class failed") }
     }
 
-    // ── Create Account ───────────────────────────────────
     const handleCreateAccount = async () => {
         if (!newPassword) return alert("Please enter a password")
         setAccountLoading(true); setAccountMsg(null)
@@ -187,12 +179,11 @@ const Teachers = () => {
     const filtered = teachers.filter(t => t.fullname?.toLowerCase().includes(search.toLowerCase()))
 
     return (
-        <div className="flex min-h-screen bg-gray-50 overflow-hidden">
+        <div className="min-h-screen bg-gray-50">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
             <div className="flex-1 md:ml-64 min-h-screen">
-                {/* Mobile topbar */}
                 <div className="md:hidden flex items-center justify-between bg-white px-4 py-3 shadow-sm sticky top-0 z-10">
                     <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -210,7 +201,7 @@ const Teachers = () => {
                             <p className="text-xs text-gray-400 mt-1">Manage all teachers</p>
                         </div>
                         <button onClick={() => { setErr(""); setAddModal(true) }}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs hover:bg-blue-600">+ Add Teacher</button>
+                            className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs hover:bg-blue-600 w-full sm:w-auto">+ Add Teacher</button>
                     </div>
 
                     <div className="relative max-w-sm mb-6">
@@ -222,7 +213,7 @@ const Teachers = () => {
 
                     {err && <div className="bg-red-50 border border-red-200 text-red-600 text-xs p-3 rounded-xl mb-4">{err}</div>}
 
-                    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto w-full max-w-full">
+                    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto">
                         <table className="w-full min-w-[950px]">
                             <thead>
                                 <tr className="border-b border-gray-100">
@@ -281,24 +272,20 @@ const Teachers = () => {
                                         </td>
                                         <td className="px-4 py-4">
                                             <div className="flex items-center gap-3">
-                                                {/* Create account */}
                                                 <button title="Create Login Account"
                                                     className={t.password ? "text-gray-300 cursor-not-allowed" : "text-purple-500 hover:text-purple-600"}
                                                     onClick={() => { if (!t.password) { setAccountTeacher(t); setAccountModal(true) } }}>
                                                     <KeyRound size={15} />
                                                 </button>
-                                                {/* Assign class */}
                                                 <button title="Assign Class" className="text-green-500 hover:text-green-600"
                                                     onClick={() => { setAssignTeacher(t); setAssignClass(""); setAssignSubject(""); setAssignModal(true) }}>
                                                     <BookPlus size={15} />
                                                 </button>
-                                                {/* Edit */}
                                                 <button className="text-blue-400 hover:text-blue-200" onClick={() => {
                                                     setEditId(t._id)
                                                     setEditData({ fullname: t.fullname, email: t.email, salary: t.salary, subject: t.subject, accountNumber: t.accountNumber || "", bankCode: t.bankCode || "" })
                                                     setEditModal(true)
                                                 }}><Pencil size={15} /></button>
-                                                {/* Delete */}
                                                 <button className="text-red-400 hover:text-red-600" onClick={() => handleDelete(t._id)}>
                                                     <Trash2 size={15} />
                                                 </button>
@@ -312,13 +299,9 @@ const Teachers = () => {
                 </div>
             </div>
 
-            {/* Add Modal */}
             {addModal && <AddEditModal title="Add New Teacher" data={addData} setData={setAddData} banks={banks} onSubmit={handleAdd} onClose={() => setAddModal(false)} />}
-
-            {/* Edit Modal */}
             {editModal && <AddEditModal title="Edit Teacher" data={editData} setData={setEditData} banks={banks} onSubmit={handleEdit} onClose={() => setEditModal(false)} />}
 
-            {/* Assign Class Modal */}
             {assignModal && assignTeacher && (
                 <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
                     <div className="bg-white shadow-xl rounded-2xl w-full max-w-md p-5">
@@ -329,9 +312,7 @@ const Teachers = () => {
                         <p className="text-xs text-gray-400 mb-4">
                             Assign a class to <span className="font-semibold text-black">{assignTeacher.fullname}</span>
                         </p>
-
                         <p className="text-xs font-semibold mb-1 text-black">Select Class</p>
-                        {/* ✅ Dropdown populated from DB classes */}
                         <select className="w-full border border-gray-200 rounded-xl p-2.5 text-xs mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={assignClass} onChange={e => setAssignClass(e.target.value)}>
                             <option value="">— Select a class —</option>
@@ -340,18 +321,15 @@ const Teachers = () => {
                                 : liveClasses.map(cls => <option key={cls._id} value={cls.name}>{cls.name} ({cls.grade})</option>)
                             }
                         </select>
-
                         <p className="text-xs font-semibold mb-1 text-black">Subject to Teach</p>
                         <input type="text" placeholder="e.g Mathematics"
                             className="w-full border border-gray-200 rounded-xl p-2.5 text-xs mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={assignSubject} onChange={e => setAssignSubject(e.target.value)} />
-
                         {liveClasses.length === 0 && (
                             <div className="mb-4 px-3 py-2 bg-amber-50 text-amber-700 rounded-xl text-xs border border-amber-200">
                                 ⚠️ No classes found. Go to the <strong>Classes</strong> page and add classes first.
                             </div>
                         )}
-
                         {assignTeacher.assignedClasses?.length > 0 && (
                             <div className="mb-4">
                                 <p className="text-xs font-semibold text-black mb-2">Currently Assigned:</p>
@@ -369,7 +347,6 @@ const Teachers = () => {
                                 </div>
                             </div>
                         )}
-
                         <div className="flex justify-end gap-3 mt-2">
                             <button className="text-xs text-black" onClick={() => setAssignModal(false)}>Cancel</button>
                             <button onClick={handleAssign} className="text-xs bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600">
@@ -380,7 +357,6 @@ const Teachers = () => {
                 </div>
             )}
 
-            {/* Create Account Modal */}
             {accountModal && accountTeacher && (
                 <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
                     <div className="bg-white shadow-xl rounded-2xl w-full max-w-sm p-5">

@@ -23,7 +23,6 @@ const StudentForm = ({ title, data, setData, classes, onSubmit, onClose, showFam
                 </div>
                 <div>
                     <label className="text-xs text-black mb-1 block">Class</label>
-                    {/* ✅ Dropdown of classes added by admin */}
                     <select
                         className="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={data.studentClass}
@@ -133,7 +132,7 @@ const Student = () => {
     )
 
     return (
-        <div className="flex min-h-screen bg-gray-50 overflow-hidden">
+        <div className="min-h-screen bg-gray-50">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
@@ -155,7 +154,7 @@ const Student = () => {
                             <p className="text-xs text-gray-400 mt-1">Manage all students</p>
                         </div>
                         <button onClick={() => { setErr(""); setShowAdd(true) }}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs hover:bg-blue-600">+ Add Student</button>
+                            className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs hover:bg-blue-600 w-full sm:w-auto">+ Add Student</button>
                     </div>
 
                     <div className="relative max-w-sm mb-6">
@@ -167,7 +166,7 @@ const Student = () => {
 
                     {err && <div className="bg-red-50 border border-red-200 text-red-600 text-xs p-3 rounded-xl mb-4">{err}</div>}
 
-                    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto w-full max-w-full">
+                    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto">
                         <table className="w-full min-w-[500px]">
                             <thead>
                                 <tr className="border-b border-gray-100">
