@@ -30,6 +30,7 @@ export default function OwnerDashboard() {
         fetchStats()
     }, [])
 
+
     const fetchStats = async () => {
         setLoading(true)
         try {

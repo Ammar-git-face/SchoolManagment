@@ -196,13 +196,16 @@
 
 "use client"
 import { useState, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
 import { Upload, Save, School, Phone, MapPin, Mail, CheckCircle, AlertCircle, Image, X, CreditCard, Building2 } from "lucide-react"
 import Sidebar from "../sidevar"
 import { authFetch, API_BASE, getUser, setUser } from "../utils/api"
 import { API } from "../../../config/api"
 
+
 export default function SchoolSettings() {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
+    const router =useRouter()
+      const [sidebarOpen, setSidebarOpen] = useState(false)
     const [info, setInfo]               = useState({ name: "", email: "", phone: "", address: "", logo: "", schoolCode: "" })
     const [logoPreview, setLogoPreview] = useState("")
     const [saving, setSaving]           = useState(false)
@@ -274,7 +277,7 @@ export default function SchoolSettings() {
         } catch { console.log("resolve failed") }
         finally { setResolving(false) }
     }
-
+    
     const handleFileChange = (e) => {
         const file = e.target.files[0]
         if (!file) return
@@ -426,7 +429,7 @@ export default function SchoolSettings() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="sm:col-span-2">
                                 <label className="text-xs text-black mb-1 block">School Name *</label>
-                                <input value={info.name} onChange={e => setInfo(p => ({...p, name: e.target.value}))}
+                                <input value={info.name} disabled onChange={e => setInfo(p => ({...p, name: e.target.value}))}
                                     className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none text-black focus:ring-2 focus:ring-blue-500"
                                     placeholder="School name" />
                             </div>
@@ -453,10 +456,16 @@ export default function SchoolSettings() {
                                     className="w-full border border-gray-100 bg-gray-50 rounded-xl px-3 text-black py-2.5 text-sm text-gray-400 font-mono cursor-not-allowed" />
                             </div>
                         </div>
+                     <div className="flex items-center gap-4">
+                     <button  onClick={() => router.push("/component/Owner")}
+                            className="mt-5 flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition disabled:opacity-50">
+                          Owner Dashboard
+                        </button>
                         <button onClick={handleSaveInfo} disabled={saving}
                             className="mt-5 flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition disabled:opacity-50">
                             {saving ? "Saving..." : <><Save size={15} /> Save Changes</>}
                         </button>
+                        </div> 
                     </div>
 
                     {/* ── Payment Details ───────────────────────────────────────────────── */}
