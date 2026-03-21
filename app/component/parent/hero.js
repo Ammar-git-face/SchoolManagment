@@ -1,9 +1,10 @@
 "use client"
-import { GraduationCap, TrendingUp, DollarSign, Bell, Calendar } from "lucide-react"
+import {TrendingUp, DollarSign, Bell, Calendar, GraduationCap } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "./sidebar"
 import { authFetch } from "../admin/utils/api"  // ✅ reuse the same helper
 import { API } from "../../config/api"
+import { EdvanceIcon } from "../EdvanceLogo"
 
 const getInitials = (name = "") =>
     name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
@@ -125,7 +126,7 @@ const ParentDashboard = () => {
                     {/* Children list */}
                     <div className="w-full lg:w-1/2 bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
                         <h2 className="font-bold text-sm mb-4 flex items-center gap-2">
-                            <GraduationCap size={16} className="text-blue-200" /> My Children
+                            <EdvanceIcon size={16} className="text-blue-200" /> My Children
                         </h2>
                         {safeChildren.length === 0 ? (
                             <p className="text-xs text-gray-400 text-center py-6">No children linked to your account</p>

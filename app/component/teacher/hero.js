@@ -1,9 +1,10 @@
 "use client"
-import { BookOpen, GraduationCap, DollarSign, CheckCircle, Calendar1Icon, Clock, Bell } from "lucide-react"
+import { BookOpen, DollarSign, CheckCircle, Calendar1Icon, Clock, Bell } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from './sidebar'
 import { useTeacher, teacherFetch, API_BASE } from "./utils/api"
 import { API } from "../../config/api"
+import { EdvanceIcon } from "../EdvanceLogo"
 
 const TeacherDashboard = () => {
 
@@ -87,7 +88,7 @@ const TeacherDashboard = () => {
             title: "Total Students",
             value: stats.totalStudents,
             sub:   "In your classes",
-            icon:  <GraduationCap size={34} className="p-1.5 text-green-500 bg-green-100 rounded-xl" />,
+            icon:  <EdvanceIcon size={34} className="p-1.5 text-green-500 bg-green-100 rounded-xl" />,
             id: 2
         },
         {

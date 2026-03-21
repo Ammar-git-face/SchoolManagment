@@ -1,9 +1,11 @@
 "use client"
-import { Book, User2, GraduationCap, DollarSignIcon, Menu } from "lucide-react"
+import { Book, User2,  DollarSignIcon, Menu , GraduationCap } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Pie, PieChart, Tooltip, Cell, BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts"
 import Sidebar from "./sidevar"
 import { authFetch, API_BASE, getUser } from "./utils/api"
+import { EdvanceIcon } from "../../component/EdvanceLogo"
+// import { GraduationCap } from "@/node_modules/lucide-react/dist/lucide-react"
 
 const COLORS = ["#4F46E5", "#F59E0B", "#EF4444", "#22C55E"]
 
@@ -77,7 +79,7 @@ const Hero = () => {
             title: "Total Students",
             heading: loading ? "..." : stats.totalStudents,
             content: "Live from database",
-            icon: <GraduationCap size={35} className="p-1.5 text-blue-200 bg-blue-200 rounded-xl" />
+            icon: <GraduationCap size={35} className="p-1.5 text-blue-400 bg-blue-200 rounded-xl" />
         },
         {
             title: "Total Teachers",

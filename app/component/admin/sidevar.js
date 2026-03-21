@@ -8,7 +8,6 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { API_BASE, getUser, setUser } from "./utils/api"
-import { API } from "../../config/api"
 
 const items = [
     { title: "Dashboard",    icon: <LayoutDashboard size={16} />, url: "/component/admin" },
@@ -19,27 +18,26 @@ const items = [
     { title: "Attendance",   icon: <ClipboardList size={16} />,   url: "/component/admin/Attendance" },
     { title: "Results",      icon: <File size={16} />,            url: "/component/admin/results" },
     { title: "Fee Management", icon: <DollarSign size={16} />,    url: "/component/admin/fee" },
-    { title: "salaries",      icon: <Wallet size={16} />,          url: "/component/admin/salary" },
+    { title: "Payroll",      icon: <Wallet size={16} />,          url: "/component/admin/payroll" },
     { title: "PTA Meetings", icon: <Video size={16} />,           url: "/component/admin/pta" },
     { title: "Announcements", icon: <Bell size={16} />,           url: "/component/admin/alert" },
     { title: "Messages",     icon: <MessageCircle size={16} />,   url: "/component/admin/chat" },
-    { title: "Settings",     icon: <Settings size={16} />,        url: "/component/admin/settings" },
+    { title: "Settings",     icon: <Settings size={16} />,        url: "/component/admin/school" },
 ]
 
-const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
+const Sidebar = ({ isOpen, onClose }) => {
     const pathname = usePathname()
     const router   = useRouter()
 
     const [adminName,   setAdminName]   = useState("Admin")
-    const [schoolName,  setSchoolName]  = useState("School Management")
+    const [schoolName,  setSchoolName]  = useState("Edvance")
     const [schoolLogo,  setSchoolLogo]  = useState("")
     const [notifCount,  setNotifCount]  = useState(0)
-
 
     const loadFromStorage = () => {
         const u = getUser()
         setAdminName(u.name || u.fullname || "Admin")
-        setSchoolName(u.schoolName || "School Management")
+        setSchoolName(u.schoolName || "Edvance")
         setSchoolLogo(u.schoolLogo || "")
     }
 
@@ -57,7 +55,7 @@ const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
             const data = await res.json()
             if (data.logo) {
                 setSchoolLogo(data.logo)
-                setSchoolName(data.name || "School Management")
+                setSchoolName(data.name || "Edvance")
                 // Save back but without raw base64 if it's a URL
                 const u = getUser()
                 localStorage.setItem("user", JSON.stringify({
@@ -118,16 +116,16 @@ const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
                         <img src={schoolLogo} alt="Logo"
                             className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-gray-200" />
                     ) : (
-                        <div className="w-9 h-9 bg-blue-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <School size={18} className="text-black" />
+                        <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <School size={18} className="text-white" />
                         </div>
                     )}
                     <div className="overflow-hidden">
-                        <h1 className="text-sm font-bold text-black truncate">{schoolName}</h1>
+                        <h1 className="text-sm font-bold text-gray-800 truncate">{schoolName}</h1>
                         <p className="text-[10px] text-gray-400">Admin Portal</p>
                     </div>
                 </div>
-                <button onClick={onClose} className="md:hidden text-gray-400 hover:text-black flex-shrink-0">
+                <button onClick={onClose} className="md:hidden text-gray-400 hover:text-gray-600 flex-shrink-0">
                     <X size={18} />
                 </button>
             </div>
@@ -140,7 +138,7 @@ const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
                     return (
                         <Link key={item.url} href={item.url} onClick={onClose}
                             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all
-                                ${active ? "bg-blue-200 text-black" : "text-black hover:bg-gray-100 hover:text-gray-900"}`}>
+                                ${active ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"}`}>
                             <span>{item.icon}</span>
                             <span className="flex-1">{item.title}</span>
                             {showBadge && (
@@ -157,11 +155,11 @@ const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
             <div className="px-4 py-4 border-t border-gray-100 shrink-0">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-200 font-bold text-xs flex-shrink-0">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs flex-shrink-0">
                             {adminName.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
-                            <p className="text-xs font-semibold text-black truncate max-w-[110px]">{adminName}</p>
+                            <p className="text-xs font-semibold text-gray-800 truncate max-w-[110px]">{adminName}</p>
                             <p className="text-[10px] text-gray-400">Administrator</p>
                         </div>
                     </div>

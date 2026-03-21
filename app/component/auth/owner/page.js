@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { API } from "../../../config/api"
+import { EdvanceIcon } from "../../EdvanceLogo"
 import { useRouter } from 'next/navigation'
 
 export default function OwnerLogin() {
@@ -42,14 +43,23 @@ export default function OwnerLogin() {
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="bg-gray-500 rounded-2xl shadow-2xl w-full max-w-md p-8">
-                <div className="text-center mb-8">
+{/* 
+            <div className="text-center mb-8">
                     <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <span className=" text-2xl">🏫</span>
                     </div>
                     <h1 className="text-2xl font-bold text-black">School Owner Portal</h1>
                     <p className="text-gray-400 text-sm mt-1">Sign in to manage your school</p>
+                </div> */}
+                 <div className="flex flex-col items-center mb-8">
+                    <EdvanceIcon size={72} />
+                    <span className="mt-3 text-xl font-bold text-gray-900 tracking-tight">edvance</span>
+                    <span className="text-xs font-medium text-indigo-500 tracking-widest  mb-6 uppercase mt-0.5">School Management</span>
+                    <h2 className="text-2xl font-bold text-black">School Owner Portal</h2>
+                    <p className="text-gray-400 text-sm mt-1">Sign in to manage your school</p>
                 </div>
 
+              
                 {error && (
                     <div className="bg-red-50 text-red-600 px-4 py-3 rounded-xl text-sm mb-4">{error}</div>
                 )}
@@ -71,7 +81,7 @@ export default function OwnerLogin() {
                         </div>
                     </div>
                     <button onClick={handleLogin} disabled={loading}
-                        className="w-full text-blue-200 bg-blue-200 h-8 hover:bg-blue-50 rounded-xl font-semibold border mt-2">
+                        className="w-full text-black bg-blue-200 h-8 hover:bg-blue-50 rounded-xl font-semibold border mt-2">
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
                 </div>

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import {
-    GraduationCap,
+    EdvanceIcon,
     BookOpen,
     Users,
     BarChart2,
@@ -124,7 +124,7 @@ export default function OwnerDashboard() {
                 {/* Top stat cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
                     {[
-                        { label: 'Total Students', value: stats?.totalStudents || 0, icon: <GraduationCap className="w-5 h-5" />, color: 'bg-blue-50 text-blue-200' },
+                        { label: 'Total Students', value: stats?.totalStudents || 0, icon: <EdvanceIcon className="w-5 h-5" />, color: 'bg-blue-50 text-blue-200' },
                         { label: 'Total Teachers', value: stats?.totalTeachers || 0, icon: <BookOpen className="w-5 h-5" />, color: 'bg-purple-50 text-purple-600' },
                         { label: 'Total Parents', value: stats?.totalParents || 0, icon: <Users className="w-5 h-5" />, color: 'bg-green-50 text-green-600' },
                         { label: 'Attendance Rate', value: `${stats?.overallAttendanceRate || 0}%`, icon: <BarChart2 className="w-5 h-5" />, color: 'bg-yellow-50 text-yellow-600' },

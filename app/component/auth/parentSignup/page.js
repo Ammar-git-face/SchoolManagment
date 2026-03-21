@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Users, Eye, EyeOff } from "lucide-react"
 import { API } from "../../../config/api"
+import { EdvanceIcon } from "../../EdvanceLogo"
 
 const ParentRegister = () => {
     const router = useRouter()
@@ -42,14 +43,12 @@ const ParentRegister = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-50 to-violet-100 flex items-center justify-center p-4">
             <div className="bg-white rounded-3xl shadow-xl p-8 w-full max-w-md">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-purple-500 rounded-2xl flex items-center justify-center">
-                        <Users size={24} className="text-white" />
-                    </div>
-                    <div>
-                        <h1 className="text-xl font-bold text-black">Parent Registration</h1>
-                        <p className="text-xs text-black">You'll need your family code from the school admin</p>
-                    </div>
+            <div className="flex flex-col items-center mb-8">
+                    <EdvanceIcon size={72} />
+                    <span className="mt-3 text-xl font-bold text-gray-900 tracking-tight">edvance</span>
+                    <span className="text-xs font-medium text-indigo-500 tracking-widest  mb-6 uppercase mt-0.5">School Management</span>
+                    <h2>Parent Signup Portal</h2>
+                    <p className="text-sm text-gray-500">You will need school and family code from the school admin</p>
                 </div>
 
                 {error && (

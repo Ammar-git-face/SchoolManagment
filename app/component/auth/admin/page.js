@@ -1,7 +1,8 @@
 "use client"
-import { GraduationCap, Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { EdvanceIcon } from "../../EdvanceLogo"
 import { API } from "../../../config/api"
 
 const AdminLogin = () => {
@@ -26,13 +27,11 @@ const AdminLogin = () => {
             const data = await res.json()
             if (!res.ok) return setError(data.error || "Login failed")
 
-            // ✅ Backend returns { token, user: { id, name, email, role, schoolCode... } }
             const token = data.token
             const user  = data.user || {}
 
             if (token) localStorage.setItem("token", token)
 
-            // ✅ Save full user so settings page can read schoolName, schoolCode etc.
             localStorage.setItem("user", JSON.stringify({
                 id:            user.id            || user._id        || "",
                 name:          user.name          || user.fullname   || "",
@@ -57,15 +56,11 @@ const AdminLogin = () => {
         <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
             <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
 
-                {/* Logo */}
-                <div className="flex items-center gap-2 mb-8">
-                    <div className="bg-blue-500 p-2 rounded-xl">
-                        <GraduationCap size={22} className="text-white" />
-                    </div>
-                    <div>
-                        <h1 className="text-sm font-bold text-black">EduManage</h1>
-                        <p className="text-xs text-gray-400">Admin Portal</p>
-                    </div>
+                {/* ✅ Logo — centered, stacked like the image */}
+                <div className="flex flex-col items-center mb-8">
+                    <EdvanceIcon size={72} />
+                    <span className="mt-3 text-xl font-bold text-gray-900 tracking-tight">edvance</span>
+                    <span className="text-xs font-medium text-indigo-500 tracking-widest uppercase mt-0.5">School Management</span>
                 </div>
 
                 <h2 className="text-2xl font-bold text-black mb-1">Welcome back</h2>

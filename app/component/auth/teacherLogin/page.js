@@ -1,8 +1,9 @@
 "use client"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { GraduationCap, Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff } from "lucide-react"
 import { API_BASE } from "../../admin/utils/api"
+import { EdvanceIcon } from "../../EdvanceLogo"
 import { API } from "../../../config/api"
 
 const TeacherLogin = () => {
@@ -54,7 +55,7 @@ const TeacherLogin = () => {
             <div className="bg-white rounded-3xl shadow-xl p-8 w-full max-w-md">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center">
-                        <GraduationCap size={24} className="text-white" />
+                        <EdvanceIcon size={24} className="text-white" />
                     </div>
                     <div>
                         <h1 className="text-xl font-bold text-black">Teacher Login</h1>

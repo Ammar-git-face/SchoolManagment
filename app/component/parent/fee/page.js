@@ -201,14 +201,14 @@ const ParentFeePayments = () => {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
+                    </div>  
                 </div>
             </div>
 
             {showModal && (
                 <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-                        <div className="flex justify-between items-center mb-5">
+                        <div className="flex justify-between items-center mb-5"> 
                             <h2 className="text-sm font-bold text-black">Make Fee Payment</h2>
                             <button onClick={() => setShowModal(false)}><X size={16} className="text-gray-400" /></button>
                         </div>

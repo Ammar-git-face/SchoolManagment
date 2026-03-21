@@ -1,7 +1,8 @@
 "use client"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { School, Shield, BookOpen, Users, ArrowRight, GraduationCap, BarChart3, MessageCircle, CheckCircle, ChevronRight, Star } from "lucide-react"
+import { Shield, BookOpen, Users, ArrowRight, BarChart3, MessageCircle, CheckCircle, ChevronRight, Star } from "lucide-react"
+import { EdvanceIcon } from "./component/EdvanceLogo"
 
 const useCounter = (target, duration = 2000, start = false) => {
     const [count, setCount] = useState(0)
@@ -51,7 +52,7 @@ export default function LandingPage() {
 
     const features = [
         { icon: <BarChart3 size={20} />, title: "Real-time Dashboard", desc: "Live stats on students, fees, attendance and performance" },
-        { icon: <GraduationCap size={20} />, title: "Smart Results",      desc: "Teacher submits → Admin approves → Parent sees instantly" },
+        { icon: <EdvanceIcon size={20} />, title: "Smart Results",      desc: "Teacher submits → Admin approves → Parent sees instantly" },
         { icon: <MessageCircle size={20}/>, title: "Built-in Messaging",  desc: "Direct communication between admin, teachers and parents" },
         { icon: <CheckCircle size={20} />, title: "Fee Tracking",         desc: "Flutterwave-powered payments with full audit trail" },
     ]
@@ -84,11 +85,18 @@ export default function LandingPage() {
 
                 {/* NAV */}
                 <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 48px", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <div style={{ width: 32, height: 32, background: "#2563eb", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <School size={16} color="#fff" />
-                        </div>
-                        <span style={{ fontWeight: 700, fontSize: 14, letterSpacing: "0.05em" }}>EduManage</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="16" r="16" fill="#0f172a"/>
+                            <polygon points="16,6 26,11 16,15 6,11" fill="#ffffff"/>
+                            <polygon points="16,15 26,11 26,14 16,18" fill="#c7d2fe"/>
+                            <polygon points="16,15 6,11 6,14 16,18" fill="#818cf8"/>
+                            <rect x="14.5" y="15" width="3" height="7" rx="1" fill="#ffffff"/>
+                            <circle cx="16" cy="23" r="2" fill="#818cf8"/>
+                            <line x1="24" y1="12" x2="24" y2="17" stroke="#c7d2fe" strokeWidth="1.5" strokeLinecap="round"/>
+                            <circle cx="24" cy="19" r="1.5" fill="#818cf8"/>
+                        </svg>
+                        <span style={{ fontWeight: 700, fontSize: 16, letterSpacing: "-0.02em", color: "#fff" }}>edvance</span>
                     </div>
                     <button onClick={() => router.push("/component/auth/register")}
                         style={{ fontSize: 12, fontWeight: 600, padding: "8px 16px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.2)", background: "transparent", color: "rgba(255,255,255,0.7)", cursor: "pointer", transition: "all 0.2s" }}
@@ -222,7 +230,7 @@ export default function LandingPage() {
 
                 {/* FOOTER */}
                 <footer style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px", textAlign: "center" }}>
-                    <p style={{ ...S.dim20, fontSize: 12 }}>© 2025 EduManage · Built for Nigerian Schools</p>
+                    <p style={{ ...S.dim20, fontSize: 12 }}>© 2025 Edvance · Built for Nigerian Schools</p>
                 </footer>
             </div>
         </div>

@@ -1,15 +1,15 @@
 "use client"
-import { GraduationCap, TrendingUp, AlertTriangle, CheckCircle } from "lucide-react"
+import { TrendingUp, GraduationCap, AlertTriangle, CheckCircle } from "lucide-react"
 import { useState, useEffect } from "react"
 import Sidebar from "../sidebar"
 import { useParent, parentFetch } from "../utils/useParent"
 import { API } from "../../../config/api"
 
-const getInitials  = (name = "") => name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()
+const getInitials = (name = "") => name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()
 const getScoreColor = (s) => s >= 70 ? "text-green-500" : s >= 50 ? "text-yellow-500" : "text-red-500"
-const getAvgColor   = (a) => a >= 70 ? "text-green-500 bg-green-50 border-green-200"
+const getAvgColor = (a) => a >= 70 ? "text-green-500 bg-green-50 border-green-200"
     : a >= 50 ? "text-yellow-500 bg-yellow-50 border-yellow-200"
-    : "text-orange-400 bg-orange-50 border-orange-200"
+        : "text-orange-400 bg-orange-50 border-orange-200"
 
 const MyChildren = () => {
     const { user, children } = useParent()   // ✅ always array, no hardcoded name
@@ -20,7 +20,7 @@ const MyChildren = () => {
         if (!user?.id) return
         const fetchResults = async () => {
             try {
-                const res  = await parentFetch(`${API}/result`)
+                const res = await parentFetch(`${API}/result`)
                 const data = await res.json()
                 setResults(Array.isArray(data) ? data : [])
             } catch (err) { console.log(err) }
@@ -29,13 +29,13 @@ const MyChildren = () => {
         fetchResults()
     }, [user])
 
-    const getChildResults    = (id) => results.filter(r => r.studentId?.toString() === id?.toString())
-    const getChildAvg        = (id) => {
+    const getChildResults = (id) => results.filter(r => r.studentId?.toString() === id?.toString())
+    const getChildAvg = (id) => {
         const r = getChildResults(id)
         return r.length === 0 ? 0 : Math.round(r.reduce((a, x) => a + (x.total || 0), 0) / r.length)
     }
-    const getStrengths       = (id) => getChildResults(id).map(x => x.strengths).filter(Boolean).join(", ") || "No data yet"
-    const getAreasToImprove  = (id) => getChildResults(id).map(x => x.areasToImprove).filter(Boolean).join(", ") || "No data yet"
+    const getStrengths = (id) => getChildResults(id).map(x => x.strengths).filter(Boolean).join(", ") || "No data yet"
+    const getAreasToImprove = (id) => getChildResults(id).map(x => x.areasToImprove).filter(Boolean).join(", ") || "No data yet"
 
     return (
         <div>
@@ -50,13 +50,13 @@ const MyChildren = () => {
                     <p className="text-xs text-gray-400">Loading...</p>
                 ) : children.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-60 bg-gray-50 rounded-2xl border border-gray-100">
-                        <GraduationCap size={40} className="text-gray-300 mb-3" />
+                        <GrduationCap size={40} className="text-gray-300 mb-3" />
                         <p className="text-sm text-gray-400">No children linked to your account</p>
                     </div>
                 ) : (
                     <div className="flex flex-col gap-6">
                         {children.map((child) => {
-                            const avg         = getChildAvg(child._id)
+                            const avg = getChildAvg(child._id)
                             const childResults = getChildResults(child._id)
                             return (
                                 <div key={child._id} className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
@@ -76,7 +76,6 @@ const MyChildren = () => {
                                             </div>
                                         </div>
                                     </div>
-
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                                         <div className="bg-green-50 border border-green-100 rounded-xl p-4">
                                             <p className="text-xs font-semibold text-green-600 flex items-center gap-1 mb-2">
@@ -99,7 +98,7 @@ const MyChildren = () => {
                                         <table className="w-full">
                                             <thead>
                                                 <tr className="border-b border-gray-100">
-                                                    {["Subject","Grade","Score","Term"].map(h =>
+                                                    {["Subject", "Grade", "Score", "Term"].map(h =>
                                                         <th key={h} className="text-left text-xs text-gray-400 font-medium pb-2">{h}</th>
                                                     )}
                                                 </tr>
