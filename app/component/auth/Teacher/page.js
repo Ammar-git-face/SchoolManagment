@@ -1,14 +1,15 @@
 "use client"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { EdvanceIcon, Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff } from "lucide-react"
 import { API_BASE } from "../../admin/utils/api"
 import { API } from "../../../config/api"
+import { EdvanceIcon } from "../../EdvanceLogo"
 
 const TeacherLogin = () => {
     const router = useRouter()
-    const [loading,  setLoading]  = useState(false)
-    const [error,    setError]    = useState("")
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
     const [showPass, setShowPass] = useState(false)
     const [form, setForm] = useState({ email: "", password: "" })
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
@@ -31,13 +32,13 @@ const TeacherLogin = () => {
             // ✅ Backend returns FLAT — no data.user wrapper
             localStorage.setItem("token", data.token)
             localStorage.setItem("user", JSON.stringify({
-                id:              data._id             || "",
-                _id:             data._id             || "",
-                name:            data.fullname        || data.name || "",
-                fullname:        data.fullname        || data.name || "",
-                email:           data.email           || email,
-                role:            "teacher",
-                schoolCode:      data.schoolCode      || "",
+                id: data._id || "",
+                _id: data._id || "",
+                name: data.fullname || data.name || "",
+                fullname: data.fullname || data.name || "",
+                email: data.email || email,
+                role: "teacher",
+                schoolCode: data.schoolCode || "",
                 assignedClasses: Array.isArray(data.assignedClasses) ? data.assignedClasses : [],
             }))
 

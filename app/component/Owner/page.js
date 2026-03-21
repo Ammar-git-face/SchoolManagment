@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import {
-    EdvanceIcon,
     BookOpen,
     Users,
     BarChart2,
@@ -13,6 +12,7 @@ import {
     Menu,
     X
 } from 'lucide-react'
+import { EdvanceIcon } from "../EdvanceLogo"
 import { authFetch } from "../admin/utils/api"
 import { API } from "../../config/api"
 const COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444']
