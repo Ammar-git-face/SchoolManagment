@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { School, Eye, EyeOff, CheckCircle, Copy, Check, ArrowLeft } from "lucide-react"
 import { API } from "../../../config/api"
+import { EdvanceIcon} from '../../EdvanceLogo'
 
 const SchoolRegister = () => {
     const router = useRouter()
@@ -109,8 +110,8 @@ const SchoolRegister = () => {
                     <button onClick={() => router.push("/")} className="p-2 rounded-xl hover:bg-gray-100 text-black mr-1">
                         <ArrowLeft size={16} />
                     </button>
-                    <div className="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-                        <School size={20} className="text-white" />
+                    <div className="w-10 h-10 bg-blue-500 rounded-2xl flex items-center justify-center flex-shrink-0">
+                        <EdvanceIcon size={20} className="text-white" />
                     </div>
                     <div>
                         <h1 className="text-lg font-bold text-black">Register Your School</h1>
