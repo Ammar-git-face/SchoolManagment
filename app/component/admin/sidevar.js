@@ -18,11 +18,11 @@ const items = [
     { title: "Attendance",   icon: <ClipboardList size={16} />,   url: "/component/admin/Attendance" },
     { title: "Results",      icon: <File size={16} />,            url: "/component/admin/results" },
     { title: "Fee Management", icon: <DollarSign size={16} />,    url: "/component/admin/fee" },
-    { title: "Payroll",      icon: <Wallet size={16} />,          url: "/component/admin/payroll" },
+    { title: "Payroll",      icon: <Wallet size={16} />,          url: "/component/admin/salary" },
     { title: "PTA Meetings", icon: <Video size={16} />,           url: "/component/admin/pta" },
     { title: "Announcements", icon: <Bell size={16} />,           url: "/component/admin/alert" },
     { title: "Messages",     icon: <MessageCircle size={16} />,   url: "/component/admin/chat" },
-    { title: "Settings",     icon: <Settings size={16} />,        url: "/component/admin/school" },
+    { title: "Settings",     icon: <Settings size={16} />,        url: "/component/admin/settings" },
 ]
 
 const Sidebar = ({ isOpen, onClose }) => {

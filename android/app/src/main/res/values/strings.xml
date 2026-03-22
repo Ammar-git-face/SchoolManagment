@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">edvance</string>
+    <string name="title_activity_main">edvance</string>
+    <string name="package_name">com.edvance.schoolapp</string>
+    <string name="custom_url_scheme">com.edvance.schoolapp</string>
+</resources>
