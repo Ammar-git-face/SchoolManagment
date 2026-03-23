@@ -1,15 +1,15 @@
 "use client"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, ArrowLeft } from "lucide-react"
 import { API_BASE } from "../../admin/utils/api"
 import { EdvanceIcon } from "../../EdvanceLogo"
 import { API } from "../../../config/api"
 
 const TeacherLogin = () => {
     const router = useRouter()
-    const [loading,  setLoading]  = useState(false)
-    const [error,    setError]    = useState("")
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
     const [showPass, setShowPass] = useState(false)
     const [form, setForm] = useState({ email: "", password: "" })
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
@@ -32,13 +32,13 @@ const TeacherLogin = () => {
             // ✅ Backend returns FLAT — no data.user wrapper
             localStorage.setItem("token", data.token)
             localStorage.setItem("user", JSON.stringify({
-                id:              data._id             || "",
-                _id:             data._id             || "",
-                name:            data.fullname        || data.name || "",
-                fullname:        data.fullname        || data.name || "",
-                email:           data.email           || email,
-                role:            "teacher",
-                schoolCode:      data.schoolCode      || "",
+                id: data._id || "",
+                _id: data._id || "",
+                name: data.fullname || data.name || "",
+                fullname: data.fullname || data.name || "",
+                email: data.email || email,
+                role: "teacher",
+                schoolCode: data.schoolCode || "",
                 assignedClasses: Array.isArray(data.assignedClasses) ? data.assignedClasses : [],
             }))
 
@@ -53,6 +53,9 @@ const TeacherLogin = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
             <div className="bg-white rounded-3xl shadow-xl p-8 w-full max-w-md">
+            <button onClick={() => router.push("/")} className="p-2 rounded-xl hover:bg-gray-100 text-black mr-1">
+                        <ArrowLeft size={16} />
+                    </button>
                 <div className="flex items-center gap-3 mb-6">
                     <div className="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center">
                         <EdvanceIcon size={24} className="text-white" />
@@ -87,11 +90,11 @@ const TeacherLogin = () => {
                     className="w-full bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white font-semibold py-3 rounded-2xl transition text-sm">
                     {loading ? "Signing in..." : "Sign In"}
                 </button>
-                <p className="text-xs text-center text-gray-400 mt-4">
+                {/* <p className="text-xs text-center text-gray-400 mt-4">
                     Don't have an account?{" "}
                     <button onClick={() => router.push("/component/auth/teacherRegister")}
                         className="text-green-500 hover:underline font-medium">Register</button>
-                </p>
+                </p> */}
             </div>
         </div>
     )

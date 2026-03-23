@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { API } from "../../../config/api"
 import { EdvanceIcon } from "../../EdvanceLogo"
 import { useRouter } from 'next/navigation'
+import {ArrowLeft} from 'lucide-react' 
 
 export default function OwnerLogin() {
     const router = useRouter()
@@ -43,6 +44,9 @@ export default function OwnerLogin() {
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="bg-gray-500 rounded-2xl shadow-2xl w-full max-w-md p-8">
+            <button onClick={() => router.push("/")} className="p-2 rounded-xl hover:bg-gray-100 text-black mr-1">
+                        <ArrowLeft size={16} />
+                    </button>
 {/* 
             <div className="text-center mb-8">
                     <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">

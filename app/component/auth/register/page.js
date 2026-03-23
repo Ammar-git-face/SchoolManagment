@@ -184,7 +184,7 @@ const SchoolRegister = () => {
                 <p className="text-xs text-center text-black mt-4">
                     Already registered?{" "}
                     <button onClick={() => router.push("/component/auth/admin")}
-                        className="text-blue-200 hover:underline font-medium">
+                        className="text-blue-500 hover:underline font-medium">
                         Admin Login
                     </button>
                 </p>

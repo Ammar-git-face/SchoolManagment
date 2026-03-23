@@ -1,5 +1,5 @@
 "use client"
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, ArrowLeft } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { EdvanceIcon } from "../../EdvanceLogo"
@@ -55,7 +55,9 @@ const AdminLogin = () => {
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
             <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
-
+            <button onClick={() => router.push("/")} className="p-2 rounded-xl hover:bg-gray-100 text-black mr-1">
+                        <ArrowLeft size={16} />
+                    </button>
                 {/* ✅ Logo — centered, stacked like the image */}
                 <div className="flex flex-col items-center mb-8">
                     <EdvanceIcon size={72} />

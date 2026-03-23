@@ -2,7 +2,7 @@
 "use client"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Users, Eye, EyeOff } from "lucide-react"
+import { Users, Eye, EyeOff ,ArrowLeft } from "lucide-react"
 import { API } from "../../../config/api"
 import { EdvanceIcon } from "../../EdvanceLogo"
 
@@ -43,6 +43,9 @@ const ParentRegister = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-50 to-violet-100 flex items-center justify-center p-4">
             <div className="bg-white rounded-3xl shadow-xl p-8 w-full max-w-md">
+            <button onClick={() => router.push("/")} className="p-2 rounded-xl hover:bg-gray-100 text-black mr-1">
+                        <ArrowLeft size={16} />
+                    </button>
             <div className="flex flex-col items-center mb-8">
                     <EdvanceIcon size={72} />
                     <span className="mt-3 text-xl font-bold text-gray-900 tracking-tight">edvance</span>
