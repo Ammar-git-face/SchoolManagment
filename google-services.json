@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "169643495788",
+    "project_id": "edvance-18fe6",
+    "storage_bucket": "edvance-18fe6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169643495788:android:b3cabd1ae1662abfa76349",
+        "android_client_info": {
+          "package_name": "com.edvance.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQiEuduB_PUzHcS3abtAz3OKF4riscQeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

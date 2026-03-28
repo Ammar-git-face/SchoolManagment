@@ -457,7 +457,7 @@ export default function SchoolSettings() {
                             </div>
                         </div>
                      <div className="flex items-center gap-4">
-                     <button  onClick={() => router.push("/component/Owner")}
+                     <button  onClick={() => router.push("/component/auth/owner")}
                             className="mt-5 flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition disabled:opacity-50">
                           Owner Dashboard
                         </button>

@@ -1,37 +1,154 @@
+// 'use client'
+// import { useState } from 'react'
+// import { API } from "../../../config/api"
+// import { EdvanceIcon } from "../../EdvanceLogo"
+// import { useRouter } from 'next/navigation'
+// import {ArrowLeft} from 'lucide-react' 
+
+// export default function OwnerLogin() {
+//     const router = useRouter()
+//     const [email, setEmail] = useState('')
+//     const [password, setPassword] = useState('')
+//     const [loading, setLoading] = useState(false)
+//     const [error, setError] = useState('')
+//     // const [showPass, setShowPass] = useState(false)
+
+//     const handleLogin = async () => {
+//         if (!email || !password) return setError('Please fill in all fields')
+//         setLoading(true)
+//         setError('')
+//         try {
+//             const res = await fetch(`${API}/payroll/owner-login`, {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ email, password })
+//             })
+//             const data = await res.json()
+//             if (!res.ok) return setError(data.error || 'Login failed')
+
+//             localStorage.setItem('ownerId', data._id)
+//             localStorage.setItem('ownerName', data.fullname)
+//             localStorage.setItem('ownerEmail', data.email)
+//             localStorage.setItem('schoolName', data.schoolName)
+//             localStorage.setItem('ownerPlan', data.plan)
+//             localStorage.setItem('role', 'owner')
+
+//             router.push('/component/Owner')
+//         } catch {
+//             setError('Server error. Please try again.')
+//         } finally {
+//             setLoading(false)
+//         }
+//     }
+
+//     return (
+//         <div className="min-h-screen flex items-center justify-center p-4">
+//             <div className="bg-gray-500 rounded-2xl shadow-2xl w-full max-w-md p-8">
+//             <button onClick={() => router.push("/")} className="p-2 rounded-xl hover:bg-gray-100 text-black mr-1">
+//                         <ArrowLeft size={16} />
+//                     </button>
+// {/* 
+//             <div className="text-center mb-8">
+//                     <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+//                         <span className=" text-2xl">🏫</span>
+//                     </div>
+//                     <h1 className="text-2xl font-bold text-black">School Owner Portal</h1>
+//                     <p className="text-gray-400 text-sm mt-1">Sign in to manage your school</p>
+//                 </div> */}
+//                  <div className="flex flex-col items-center mb-8">
+//                     <EdvanceIcon size={72} />
+//                     <span className="mt-3 text-xl font-bold text-gray-900 tracking-tight">edvance</span>
+//                     <span className="text-xs font-medium text-indigo-500 tracking-widest  mb-6 uppercase mt-0.5">School Management</span>
+//                     <h2 className="text-2xl font-bold text-black">School Owner Portal</h2>
+//                     <p className="text-gray-400 text-sm mt-1">Sign in to manage your school</p>
+//                 </div>
+
+              
+//                 {error && (
+//                     <div className="bg-red-50 text-red-600 px-4 py-3 rounded-xl text-sm mb-4">{error}</div>
+//                 )}
+
+//                 <div className="space-y-4">
+//                     <div>
+//                         <label className="text-sm text-black mb-1 block font-medium">Email Address</label>
+//                         <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+//                             placeholder="owner@school.com"
+//                             className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none text-black focus:ring-2 focus:ring-blue-500" />
+//                     </div>
+//                     <div>
+//                         <label className="text-sm text-black mb-1 block font-medium">Password</label>
+//                         <div className="relative">
+//                             <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+//                                 placeholder="Enter your password"
+//                                 onKeyDown={e => e.key === 'Enter' && handleLogin()}
+//                                 className="w-full border rounded-xl px-4 py-3 text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 pr-12" />
+//                         </div>
+//                     </div>
+//                     <button onClick={handleLogin} disabled={loading}
+//                         className="w-full text-black bg-blue-200 h-8 hover:bg-blue-50 rounded-xl font-semibold border mt-2">
+//                         {loading ? 'Signing in...' : 'Sign In'}
+//                     </button>
+//                 </div>
+//             </div>
+//         </div>
+//     )
+// }
+
 'use client'
 import { useState } from 'react'
 import { API } from "../../../config/api"
 import { EdvanceIcon } from "../../EdvanceLogo"
 import { useRouter } from 'next/navigation'
-import {ArrowLeft} from 'lucide-react' 
+import { ArrowLeft } from 'lucide-react'
 
 export default function OwnerLogin() {
     const router = useRouter()
-    const [email, setEmail] = useState('')
+    const [email,    setEmail]    = useState('')
     const [password, setPassword] = useState('')
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
-    // const [showPass, setShowPass] = useState(false)
+    const [loading,  setLoading]  = useState(false)
+    const [error,    setError]    = useState('')
 
     const handleLogin = async () => {
         if (!email || !password) return setError('Please fill in all fields')
         setLoading(true)
         setError('')
         try {
-            const res = await fetch(`${API}/payroll/owner-login`, {
-                method: 'POST',
+            const res  = await fetch(`${API}/payroll/owner-login`, {
+                method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+                body:    JSON.stringify({ email, password })
             })
             const data = await res.json()
             if (!res.ok) return setError(data.error || 'Login failed')
 
-            localStorage.setItem('ownerId', data._id)
-            localStorage.setItem('ownerName', data.fullname)
-            localStorage.setItem('ownerEmail', data.email)
-            localStorage.setItem('schoolName', data.schoolName)
-            localStorage.setItem('ownerPlan', data.plan)
-            localStorage.setItem('role', 'owner')
+            // FIX: backend wraps response in data.user — was reading data.* directly (all undefined)
+            const user = data.user
+
+            // FIX: save token so authFetch can attach it to future requests
+            localStorage.setItem('token',      data.token)
+
+            // FIX: use correct keys from data.user
+            localStorage.setItem('ownerId',    user.id         || '')
+            localStorage.setItem('ownerName',  user.fullname   || '')
+            localStorage.setItem('ownerEmail', user.email      || '')
+            localStorage.setItem('schoolName', user.schoolName || '')
+            localStorage.setItem('schoolCode', user.schoolCode || '')
+            localStorage.setItem('ownerPlan',  user.plan       || '')
+            // FIX: role must be 'owner' — was hardcoded but now reads from response
+            localStorage.setItem('role',       user.role       || 'owner')
+
+            // Also save full user object so authFetch/getUser helpers work
+            localStorage.setItem('user', JSON.stringify({
+                id:         user.id,
+                _id:        user.id,
+                name:       user.fullname,
+                fullname:   user.fullname,
+                email:      user.email,
+                role:       user.role || 'owner',
+                schoolCode: user.schoolCode,
+                schoolName: user.schoolName,
+                plan:       user.plan,
+            }))
 
             router.push('/component/Owner')
         } catch {
@@ -44,26 +161,17 @@ export default function OwnerLogin() {
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="bg-gray-500 rounded-2xl shadow-2xl w-full max-w-md p-8">
-            <button onClick={() => router.push("/")} className="p-2 rounded-xl hover:bg-gray-100 text-black mr-1">
-                        <ArrowLeft size={16} />
-                    </button>
-{/* 
-            <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <span className=" text-2xl">🏫</span>
-                    </div>
-                    <h1 className="text-2xl font-bold text-black">School Owner Portal</h1>
-                    <p className="text-gray-400 text-sm mt-1">Sign in to manage your school</p>
-                </div> */}
-                 <div className="flex flex-col items-center mb-8">
+                <button onClick={() => router.push("/")} className="p-2 rounded-xl hover:bg-gray-100 text-black mr-1">
+                    <ArrowLeft size={16} />
+                </button>
+                <div className="flex flex-col items-center mb-8">
                     <EdvanceIcon size={72} />
                     <span className="mt-3 text-xl font-bold text-gray-900 tracking-tight">edvance</span>
-                    <span className="text-xs font-medium text-indigo-500 tracking-widest  mb-6 uppercase mt-0.5">School Management</span>
+                    <span className="text-xs font-medium text-indigo-500 tracking-widest mb-6 uppercase mt-0.5">School Management</span>
                     <h2 className="text-2xl font-bold text-black">School Owner Portal</h2>
                     <p className="text-gray-400 text-sm mt-1">Sign in to manage your school</p>
                 </div>
 
-              
                 {error && (
                     <div className="bg-red-50 text-red-600 px-4 py-3 rounded-xl text-sm mb-4">{error}</div>
                 )}
