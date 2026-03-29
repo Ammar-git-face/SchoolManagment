@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import Sidebar from "../sidevar";
 import { authFetch } from "../utils/api";
 import { API } from "../../../config/api"
+import PremiumGate from "../PremiumGate"   // ✅ ADDED: import gate
 
-const MessagePage = () => {
+const MessageContent = () => {                                                // ✅ ADDED: renamed from MessagePage to MessageContent
     const [teachers, setTeachers] = useState([])
     const [parents, setParents] = useState([])
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -32,7 +33,6 @@ const MessagePage = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden"
                     onClick={() => setSidebarOpen(false)} />
             )}
-
             <div className="flex-1 md:ml-64 min-h-screen">
                 <div className="md:hidden flex items-center justify-between bg-white px-4 py-3 shadow-sm sticky top-0 z-10">
                     <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100">
@@ -43,14 +43,11 @@ const MessagePage = () => {
                     <h1 className="font-semibold text-black">Messages</h1>
                     <div className="w-8" />
                 </div>
-
                 <div className="px-4 md:px-6 pt-8 pb-10">
                     <h1 className="text-2xl font-bold text-black mb-1">Messages</h1>
                     <p className="text-xs text-gray-400 mb-6">Communicate with teachers and parents</p>
-
                     <div className="bg-white border border-gray-100 rounded-2xl shadow-sm h-[500px] w-full md:w-2/5 overflow-y-auto">
                         <h2 className="font-bold text-black p-4 border-b border-gray-100 text-sm">Conversations</h2>
-
                         {teachers.length === 0 && parents.length === 0 ? (
                             <div className="text-center text-xs text-gray-400 py-8">No contacts found</div>
                         ) : (
@@ -87,5 +84,13 @@ const MessagePage = () => {
         </div>
     );
 }
+
+const MessagePage = () => {                                                   // ✅ ADDED: new default export wraps content in gate
+    return (                                                                  // ✅ ADDED
+        <PremiumGate feature="Messaging">                                     // ✅ ADDED
+            <MessageContent />                                                // ✅ ADDED
+        </PremiumGate>                                                        // ✅ ADDED
+    )                                                                         // ✅ ADDED
+}                                                                             // ✅ ADDED
 
 export default MessagePage;
